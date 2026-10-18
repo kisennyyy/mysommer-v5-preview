@@ -296,9 +296,18 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 /* Three deliberate sizes: orb → bar → record player → orb. */
 .v5-music-player.compact{width:54px!important}
 
-/* V5 illustrated-book splash: centered square cover, warm ivory page, quiet entrance. */
-.intro{background:#f1eafa!important;color:#594473!important;overflow-y:auto;overscroll-behavior:contain;padding:28px 16px}
+/* V5 illustrated-book splash: warm violet → cool blush → pink-lavender, without particles. */
+.intro{background:#e9d9ed!important;color:#594473!important;overflow-y:auto;overscroll-behavior:contain;padding:28px 16px;animation:v5IntroColorJourney 7.2s ease-in-out both}
 .intro:before,.intro:after,.intro-sparkles,.intro-photo{display:none!important}
+@keyframes v5IntroColorJourney{
+ 0%{background-color:#e8d5e8}
+ 38%{background-color:#e5d8ed}
+ 72%{background-color:#f2dce9}
+ 100%{background-color:#eedcf3}
+}
+/* A translucent wash moves across the page while the book-cover illustration stays clear. */
+.intro::selection{background:#d9b4e5;color:#4e3466}
+@media(prefers-reduced-motion:reduce){.intro{animation:none!important;background:#eedcf3!important}}
 .intro-content{width:min(100%,520px);max-width:520px;padding:18px 12px 24px!important;display:flex;flex-direction:column;align-items:center;animation:v5BookContent 1.2s ease both!important;text-shadow:none!important}
 .intro-art-frame{width:min(78vw,410px,47vh);aspect-ratio:1/1;border-radius:17px;background:#e4d7f1 var(--intro-image) center/cover no-repeat;box-shadow:0 3px 20px rgba(77,48,116,.12);border:1px solid rgba(126,94,165,.18);overflow:hidden;display:flex;align-items:center;justify-content:center;animation:v5BookArt 1.8s ease-out both}
 .intro-art-frame.has-image .intro-art-placeholder{display:none}
@@ -724,7 +733,7 @@ function applyAppearance(){
 function closeIntro(){document.getElementById('introScreen').classList.add('hidden')}
 function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden');
  const art=document.getElementById('introArtFrame'),content=el.querySelector('.intro-content');
- [art,content].forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
+ [el,art,content].forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
 }
 document.getElementById('introEnter').onclick=closeIntro;
 
