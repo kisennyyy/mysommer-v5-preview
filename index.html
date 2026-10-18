@@ -163,6 +163,18 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-section-editor{border-top:1px solid var(--line);margin-top:22px;padding-top:18px}.v5-section-editor h3{font-size:16px;margin:0}.v5-section-editor p{font-size:12px;color:var(--muted)}
 .v5-intro-hidden{display:none}
 @media(max-width:760px){.v5-home-links{grid-template-columns:repeat(2,minmax(0,1fr))}.v5-home-cover{height:320px}.v5-home-links button{padding:14px 12px;font-size:12px}}
+
+.v5-letter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.v5-envelope{border:1px solid #d9c3e8;border-radius:15px;background:linear-gradient(155deg,#faf2ff,#e9d6f3);min-height:180px;padding:20px;position:relative;overflow:hidden;box-shadow:var(--shadow);text-align:left}
+.v5-envelope:before{content:'';position:absolute;top:0;left:0;right:0;height:90px;background:linear-gradient(150deg,#d9bee9,#f6e5ff);clip-path:polygon(0 0,100% 0,50% 100%);opacity:.7}
+.v5-envelope h3,.v5-envelope p,.v5-envelope button{position:relative;z-index:1}
+.v5-envelope h3{margin-top:65px;font-family:Georgia,serif;color:#513571}.v5-envelope p{color:#79658c;font-size:12px}
+.v5-letter-paper{background:#fffdf9;padding:24px;border-radius:14px;border:1px solid #e8dbea;box-shadow:0 15px 35px #3c205222;animation:v5Unfold .65s ease both;white-space:pre-wrap;line-height:1.85;max-height:60vh;overflow:auto}
+@keyframes v5Unfold{from{opacity:0;transform:translateY(-25px) scaleY(.3)}to{opacity:1;transform:translateY(0) scaleY(1)}}
+.v5-letter-modal{position:fixed;inset:0;z-index:12000;background:#1d0c30a8;display:flex;align-items:center;justify-content:center;padding:18px}
+.v5-letter-dialog{width:min(650px,100%);max-height:90vh;overflow:auto;background:var(--paper);padding:24px;border-radius:22px}
+.v5-letter-dialog input,.v5-letter-dialog textarea,.v5-letter-dialog select{width:100%;margin:8px 0 14px;padding:12px;border:1px solid var(--line);border-radius:10px;background:white}
+.v5-letter-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -185,6 +197,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
     <button data-page="merch"><span class="nav-icon">✧</span>谷子</button>
     <button data-page="settings"><span class="nav-icon">❖</span>档案</button>
     <button data-page="writing"><span class="nav-icon">✎</span>文稿</button>
+    <button data-page="letters"><span class="nav-icon">✉</span>书信</button>
     <button data-page="divination"><span class="nav-icon">☽</span>梦占</button>
     <button data-page="gacha"><span class="nav-icon">✧</span>抽卡</button>
     <button data-page="appearance"><span class="nav-icon">✿</span>外观</button>
@@ -198,7 +211,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
   <section class="page active" id="page-home">
     <div class="v5-home-cover" id="v5HomeCover"><div class="v5-cover-hint">✦ OUR LITTLE UNIVERSE · 🍎 🍏</div></div>
     <div class="hero" id="v5SecretHero" title="我们的秘密基地"><div class="hero-copy"><div class="eyebrow">A LITTLE UNIVERSE OF OUR OWN</div><h3>把我们的<br>共同经历好好收藏。</h3><p>就好像我们的秘密基地一样，收藏和存档着一切。</p></div><div class="hero-symbol">☾✧</div></div>
-    <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙 <span>↗</span></button><button data-goto="settings">❖ 档案室 <span>↗</span></button><button data-goto="dreams">☾ 梦图收藏 <span>↗</span></button><button data-goto="writing">✎ 文稿 <span>↗</span></button><button data-goto="divination">☽ 梦占 <span>↗</span></button><button data-goto="gacha">✧ 抽卡 <span>↗</span></button><button data-goto="calendar">♡ 日历 <span>↗</span></button><button data-goto="merch">✧ 谷子 <span>↗</span></button></div>
+    <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙 <span>↗</span></button><button data-goto="settings">❖ 档案室 <span>↗</span></button><button data-goto="dreams">☾ 梦图收藏 <span>↗</span></button><button data-goto="writing">✎ 文稿 <span>↗</span></button><button data-goto="letters">✉ 书信 <span>↗</span></button><button data-goto="divination">☽ 梦占 <span>↗</span></button><button data-goto="gacha">✧ 抽卡 <span>↗</span></button><button data-goto="calendar">♡ 日历 <span>↗</span></button><button data-goto="merch">✧ 谷子 <span>↗</span></button></div>
     <div class="v5-progress" id="v5Progress"></div>
     <div class="stats">
       <div class="stat"><div class="label">AU</div><div class="number" id="statAus">13</div><div class="hint">不同的故事</div></div>
@@ -263,6 +276,10 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
     <div class="note-grid" id="writingGrid"></div>
   </section>
 
+  <section class="page" id="page-letters">
+    <div class="section-head"><div><h3>书信收藏</h3><p>写给彼此的信，藏进一只只信封里。</p></div><button class="btn primary" id="v5AddLetter">＋ 写一封信</button></div>
+    <div id="v5LetterGrid" class="v5-letter-grid"></div>
+  </section>
   <section class="page" id="page-appearance">
     <div class="section-head"><div><h3>外观与开屏设置</h3><p>上传合照或喜欢的图片，设置开屏、背景、首页封面。更改会保存在本机。</p></div><button class="btn soft" id="previewIntro">预览开屏 ✧</button></div>
     <div class="panel">
@@ -315,18 +332,18 @@ const initialAus = [
 ];
 function uid(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4)}
 const STORE="purpleArchive_v5_dev";
-let db={aus:[],events:[],dreams:[],merch:[],settings:[],writing:[],characters:[],divinations:[],gacha:[],appearance:{}};
+let db={aus:[],events:[],dreams:[],merch:[],settings:[],writing:[],characters:[],divinations:[],gacha:[],appearance:{},letters:[]};
 try{const old=JSON.parse(localStorage.getItem(STORE)||"null");db=old&&typeof old==="object"?{...db,...old}:db}catch(e){}
 if(!Array.isArray(db.aus)||!db.aus.length)db.aus=initialAus;
 // Keep the same localStorage key and all previous record collections.
 // Older backups automatically receive the two new empty collections.
-for(const bucket of ['events','dreams','merch','settings','writing','characters','divinations','gacha']){
+for(const bucket of ['events','dreams','merch','settings','writing','characters','divinations','gacha','letters']){
  if(!Array.isArray(db[bucket]))db[bucket]=[];
 }
 function persist(){try{localStorage.setItem(STORE,JSON.stringify(db));updateStats();if(window.archiveCloud)window.archiveCloud.changed()}catch(e){toast("本地保存失败：请导出 JSON 备份。")}}
 function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function toast(s){const t=document.getElementById("toast");t.textContent=s;t.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove("show"),2500)}
-const pageNames={home:"欢迎回来",aus:"AU ",calendar:"日历",dreams:"梦图",merch:"谷子",settings:"档案",writing:"文稿",divination:"梦占存档",gacha:"抽卡存档",characters:"角色档案",appearance:"外观设置"};
+const pageNames={letters:"书信",home:"欢迎回来",aus:"AU ",calendar:"日历",dreams:"梦图",merch:"谷子",settings:"档案",writing:"文稿",divination:"梦占存档",gacha:"抽卡存档",characters:"角色档案",appearance:"外观设置"};
 function go(page){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+page));document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));document.getElementById("pageTitle").textContent=(getAppearance().sections?.[page]?.title||V5_SECTION_DEFAULTS[page]?.[0]||pageNames[page]||page);renderAll();window.scrollTo({top:0,behavior:"smooth"})}
 document.getElementById("nav").addEventListener("click",e=>{const b=e.target.closest("button[data-page]");if(b)go(b.dataset.page)});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-goto]");if(b)go(b.dataset.goto)});
@@ -379,7 +396,7 @@ document.getElementById("prevMonth").onclick=()=>{calDate.setMonth(calDate.getMo
 document.getElementById("nextMonth").onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCalendar()};
 document.getElementById("addEvent").onclick=()=>openModal("添加纪念日",`<div class="form-grid">${f("title","名称","")}${f("date","日期",dateOnly(new Date()),"date")}${sel("kind","类型",["纪念日","倒数日","生日","计划日"],"纪念日")}${ta("note","备注","")}</div>`,()=>{if(!val("title")||!val("date")){toast("请填写名称和日期");return false}db.events.push({id:uid(),title:val("title"),date:val("date"),kind:val("kind"),note:val("note")});selectedDate=val("date");calDate=new Date(val("date")+"T00:00:00");calDate.setDate(1);toast("日期已添加")});
 function renderCharacters(){renderNotes("characters","characterGrid","characterSearch","characterAu");const filter=document.getElementById("characterAu").value;if(filter){const list=db.characters.filter(x=>x.au===filter&&[x.title,x.name,x.au,x.content,x.role].join(" ").toLowerCase().includes((document.getElementById("characterSearch").value||"").toLowerCase()));document.getElementById("characterGrid").innerHTML=list.map(x=>noteCard(x,"characters")).join("")||empty("这个 AU 还没有角色档案。")}}
-function renderAll(){updateStats();renderAus();renderCalendar();renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory");renderPhotos("merch","merchGallery","merchSearch","merchStatus");renderNotes("settings","settingGrid","settingSearch","settingType");renderNotes("writing","writingGrid","writingSearch","writingType");renderCharacters();renderDivinations();renderGacha()}
+function renderAll(){updateStats();renderAus();renderCalendar();renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory");renderPhotos("merch","merchGallery","merchSearch","merchStatus");renderNotes("settings","settingGrid","settingSearch","settingType");renderNotes("writing","writingGrid","writingSearch","writingType");renderCharacters();renderDivinations();renderGacha();renderV5Letters()}
 ["auSearch","auStatus"].forEach(id=>document.getElementById(id).addEventListener("input",renderAus));
 ["dreamSearch","dreamCategory"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory")));
 ["merchSearch","merchStatus"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderPhotos("merch","merchGallery","merchSearch","merchStatus")));
@@ -388,7 +405,7 @@ function renderAll(){updateStats();renderAus();renderCalendar();renderPhotos("dr
 ["characterSearch","characterAu"].forEach(id=>document.getElementById(id).addEventListener("input",renderCharacters));
 document.getElementById("exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="🍎 🍏 -备份-"+dateOnly(new Date())+".json";a.click();URL.revokeObjectURL(url);toast("备份已导出")};
 document.getElementById("importBtn").onclick=()=>document.getElementById("importFile").click();
-document.getElementById("importFile").onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const incoming=JSON.parse(r.result);if(!incoming||!Array.isArray(incoming.aus))throw new Error();if(confirm("导入会覆盖当前档案。建议先导出备份，确定继续吗？")){db={...db,...incoming};for(const b of ["events","dreams","merch","settings","writing","characters","divinations","gacha"]){if(!Array.isArray(db[b]))db[b]=[]}persist();renderAll();applyAppearance();toast("备份已导入")}}catch(err){toast("文件格式不正确，无法导入")}e.target.value=""};r.readAsText(file)};
+document.getElementById("importFile").onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const incoming=JSON.parse(r.result);if(!incoming||!Array.isArray(incoming.aus))throw new Error();if(confirm("导入会覆盖当前档案。建议先导出备份，确定继续吗？")){db={...db,...incoming};for(const b of ["events","dreams","merch","settings","writing","characters","divinations","gacha","letters"]){if(!Array.isArray(db[b]))db[b]=[]}persist();renderAll();applyAppearance();toast("备份已导入")}}catch(err){toast("文件格式不正确，无法导入")}e.target.value=""};r.readAsText(file)};
 
 
 /* === V3: Archive tabs and independent divination/gacha records === */
@@ -536,7 +553,8 @@ const V5_SECTION_DEFAULTS={
  writing:['文稿存档','存放正文、片段、提纲、废稿与尚未命名的句子。'],
  divination:['梦占存档','收藏塔罗、牌阵、梦占问题、牌面与自己的解读。'],
  gacha:['抽卡存档','记录卡池、抽数与每一次相遇。'],
- appearance:['外观与开屏设置','自定义网站外观、首页封面与文字。']
+ appearance:['外观与开屏设置','自定义网站外观、首页封面与文字。'],
+ letters:['书信收藏','写给彼此的信，藏进一只只信封里。']
 };
 function applyV5Sections(a){
  const values=a.sections||{};
@@ -572,6 +590,38 @@ document.getElementById('v5SecretHero').addEventListener('click',()=>{
  if(v5SecretClicks>=5){v5SecretClicks=0;toast('仅属于我们的秘密基地');}
  else v5SecretTimer=setTimeout(()=>v5SecretClicks=0,1800);
 });
+
+
+/* V5 letters: separate test data, animated reading and editing */
+function renderV5Letters(){
+ const el=document.getElementById('v5LetterGrid');if(!el)return;
+ el.innerHTML=(db.letters||[]).map(l=>'<article class="v5-envelope"><h3>'+esc(l.title||'无题书信')+'</h3><p>✉ '+esc(l.date||'未注明日期')+'</p><button class="btn soft" data-letter-open="'+esc(l.id)+'">拆开信封 ↗</button></article>').join('')||'<div class="panel">还没有书信。写下第一封，收藏在这里吧。🍎 🍏</div>';
+}
+function v5LetterModal(html){
+ const overlay=document.createElement('div');overlay.className='v5-letter-modal';overlay.innerHTML='<div class="v5-letter-dialog" role="dialog" aria-modal="true">'+html+'</div>';
+ document.body.appendChild(overlay);overlay.addEventListener('click',e=>{if(e.target===overlay||e.target.closest('[data-letter-close]'))overlay.remove()});return overlay;
+}
+function v5EditLetter(id){
+ const l=(db.letters||[]).find(x=>x.id===id)||{id:'letter_'+Date.now(),title:'',date:new Date().toISOString().slice(0,10),auId:'',body:''};
+ const opts='<option value="">不关联 AU</option>'+db.aus.map(a=>'<option value="'+esc(a.id)+'" '+(l.auId===a.id?'selected':'')+'>'+esc(a.name)+'</option>').join('');
+ const box=v5LetterModal('<h3>✉ '+(id?'编辑书信':'写一封信')+'</h3><label>信件标题</label><input id="v5LetterTitle"><label>日期</label><input id="v5LetterDate" type="date"><label>所属 AU（可选）</label><select id="v5LetterAu">'+opts+'</select><label>信的内容</label><textarea id="v5LetterBody" rows="10"></textarea><div class="v5-letter-actions"><button class="btn primary" id="v5LetterSave">保存书信</button><button class="btn" data-letter-close>取消</button></div>');
+ box.querySelector('#v5LetterTitle').value=l.title;box.querySelector('#v5LetterDate').value=l.date;box.querySelector('#v5LetterBody').value=l.body;
+ box.querySelector('#v5LetterSave').onclick=()=>{
+ const title=box.querySelector('#v5LetterTitle').value.trim(),body=box.querySelector('#v5LetterBody').value;
+ if(!title){toast('请填写信件标题');return}
+ const updated={...l,title,date:box.querySelector('#v5LetterDate').value,auId:box.querySelector('#v5LetterAu').value,body};
+ db.letters??=[];const i=db.letters.findIndex(x=>x.id===l.id);if(i<0)db.letters.push(updated);else db.letters[i]=updated;
+ persist();renderV5Letters();box.remove();toast('书信已收藏');
+ };
+}
+function v5OpenLetter(id){
+ const l=(db.letters||[]).find(x=>x.id===id);if(!l)return;
+ const box=v5LetterModal('<h3>✉ '+esc(l.title)+'</h3><p>'+esc(l.date||'')+'</p><div class="v5-letter-paper">'+esc(l.body||'（这封信尚未写下内容）')+'</div><div class="v5-letter-actions"><button class="btn primary" id="v5LetterEdit">编辑</button><button class="btn danger" id="v5LetterDelete">删除</button><button class="btn" data-letter-close>收起信件</button></div>');
+ box.querySelector('#v5LetterEdit').onclick=()=>{box.remove();v5EditLetter(id)};
+ box.querySelector('#v5LetterDelete').onclick=()=>{if(!confirm('确定删除这封信吗？'))return;db.letters=db.letters.filter(x=>x.id!==id);persist();renderV5Letters();box.remove()};
+}
+document.getElementById('v5AddLetter').onclick=()=>v5EditLetter();
+document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.target.closest('[data-letter-open]');if(b)v5OpenLetter(b.dataset.letterOpen)});
 
 /* === V4 Puter cloud sync (GitHub Pages + same Puter account on both devices) ===
    GitHub stores ONLY this website source. Your records live in your Puter app drive.
