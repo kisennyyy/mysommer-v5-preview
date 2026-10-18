@@ -188,6 +188,23 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-outfit-dialog input,.v5-outfit-dialog textarea{display:block;width:100%;margin:8px 0 14px;padding:12px;border:1px solid var(--line);border-radius:10px}
 .v5-outfit-dialog label{display:block;font-size:13px;color:var(--deep)}
 @media(max-width:620px){.v5-wardrobe-pair{grid-template-columns:1fr}}
+
+.v5-writing-paper{max-width:870px;margin:auto;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:clamp(20px,5vw,52px);box-shadow:0 12px 40px #32174412}
+.v5-writing-article{font-size:16px;line-height:2;overflow-wrap:anywhere;min-height:160px;color:var(--text)}
+.v5-writing-article h1,.v5-writing-article h2,.v5-writing-article h3{line-height:1.45;color:var(--deep)}
+.v5-writing-article blockquote{border-left:3px solid #a17cc4;padding-left:18px;margin-left:0;color:var(--muted)}
+.v5-writing-buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:25px;border-top:1px solid var(--line);padding-top:18px}
+.v5-editor-modal{position:fixed;inset:0;z-index:15000;background:#1b0b2dbb;display:flex;align-items:center;justify-content:center;padding:14px}
+.v5-editor-dialog{width:min(950px,100%);max-height:94vh;overflow:auto;background:var(--paper);border-radius:19px;padding:clamp(15px,3vw,30px)}
+.v5-editor-dialog label{display:block;font-size:12px;color:var(--muted);margin:12px 0 4px}
+.v5-editor-dialog input,.v5-editor-dialog select{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px;background:white}
+.v5-editor-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin:15px 0 0;background:#efe7f8;padding:9px;border-radius:12px}
+.v5-editor-toolbar button{border:1px solid #d4c1e5;border-radius:8px;background:white;padding:7px 10px;color:#50386b;cursor:pointer}
+.v5-edit-surface{background:white;border:1px solid var(--line);border-radius:12px;min-height:270px;max-height:45vh;overflow:auto;padding:22px;line-height:1.8;outline-color:#a580ca;overflow-wrap:anywhere}
+.v5-edit-surface:empty:before{content:'开始写作…';color:#aaa}
+.v5-editor-status{font-size:12px;color:var(--muted);padding:8px 0}
+.v5-editor-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.v5-version-entry{border-top:1px solid var(--line);padding:12px 0;display:flex;justify-content:space-between;gap:10px;align-items:center}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -294,6 +311,10 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
     <div class="section-head"><div><h3>书信收藏</h3><p>写给彼此的信，藏进一只只信封里。</p></div><button class="btn primary" id="v5AddLetter">＋ 写一封信</button></div>
     <div id="v5LetterGrid" class="v5-letter-grid"></div>
   </section>
+  <section class="page" id="page-writing-reader">
+    <div class="section-head"><div><h3 id="v5WritingHeading">文稿阅读</h3><p id="v5WritingMeta">文字存档</p></div><button class="btn" id="v5WritingBack">← 返回文稿</button></div>
+    <article class="v5-writing-paper"><div class="v5-writing-article" id="v5WritingArticle"></div><div class="v5-writing-buttons"><button class="btn primary" id="v5WritingEditFromRead">✎ 编辑文稿</button><button class="btn soft" id="v5WritingVersionsFromRead">历史版本</button></div></article>
+  </section>
   <section class="page" id="page-appearance">
     <div class="section-head"><div><h3>外观与开屏设置</h3><p>上传合照或喜欢的图片，设置开屏、背景、首页封面。更改会保存在本机。</p></div><button class="btn soft" id="previewIntro">预览开屏 ✧</button></div>
     <div class="panel">
@@ -387,11 +408,11 @@ else {body+=`${sel("type","分类",c.types,item.type||c.types[0])}${f("au","所�
 body+=`</div>`;
 openModal(item.title||item.name?"编辑"+c.title:"新建"+c.title,body,()=>{const title=val("title");if(!title){toast("请填写标题");return false}const data={...item,title,name:bucket==="characters"?title:item.name,type:val("type")||item.type||"",au:val("au"),role:val("role"),appearance:val("appearance"),motivation:val("motivation"),content:val("content"),updated:new Date().toISOString()};const i=db[bucket].findIndex(x=>x.id===item.id);if(i>=0)db[bucket][i]=data;else db[bucket].unshift(data);toast("已保存")})}
 document.getElementById("addSetting").onclick=()=>editRecord("settings");
-document.getElementById("addWriting").onclick=()=>editRecord("writing");
+document.getElementById("addWriting").onclick=()=>v5EditWriting(null);
 document.getElementById("addCharacter").onclick=()=>editRecord("characters");
-window.editRecord=editRecord;
+window.editRecord=function(bucket,id,seed){return bucket==="writing"?v5EditWriting(id,seed):editRecord(bucket,id,seed)};
 window.deleteItem=(bucket,id)=>{if(confirm("确定删除这条记录吗？此操作无法撤销。")){db[bucket]=db[bucket].filter(x=>x.id!==id);persist();renderAll();toast("已删除")}};
-function noteCard(item,bucket){const title=item.title||item.name||"未命名",snippet=(item.content||item.desc||"").slice(0,170);return `<article class="note-card" onclick="editRecord('${bucket}','${item.id}')"><div class="tag-row" style="margin-bottom:8px"><span class="tag">${esc(item.type||item.role||"档案")}</span>${item.au?`<span class="tag">${esc(item.au)}</span>`:""}</div><h4>${esc(title)}</h4><p>${esc(snippet||"点击打开，继续补充内容。")}</p><div class="card-actions"><button class="btn soft" onclick="event.stopPropagation();editRecord('${bucket}','${item.id}')">编辑</button><button class="btn danger" onclick="event.stopPropagation();deleteItem('${bucket}','${item.id}')">删除</button></div></article>`}
+function noteCard(item,bucket){const title=item.title||item.name||"未命名",snippet=(item.content||item.desc||"").slice(0,170);return `<article class="note-card" onclick="${bucket==='writing'?'v5ReadWriting':'editRecord'}('${bucket}','${item.id}')"><div class="tag-row" style="margin-bottom:8px"><span class="tag">${esc(item.type||item.role||"档案")}</span>${item.au?`<span class="tag">${esc(item.au)}</span>`:""}</div><h4>${esc(title)}</h4><p>${esc(snippet||"点击打开，继续补充内容。")}</p><div class="card-actions"><button class="btn soft" onclick="event.stopPropagation();${bucket==='writing'?'v5EditWriting':'editRecord'}(${bucket==='writing'?'':'\''+bucket+'\','}'${item.id}')">编辑</button><button class="btn danger" onclick="event.stopPropagation();deleteItem('${bucket}','${item.id}')">删除</button></div></article>`}
 function renderNotes(bucket,gridId,searchId,typeId){const q=(document.getElementById(searchId)?.value||"").toLowerCase(),type=document.getElementById(typeId)?.value||"";const list=db[bucket].filter(x=>(!type||x.type===type)&&[x.title,x.name,x.au,x.type,x.content,x.role].join(" ").toLowerCase().includes(q));document.getElementById(gridId).innerHTML=list.map(x=>noteCard(x,bucket)).join("")||empty("这里还没有存档，点右上角添加第一条。");const countId={settings:"settingCount",writing:"writingCount",characters:"characterCount"}[bucket];document.getElementById(countId).textContent=`${list.length} 条记录`;if(bucket==="characters"){const select=document.getElementById("characterAu"),old=select.value;select.innerHTML='<option value="">全部 AU</option>'+db.aus.map(a=>`<option>${esc(a.name)}</option>`).join("");select.value=old;}}
 function imageField(id,label){return `<div class="field full"><label>${label}</label><input id="${id}" type="file" accept="image/*"><small style="color:var(--muted);font-size:10px">建议使用压缩后的图片，较大的图片会占用浏览器本地空间。</small></div>`}
 function editPhoto(bucket,id){const isDream=bucket==="dreams",item=db[bucket].find(x=>x.id===id)||{id:uid(),title:"",category:isDream?"梦图":"周边",status:isDream?"":"想收",date:"",price:"",series:"",note:"",image:""};let body=`<div class="form-grid">${f("title","名称",item.title)}${isDream?sel("category","分类",["约稿","自绘","游戏截图","梦图","灵感参考","其他"],item.category):sel("status","收藏状态",["已到手","运输中","预售中","想收"],item.status)}${isDream?f("date","日期",item.date,"date"):f("series","作品 / 系列",item.series)}${!isDream?f("price","价格 / 预算",item.price):""}${imageField("imageFile","图片")}${ta("note","备注",item.note||"")}</div>`;openModal(isDream?"添加梦图":"添加谷子",body,()=>{if(!val("title")){toast("请填写名称");return false}const file=document.getElementById("imageFile").files[0];const save=image=>{const data={...item,title:val("title"),category:val("category"),status:val("status"),date:val("date"),series:val("series"),price:val("price"),note:val("note"),image:image||item.image};const i=db[bucket].findIndex(x=>x.id===item.id);if(i>=0)db[bucket][i]=data;else db[bucket].unshift(data);persist();closeModal();renderAll();toast("收藏已保存")};if(file){if(file.size>2.5*1024*1024){toast("图片大于 2.5MB，请先压缩后再上传");return false}const reader=new FileReader();reader.onload=()=>save(reader.result);reader.onerror=()=>toast("图片读取失败");reader.readAsDataURL(file);return false}else{save(item.image);return false}})}
@@ -607,6 +628,120 @@ document.getElementById('v5SecretHero').addEventListener('click',()=>{
 
 
 
+
+/* V5 manuscript reader/editor: old plain text remains readable; snapshots stored with each manuscript. */
+let v5WritingCurrentId=null;
+function v5SafeHtml(html){
+ const doc=new DOMParser().parseFromString('<div>'+html+'</div>','text/html');
+ const allowed=new Set(['P','DIV','BR','H1','H2','H3','STRONG','B','EM','I','U','UL','OL','LI','BLOCKQUOTE']);
+ function clean(node){
+  if(node.nodeType===Node.TEXT_NODE)return document.createTextNode(node.textContent);
+  if(node.nodeType!==Node.ELEMENT_NODE)return document.createTextNode('');
+  const name=allowed.has(node.tagName)?node.tagName.toLowerCase():'span';
+  const el=document.createElement(name);
+  for(const child of [...node.childNodes])el.appendChild(clean(child));
+  return el;
+ }
+ const out=document.createElement('div');
+ for(const node of [...doc.body.firstElementChild.childNodes])out.appendChild(clean(node));
+ return out.innerHTML;
+}
+function v5WritingHtml(item){
+ if(item.v5Html)return v5SafeHtml(item.v5Html);
+ return esc(item.content||'').replace(/\r?\n/g,'<br>');
+}
+function v5ReadWriting(bucket,id){
+ const item=db.writing.find(x=>x.id===id);if(!item)return;
+ v5WritingCurrentId=id;go('writing-reader');
+ document.getElementById('v5WritingHeading').textContent=item.title||'无题文稿';
+ document.getElementById('v5WritingMeta').textContent=[item.type,item.au,item.updated?.slice(0,10)].filter(Boolean).join(' · ');
+ document.getElementById('v5WritingArticle').innerHTML=v5WritingHtml(item);
+}
+window.v5ReadWriting=v5ReadWriting;
+document.getElementById('v5WritingBack').onclick=()=>go('writing');
+document.getElementById('v5WritingEditFromRead').onclick=()=>v5EditWriting(v5WritingCurrentId);
+document.getElementById('v5WritingVersionsFromRead').onclick=()=>v5WritingVersions(v5WritingCurrentId);
+function v5EditWriting(id,seed={}){
+ const existing=db.writing.find(x=>x.id===id);
+ const item=existing||{id:uid(),title:'',type:'正文',au:'',content:'',...seed};
+ const overlay=document.createElement('div');overlay.className='v5-editor-modal';
+ overlay.innerHTML='<div class="v5-editor-dialog" role="dialog" aria-modal="true"><h3>✎ '+(existing?'编辑文稿':'新建文稿')+'</h3>'+
+ '<label>标题</label><input id="v5EditorTitle" placeholder="文稿标题">'+
+ '<label>分类</label><select id="v5EditorType">'+['正文','片段','大纲','设定草稿','废稿回收','其他'].map(x=>'<option>'+x+'</option>').join('')+'</select>'+
+ '<label>关联 AU</label><select id="v5EditorAu"><option value="">不关联 AU</option>'+db.aus.map(a=>'<option value="'+esc(a.name)+'">'+esc(a.name)+'</option>').join('')+'</select>'+
+ '<div class="v5-editor-toolbar">'+[['h1','大标题'],['h2','小标题'],['bold','粗体'],['italic','斜体'],['underline','下划线'],['insertUnorderedList','• 列表'],['insertOrderedList','1. 列表'],['formatBlock:blockquote','引用'],['formatBlock:p','正文']].map(x=>'<button type="button" data-v5-format="'+x[0]+'">'+x[1]+'</button>').join('')+'</div>'+
+ '<div class="v5-edit-surface" id="v5EditorBody" contenteditable="true" role="textbox" aria-label="文稿正文" aria-multiline="true"></div>'+
+ '<div class="v5-editor-status" id="v5EditorStatus">编辑中 · 自动保存</div>'+
+ '<div class="v5-editor-actions"><button class="btn primary" id="v5EditorSave">保存并阅读</button><button class="btn soft" id="v5EditorHistory">历史版本</button><button class="btn" id="v5EditorClose">关闭编辑器</button></div></div>';
+ document.body.appendChild(overlay);
+ const get=x=>overlay.querySelector('#'+x);
+ get('v5EditorTitle').value=item.title||'';
+ get('v5EditorType').value=item.type||'正文';
+ get('v5EditorAu').value=item.au||'';
+ get('v5EditorBody').innerHTML=v5WritingHtml(item);
+ let timer=null,dirty=false,closed=false;
+ const snapshot=()=>({title:get('v5EditorTitle').value.trim(),type:get('v5EditorType').value,au:get('v5EditorAu').value,v5Html:v5SafeHtml(get('v5EditorBody').innerHTML),content:get('v5EditorBody').innerText||''});
+ function save(forceVersion=false){
+  if(closed||!dirty&&!forceVersion)return true;
+  const data=snapshot();
+  if(!data.title){get('v5EditorStatus').textContent='请填写标题才能自动保存';return false}
+  const previous=db.writing.find(x=>x.id===item.id);
+  const history=Array.isArray(previous?.v5Versions)?[...previous.v5Versions]:[];
+  if(previous&&(forceVersion||history.length===0||Date.now()-new Date(history[history.length-1].date).getTime()>300000)){
+   history.push({date:new Date().toISOString(),title:previous.title||'',html:v5WritingHtml(previous)});
+  }
+  const updated={...item,...previous,...data,v5Versions:history.slice(-30),updated:new Date().toISOString()};
+  const index=db.writing.findIndex(x=>x.id===item.id);
+  if(index<0)db.writing.unshift(updated);else db.writing[index]=updated;
+  persist();dirty=false;get('v5EditorStatus').textContent='已自动保存 · '+new Date().toLocaleTimeString();return true;
+ }
+ function schedule(){dirty=true;get('v5EditorStatus').textContent='正在编辑…';clearTimeout(timer);timer=setTimeout(()=>save(false),1100)}
+ for(const key of ['v5EditorTitle','v5EditorType','v5EditorAu','v5EditorBody'])get(key).addEventListener('input',schedule);
+ get('v5EditorType').addEventListener('change',schedule);get('v5EditorAu').addEventListener('change',schedule);
+ overlay.querySelectorAll('[data-v5-format]').forEach(b=>{
+  b.onmousedown=e=>e.preventDefault();
+  b.onclick=()=>{
+   get('v5EditorBody').focus();
+   const command=b.dataset.v5Format;
+   if(command.startsWith('formatBlock:'))document.execCommand('formatBlock',false,command.split(':')[1]);
+   else if(command==='h1'||command==='h2')document.execCommand('formatBlock',false,command);
+   else document.execCommand(command,false,null);
+   schedule();
+  };
+ });
+ get('v5EditorBody').addEventListener('paste',e=>{
+  e.preventDefault();const text=e.clipboardData.getData('text/plain');document.execCommand('insertText',false,text);
+ });
+ function close(read){
+  clearTimeout(timer);if(!save(true))return;
+  closed=true;overlay.remove();renderAll();
+  if(read)v5ReadWriting('writing',item.id);
+ }
+ get('v5EditorSave').onclick=()=>close(true);
+ get('v5EditorClose').onclick=()=>close(false);
+ get('v5EditorHistory').onclick=()=>{if(!save(true))return;v5WritingVersions(item.id)};
+ overlay.addEventListener('click',e=>{if(e.target===overlay)close(false)});
+}
+window.v5EditWriting=v5EditWriting;
+function v5WritingVersions(id){
+ const item=db.writing.find(x=>x.id===id);if(!item)return;
+ const history=item.v5Versions||[];
+ const overlay=document.createElement('div');overlay.className='v5-editor-modal';
+ overlay.innerHTML='<div class="v5-editor-dialog" role="dialog" aria-modal="true"><h3>✧ 历史版本 · '+esc(item.title)+'</h3><p>恢复版本前会先保留当前内容的快照。</p>'+
+ (history.length?history.map((h,i)=>'<div class="v5-version-entry"><span>'+esc(new Date(h.date).toLocaleString())+' · '+esc(h.title||'无题')+'</span><button class="btn soft" data-v5-restore="'+i+'">恢复此版本</button></div>').reverse().join(''):'<p>暂无历史版本。继续编辑后会逐步记录。</p>')+
+ '<button class="btn" id="v5VersionsClose">关闭</button></div>';
+ document.body.appendChild(overlay);
+ overlay.querySelector('#v5VersionsClose').onclick=()=>overlay.remove();
+ overlay.querySelectorAll('[data-v5-restore]').forEach(b=>b.onclick=()=>{
+  if(!confirm('恢复这个版本？当前内容会保存到历史版本。'))return;
+  const version=history[Number(b.dataset.v5Restore)];
+  item.v5Versions=[...history,{date:new Date().toISOString(),title:item.title,html:v5WritingHtml(item)}].slice(-30);
+  item.v5Html=v5SafeHtml(version.html);item.content=new DOMParser().parseFromString(item.v5Html,'text/html').body.textContent||'';
+  item.title=version.title||item.title;item.updated=new Date().toISOString();
+  persist();overlay.remove();v5ReadWriting('writing',id);toast('已恢复历史版本');
+ });
+}
+
 let v5CurrentAu=null;
 function v5OpenAu(id){v5CurrentAu=id;go('au-detail');renderV5AuDetail()}
 window.v5OpenAu=v5OpenAu;
@@ -633,10 +768,10 @@ function renderV5AuDetail(){
  bindV5Wardrobe(root,a);
  root.querySelector('#v5AuEdit').onclick=()=>editAu(a.id);
  root.querySelector('#v5AuNewSetting').onclick=()=>editRecord('settings',null,{title:a.name+' · 新设定',type:'世界观',au:a.name,content:''});
- root.querySelector('#v5AuNewWriting').onclick=()=>editRecord('writing',null,{title:'',type:'正文',au:a.name,content:''});
+ root.querySelector('#v5AuNewWriting').onclick=()=>v5EditWriting(null,{title:'',type:'正文',au:a.name,content:''});
  root.querySelectorAll('[data-v5-record]').forEach(b=>b.onclick=()=>{
  const bucket=b.dataset.v5Record,id=b.dataset.v5Id;
- if(bucket==='letters'){v5OpenLetter(id);return}editRecord(bucket,id);
+ if(bucket==='letters'){v5OpenLetter(id);return}if(bucket==='writing'){v5ReadWriting('writing',id);return}editRecord(bucket,id);
  });
  root.querySelector('#v5TimelineAdd').onclick=()=>{
  const title=root.querySelector('#v5TimelineTitle').value.trim();if(!title){toast('请填写时间节点标题');return}
