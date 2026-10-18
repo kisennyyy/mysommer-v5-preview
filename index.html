@@ -487,6 +487,39 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 #page-home .room-close{color:#977daf!important}
 @media(max-width:600px){#page-home .radio-area{width:100%!important}#page-home .radio-machine{padding:10px 10px 12px!important;border-width:4px!important}#page-home .radio-top{border-width:4px!important}#page-home .radio-speaker{border-width:3px!important}#page-home .radio-tape{border-width:4px!important;padding:4px 3px!important}#page-home .room-drawer{padding:22px 15px!important}#page-home .room-drawer .v5-home-links{gap:9px!important}#page-home .room-drawer .v5-home-links button{padding:15px 6px!important;font-size:13px!important}}
 
+
+/* V5.1 calendar: editorial orbital diagrams in ivory and lilac. */
+#page-calendar{position:relative;isolation:isolate}
+#page-calendar:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.5;background:radial-gradient(ellipse 46% 20% at 78% 9%,transparent 98%,#cbb7e7 99%,transparent 100%),radial-gradient(ellipse 40% 32% at 30% 33%,transparent 98%,#d4c4eb 99%,transparent 100%),radial-gradient(circle at 91% 19%,#8b6bae 0 2px,transparent 3px),radial-gradient(circle at 7% 51%,#aa8acb 0 2px,transparent 3px)}
+#page-calendar>.section-head{padding:18px 4px 25px;border-bottom:1px solid #dcd0ea;margin-bottom:22px}
+#page-calendar>.section-head h3{font-size:clamp(25px,3.4vw,42px);font-weight:500;letter-spacing:.12em;color:#654c85}
+#page-calendar>.section-head p{font-size:12px;letter-spacing:.06em;color:#9383a7}
+#page-calendar .panel{background:linear-gradient(155deg,#fff,#fdfaff 75%,#f8f3fd);border:1px solid #e6ddef;border-radius:7px;box-shadow:0 14px 30px #6a508515;position:relative}
+#page-calendar .v5-month-journal{border-left:3px solid #9d7abf;border-radius:5px;padding:24px 27px;overflow:hidden}
+#page-calendar .v5-month-journal:after{content:"";position:absolute;right:-70px;top:-85px;width:270px;height:270px;border:1px solid #d8c8e8;border-radius:50%;box-shadow:0 0 0 35px #f4eafb40,0 0 0 36px #d8c8e860;pointer-events:none}
+#page-calendar .v5-month-journal h3{letter-spacing:.14em;font-weight:500;color:#644b83}
+#page-calendar .calendar-layout{gap:22px;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr)}
+#page-calendar .calendar-layout>.panel{padding:22px!important;overflow:hidden}
+#page-calendar .calendar-layout>.panel:first-child:before{content:"";position:absolute;inset:10px;pointer-events:none;opacity:.6;background:radial-gradient(ellipse 45% 40% at 80% 19%,transparent 98%,#d7c7e6 99%,transparent 100%),radial-gradient(circle at 90% 19%,#8f71b0 0 3px,transparent 4px);z-index:0}
+#page-calendar .calendar-head{position:relative;border-bottom:1px solid #e9e0f1;padding-bottom:17px;margin-bottom:17px}
+#page-calendar .calendar-head h3{font-family:Georgia,serif;font-size:23px;font-weight:400;letter-spacing:.1em;color:#654c85}
+#page-calendar .calendar-head .btn{border-radius:50%;width:37px;height:37px;padding:0;background:#fff;border:1px solid #d9c9e7;color:#79599a;font-size:24px}
+#page-calendar .calendar-grid{position:relative;gap:5px}
+#page-calendar .day-name{font:600 10px/1.5 ui-sans-serif,system-ui;letter-spacing:.13em;color:#a58dbd;padding:8px 0 14px}
+#page-calendar .day{min-height:clamp(46px,7vw,74px);background:#f9f6fc;border:1px solid #efe8f4;border-radius:3px;padding:9px 8px;font:500 13px/1.2 Georgia,serif;color:#63517a;transition:background .18s,border-color .18s,transform .18s}
+#page-calendar .day:hover{border-color:#b9a2d2;background:#f1e9f8;transform:translateY(-1px)}
+#page-calendar .day.muted{background:#fff;opacity:.35}
+#page-calendar .day.today{border:1px solid #9877bc;background:#f0e6f9;color:#60457e;font-weight:700}
+#page-calendar .day.selected{background:#8261a7;border-color:#8261a7;color:#fff}
+#page-calendar .day .dot{width:6px;height:6px;background:#b68ac9;bottom:8px;left:9px;box-shadow:0 0 0 2px #e9d9f4}
+#page-calendar .day.selected .dot{background:#fff;box-shadow:none}
+#page-calendar .calendar-layout>.panel:last-child .section-head{border-bottom:1px solid #eae0f1;padding-bottom:13px}
+#page-calendar .calendar-layout>.panel:last-child h3{font-weight:500;letter-spacing:.06em;color:#654b82}
+#page-calendar .calendar-layout .list{gap:10px}
+#page-calendar .btn.primary{background:#8262a8;border-color:#8262a8;color:white}
+@media(max-width:850px){#page-calendar .calendar-layout{grid-template-columns:1fr}#page-calendar .calendar-layout>.panel{padding:15px!important}}
+@media(max-width:480px){#page-calendar .day{min-height:45px;padding:6px 5px;font-size:12px}#page-calendar .calendar-grid{gap:3px}#page-calendar .calendar-head h3{font-size:18px}#page-calendar .v5-month-journal{padding:17px}}
+
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
