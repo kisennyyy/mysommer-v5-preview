@@ -298,7 +298,13 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 
 /* V5 illustrated-book splash: warm violet → cool blush → pink-lavender, without particles. */
 .intro{background:#e9d9ed!important;color:#594473!important;overflow-y:auto;overscroll-behavior:contain;padding:28px 16px;animation:v5IntroColorJourney 7.2s ease-in-out both}
-.intro:before,.intro:after,.intro-sparkles,.intro-photo{display:none!important}
+.intro:before,.intro:after,.intro-sparkles{display:none!important}
+.intro-photo{display:block!important;position:absolute;inset:-2%;z-index:0!important;pointer-events:none;background:linear-gradient(120deg,rgba(242,200,225,0) 4%,rgba(237,186,217,.32) 44%,rgba(233,190,229,.48) 76%,rgba(234,204,241,.35) 100%)!important;opacity:0;transform:translateX(-22%);animation:v5PinkWash 7.2s ease-in-out forwards!important}
+@keyframes v5PinkWash{0%,15%{opacity:0;transform:translateX(-22%)}40%{opacity:.42}76%{opacity:.85;transform:translateX(0)}100%{opacity:.8;transform:translateX(0)}}
+.intro-content,.intro-bottom,.intro-skip{position:relative;z-index:1}
+.intro-bottom{position:absolute}
+.intro-skip{position:absolute}
+
 @keyframes v5IntroColorJourney{
  0%{background-color:#e8d5e8}
  38%{background-color:#e5d8ed}
@@ -307,7 +313,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 }
 /* A translucent wash moves across the page while the book-cover illustration stays clear. */
 .intro::selection{background:#d9b4e5;color:#4e3466}
-@media(prefers-reduced-motion:reduce){.intro{animation:none!important;background:#eedcf3!important}}
+@media(prefers-reduced-motion:reduce){.intro{animation:none!important;background:#eedcf3!important}.intro-photo{animation:none!important;opacity:.8;transform:none}}
 .intro-content{width:min(100%,520px);max-width:520px;padding:18px 12px 24px!important;display:flex;flex-direction:column;align-items:center;animation:v5BookContent 1.2s ease both!important;text-shadow:none!important}
 .intro-art-frame{width:min(78vw,410px,47vh);aspect-ratio:1/1;border-radius:17px;background:#e4d7f1 var(--intro-image) center/cover no-repeat;box-shadow:0 3px 20px rgba(77,48,116,.12);border:1px solid rgba(126,94,165,.18);overflow:hidden;display:flex;align-items:center;justify-content:center;animation:v5BookArt 1.8s ease-out both}
 .intro-art-frame.has-image .intro-art-placeholder{display:none}
@@ -732,8 +738,8 @@ function applyAppearance(){
 }
 function closeIntro(){document.getElementById('introScreen').classList.add('hidden')}
 function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden');
- const art=document.getElementById('introArtFrame'),content=el.querySelector('.intro-content');
- [el,art,content].forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
+ const art=document.getElementById('introArtFrame'),wash=document.getElementById('introPhoto'),content=el.querySelector('.intro-content');
+ [el,wash,art,content].forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
 }
 document.getElementById('introEnter').onclick=closeIntro;
 
