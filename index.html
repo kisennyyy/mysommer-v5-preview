@@ -757,33 +757,50 @@ function showIntro(){
 document.getElementById('introEnter').onclick=closeIntro;
 
 document.getElementById('previewIntro').onclick=showIntro;
-// Side-profile origami cranes: unmistakable pointed beak, long folded neck, raised wings, diamond body and tail.
+// Reference-inspired luminous folded-paper cranes: distinct triangular wings, long bent neck, pointed beak and tail.
 const v5Flight=document.getElementById('v5Flight');
 const v5BirdNS='http://www.w3.org/2000/svg';
-for(let ribbon=0;ribbon<2;ribbon++){
- const count=[7,6][ribbon];
+const v5CraneFacets=[
+ // Raised near wing: the two visible triangular paper planes.
+ ['M61 78 L34 8 L47 62 L64 91 Z','#ffffff'],
+ ['M61 78 L34 8 L77 65 L64 91 Z','#dedcf3'],
+ // Opposite wing spreads horizontally in perspective.
+ ['M69 79 L115 30 L93 80 L65 92 Z','#fafaff'],
+ ['M69 79 L115 30 L83 62 L65 92 Z','#d6d4ed'],
+ // Diamond-folded central body.
+ ['M47 62 L77 65 L93 80 L65 96 L49 86 Z','#ffffff'],
+ ['M47 62 L65 96 L64 77 Z','#ded8ee'],
+ ['M64 77 L93 80 L65 96 Z','#f5f1ff'],
+ // Long slender neck rises and folds forward into the beak.
+ ['M76 69 L92 38 L104 25 L111 29 L96 44 L89 76 Z','#fffefe'],
+ ['M104 25 L111 29 L117 36 L123 35 L114 40 L108 35 Z','#d8d5ef'],
+ // Tail folds backward.
+ ['M49 86 L13 76 L48 95 L65 96 Z','#e8e4f4'],
+ ['M65 96 L84 101 L93 80 Z','#ccc7e6']
+];
+for(let ribbon=0;ribbon<3;ribbon++){
+ const count=[5,7,6][ribbon];
  for(let i=0;i<count;i++){
-  const t=i/(count-1),seed=((i*7+ribbon*3)%13)/13;
+  const t=count===1?0:i/(count-1),seed=((i*7+ribbon*5)%17)/17;
   const svg=document.createElementNS(v5BirdNS,'svg');
-  svg.setAttribute('viewBox','0 0 150 110');
-  // Paper facets make the object readable as an origami crane, not a generic bird silhouette.
-  const facets=[
-   ['M58 68 L18 23 L42 73 L69 85 Z','#fffdfd'],
-   ['M58 68 L77 12 L94 70 L69 85 Z','#f8f3ff'],
-   ['M69 85 L94 70 L113 81 L88 96 Z','#eee5f7'],
-   ['M88 96 L113 81 L142 94 L114 91 Z','#fffdfd'],
-   ['M94 70 L111 46 L116 22 L127 19 L119 49 L113 81 Z','#fffdfd'],
-   ['M116 22 L127 19 L137 24 L145 25 L130 30 L119 49 Z','#f6f0ff'],
-   ['M69 85 L88 96 L74 101 L58 94 Z','#e9e0f5']
-  ];
-  for(const [d,fill] of facets){const p=document.createElementNS(v5BirdNS,'path');p.setAttribute('d',d);p.setAttribute('fill',fill);p.setAttribute('stroke','#d6c9e5');p.setAttribute('stroke-width','.8');p.setAttribute('stroke-linejoin','round');svg.appendChild(p)}
-  const wave=Math.sin(t*Math.PI*1.7+ribbon*.8);
-  svg.style.setProperty('--left',(4+t*82+(seed-.5)*6)+'%');
-  svg.style.setProperty('--top',([31,64][ribbon]+wave*8+(seed-.5)*8)+'%');
-  svg.style.setProperty('--size',(46+seed*34)+'px');
-  svg.style.setProperty('--delay',(t*.17+ribbon*.07)+'s');
-  svg.style.setProperty('--alpha',(.78+seed*.16).toFixed(2));
-  svg.style.setProperty('--angle',(wave*9-3)+'deg');
+  svg.setAttribute('viewBox','0 0 135 115');
+  const group=document.createElementNS(v5BirdNS,'g');
+  // Alternating angles show the paper cranes from slightly different perspectives.
+  if((i+ribbon)%3===0)group.setAttribute('transform','translate(135 0) scale(-1 1)');
+  for(const [d,fill] of v5CraneFacets){
+   const p=document.createElementNS(v5BirdNS,'path');
+   p.setAttribute('d',d);p.setAttribute('fill',fill);
+   p.setAttribute('stroke','#c8c1e2');p.setAttribute('stroke-width','.8');
+   p.setAttribute('stroke-linejoin','round');group.appendChild(p);
+  }
+  svg.appendChild(group);
+  const wave=Math.sin(t*Math.PI*1.5+ribbon*.95);
+  svg.style.setProperty('--left',(7+t*78+(seed-.5)*10)+'%');
+  svg.style.setProperty('--top',([25,49,72][ribbon]+wave*8+(seed-.5)*10)+'%');
+  svg.style.setProperty('--size',(34+seed*44+(ribbon===0?7:0))+'px');
+  svg.style.setProperty('--delay',(t*.16+ribbon*.075)+'s');
+  svg.style.setProperty('--alpha',(.73+seed*.24).toFixed(2));
+  svg.style.setProperty('--angle',(wave*13-5)+'deg');
   v5Flight.appendChild(svg);
  }
 }
