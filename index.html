@@ -767,8 +767,15 @@ for(let ribbon=0;ribbon<2;ribbon++){
   const t=i/(count-1),seed=((i*7+ribbon*3)%13)/13;
   const svg=document.createElementNS(v5BirdNS,'svg');
   svg.setAttribute('viewBox','0 0 120 65');
+  // Three natural swallow poses: one raised wing, one swept wing, and a banking turn.
+  // Asymmetry and forked tails keep these from reading as moths or butterflies.
+  const poses=[
+   'M52 32 C40 21 31 8 25 2 C21 18 27 32 44 42 C28 39 15 42 4 49 C21 47 34 50 47 48 L55 44 L63 46 C78 43 94 35 116 34 C98 29 79 31 64 37 L60 34 L66 52 L58 47 L48 58 L53 44 Z',
+   'M52 38 C38 33 23 21 7 18 C13 31 28 41 44 44 C28 47 17 55 12 63 C28 54 42 51 53 49 L60 45 C78 45 91 35 110 15 C90 20 72 31 62 37 L59 40 L66 55 L59 49 L49 61 L54 46 Z',
+   'M55 34 C39 21 29 15 11 13 C22 28 33 35 48 40 C31 36 18 39 6 45 C23 45 36 48 52 47 L60 43 C78 36 88 19 98 3 C102 23 86 41 66 46 L62 46 L71 58 L61 50 L51 60 L56 45 Z'
+  ];
   const wing=document.createElementNS(v5BirdNS,'path');
-  wing.setAttribute('d','M59 39 Q42 23 7 18 Q30 12 55 32 Q60 35 63 33 Q89 12 115 17 Q91 24 68 42 L63 43 L59 39 Z M60 40 L53 60 L63 49 L76 61 L68 39 Z');
+  wing.setAttribute('d',poses[(i+ribbon*2)%poses.length]);
   svg.appendChild(wing);
   const wave=Math.sin(t*Math.PI*1.7+ribbon*.8);
   svg.style.setProperty('--left',(8+t*80+(seed-.5)*9)+'%');
