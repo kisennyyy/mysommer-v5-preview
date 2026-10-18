@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#6e4aa1">
-<title>夏以昼x锺起</title>
+<title>🍎🍏</title>
 <style>
 :root{
   --bg:#f7f3fb;--paper:#fffdfd;--panel:#f0e8f8;--panel2:#e8dcf3;
@@ -333,6 +333,44 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 @media(max-height:680px){.intro{padding:12px}.intro-art-frame{width:min(70vw,280px,43vh)}.intro-apples{margin:10px 0 2px!important}.intro-bottom{display:none}}
 @media(prefers-reduced-motion:reduce){.intro-content,.intro-art-frame{animation:none!important}}
 
+
+/* C concept · interactive dream room · preview only */
+body:has(#page-home.active) .sidebar{display:none}
+body:has(#page-home.active) .shell{display:block;max-width:100%}
+body:has(#page-home.active) main{max-width:100%;padding:0}
+body:has(#page-home.active) .topbar{position:absolute;z-index:4;right:3%;top:18px;background:transparent;border:0}
+body:has(#page-home.active) .topbar>div:first-child{display:none}
+body:has(#page-home.active) .cloud-bar{position:relative;z-index:4;max-width:1040px;margin:12px auto;padding:12px}
+#page-home{overflow:hidden}
+#page-home .v5-home-cover,#page-home .hero,#page-home .v5-home-links,#page-home .v5-progress,#page-home>.footer{display:none!important}
+.dream-room{min-height:760px;position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:85px 24px 75px;background:radial-gradient(ellipse at 50% 37%,#c8aedf 0%,#a489c5 33%,#7a689f 64%,#40365f 100%);color:#fff8ff;text-align:center}
+.dream-room:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 12% 16%,#ffffff88 0 2px,transparent 3px),radial-gradient(circle at 77% 30%,#ffffff88 0 2px,transparent 3px),radial-gradient(circle at 90% 75%,#ffffff99 0 2px,transparent 3px),repeating-linear-gradient(105deg,transparent 0 145px,#ffffff0a 146px 147px);pointer-events:none}
+.room-name{font-size:clamp(32px,5vw,54px);letter-spacing:.2em;margin:0;text-shadow:0 8px 22px #392a65a8}.room-sub{font-size:11px;letter-spacing:.38em;opacity:.78;margin:5px 0 35px}
+.room-scene{width:min(1060px,100%);min-height:440px;display:grid;grid-template-columns:1fr minmax(290px,480px) 1fr;align-items:center;gap:22px}
+.room-photos{display:grid;gap:24px;justify-items:center}
+.room-photo{width:min(100%,185px);height:120px;border:8px solid #eee7f3;background:linear-gradient(145deg,#4a527d,#ab9bc4);box-shadow:0 15px 28px #2b20476b;transform:rotate(-7deg);display:grid;place-items:center;font-size:46px;transition:transform .3s;cursor:pointer;color:white}
+.room-photo:nth-child(2){transform:rotate(6deg);background:linear-gradient(145deg,#66587b,#d8a4c0)}.room-photos.right .room-photo{transform:rotate(7deg)}.room-photos.right .room-photo:nth-child(2){transform:rotate(-5deg)}
+.room-photo:hover{transform:rotate(0) scale(1.07)!important}
+.radio-area{position:relative;display:grid;justify-items:center}
+.radio-antenna{height:55px;width:68%;border:7px solid #ddd3e0;border-bottom:0;border-radius:12px 12px 0 0;transform:translateY(8px);opacity:.85}
+.radio-machine{border:0;width:100%;aspect-ratio:1.56;border-radius:16px 16px 25px 25px;padding:17px 20px;background:linear-gradient(135deg,#e6d9e7,#bba9bf 42%,#eee4e8 52%,#8b809b);box-shadow:0 23px 0 #51445f,0 35px 45px #20152c88,inset 0 4px 7px #ffffffbd;color:#322940;position:relative;transition:transform .25s}
+.radio-machine:hover{transform:translateY(-5px)}.radio-machine:focus-visible{outline:4px solid white}
+.radio-top{height:22%;border-radius:6px;background:repeating-linear-gradient(0deg,#433b4b 0 2px,#afa2af 3px 5px);box-shadow:inset 0 0 7px #251c2d}
+.radio-controls{display:flex;justify-content:space-around;margin:11px 0 13px;font-size:10px;letter-spacing:.1em}.radio-controls b{width:18px;height:18px;background:#393343;border-radius:50%;box-shadow:inset 3px 2px 2px #91879b}
+.radio-bottom{display:grid;grid-template-columns:1fr .9fr 1fr;gap:10px;align-items:center}
+.radio-speaker{aspect-ratio:1;border-radius:50%;background:repeating-radial-gradient(circle,#272331 0 3px,#51485a 4px 6px);border:7px solid #7d7185;box-shadow:inset 0 0 15px #100c16}
+.radio-tape{height:63%;border-radius:6px;background:#5d5268;border:5px solid #d3c3d0;display:flex;align-items:center;justify-content:space-around}.radio-tape i{width:24px;height:24px;border-radius:50%;background:#c8a3d0;border:5px dotted #6b527c}
+.radio-caption{margin:38px 0 0;font-size:13px;letter-spacing:.2em}
+.room-calendar{background:#f6eef5;color:#4b3b65;border-radius:9px;box-shadow:0 14px 30px #23193666;transform:rotate(4deg);width:165px;margin:18px auto 0;overflow:hidden;text-align:center;cursor:pointer;border:0;padding:0}
+.room-calendar strong{display:block;background:#9e77b8;color:white;padding:7px;font-size:12px;letter-spacing:.2em}.room-calendar em{display:block;font-size:46px;font-weight:750;font-style:normal;line-height:1.4}.room-calendar span{display:block;font-size:11px;padding:0 0 9px}
+.room-drawer{width:min(650px,95%);background:#fbf6ff;color:#42314e;box-shadow:0 25px 70px #2316349c;border:1px solid #d8c5e8;border-radius:24px;padding:23px;position:relative;margin:20px auto 0;animation:roomPop .3s ease}
+.room-drawer[hidden]{display:none}.room-drawer h3{margin:0 0 6px}.room-drawer p{font-size:12px;color:#806e90;margin:0 0 14px}.room-drawer .v5-home-links{display:grid!important;grid-template-columns:repeat(3,1fr);gap:8px}
+.room-drawer .v5-home-links button{padding:12px 8px;border:1px solid #e5d7ef;background:#f3eafa;border-radius:12px;color:#58436c}
+.room-drawer .v5-home-links button:hover{background:#e5d2f1}
+.room-close{position:absolute;right:15px;top:13px;border:0;background:transparent;font-size:23px;color:#654e78}
+@keyframes roomPop{from{opacity:0;transform:translateY(-12px) scale(.96)}to{opacity:1;transform:none}}
+@media(max-width:700px){.dream-room{padding:65px 12px;min-height:750px}.room-scene{grid-template-columns:1fr 1fr;gap:12px;min-height:0}.radio-area{grid-column:1/-1;grid-row:1;max-width:420px;width:100%;margin:auto}.room-photos{display:flex;gap:12px}.room-photos.left{grid-column:1;grid-row:2}.room-photos.right{grid-column:2;grid-row:2}.room-photo{width:90px;height:85px;font-size:28px;border-width:5px}.room-calendar{width:130px}.room-drawer .v5-home-links{grid-template-columns:repeat(2,1fr)}.radio-caption{margin:36px 0 12px}}
+@media(prefers-reduced-motion:reduce){.room-drawer{animation:none}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -346,7 +384,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 </div>
 <div class="shell">
 <aside class="sidebar">
-  <div class="brand"><div class="brand-mark">✧</div><div><h1>🍎 🍏</h1><p>MY AU UNIVERSE</p></div></div>
+  <div class="brand"><div class="brand-mark">🍎</div><div><h1>🍎 🍏</h1><p>MY AU UNIVERSE</p></div></div>
   <div class="nav" id="nav">
     <button class="active" data-page="home"><span class="nav-icon">⌂</span>首页</button>
     <button data-page="aus"><span class="nav-icon">✦</span>AU 索引</button>
@@ -367,16 +405,20 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 
   <div class="cloud-bar" aria-live="polite"><span class="cloud-status" id="cloudStatus">☁ 未连接 Puter · 当前仅保存在本机</span><button class="btn primary" id="cloudLogin">连接 Puter</button><button class="btn" id="cloudSync" disabled>立即同步</button><button class="btn" id="cloudReload" disabled>从云端读取</button><button class="btn" id="cloudBackup" disabled>下载云端备份</button></div>
   <section class="page active" id="page-home">
-    <div class="v5-home-decor" id="v5HomeDecor" aria-hidden="true"></div><div class="v5-home-cover" id="v5HomeCover"><div class="v5-cover-hint">✦ OUR LITTLE UNIVERSE · 🍎 🍏</div></div>
-    <div class="hero" id="v5SecretHero" title="我们的秘密基地"><div class="hero-copy"><div class="eyebrow">A LITTLE UNIVERSE OF OUR OWN</div><h3>把我们的<br>共同经历好好收藏。</h3><p>就好像我们的秘密基地一样，收藏和存档着一切。</p></div><div class="hero-symbol">☾✧</div></div>
-    <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙 <span>↗</span></button><button data-goto="settings">❖ 档案室 <span>↗</span></button><button data-goto="dreams">☾ 梦图收藏 <span>↗</span></button><button data-goto="writing">✎ 文稿 <span>↗</span></button><button data-goto="letters">✉ 书信 <span>↗</span></button><button data-goto="divination">☽ 梦占 <span>↗</span></button><button data-goto="gacha">✧ 抽卡 <span>↗</span></button><button data-goto="calendar">♡ 日历 <span>↗</span></button><button data-goto="merch">✧ 谷子 <span>↗</span></button></div>
-    <div class="v5-progress" id="v5Progress"></div>
-    <!-- Legacy render targets retained for compatibility; the V5 homepage stays static. -->
-    <div class="v5-home-legacy" hidden aria-hidden="true">
-      <span id="statAus"></span><span id="statEvents"></span><span id="statDreams"></span><span id="statWriting"></span>
-      <div id="homeAus"></div><div id="homeEvents"></div>
+  <div class="dream-room">
+    <h1 class="room-name">🍎🍏</h1><p class="room-sub">OUR LITTLE UNIVERSE · EST. 2026</p>
+    <div class="room-scene">
+      <div class="room-photos left"><button class="room-photo" type="button" data-goto="dreams" aria-label="打开梦图收藏">☾</button><button class="room-photo" type="button" data-goto="letters" aria-label="打开书信">✉</button></div>
+      <div class="radio-area"><div class="radio-antenna"></div><button class="radio-machine" id="roomRadio" type="button" aria-expanded="false" aria-controls="roomDrawer" aria-label="点击收音机打开宇宙档案菜单"><div class="radio-top"></div><div class="radio-controls"><b></b><span>FM 88.8 · 🍎🍏</span><b></b></div><div class="radio-bottom"><div class="radio-speaker"></div><div class="radio-tape"><i></i><i></i></div><div class="radio-speaker"></div></div></button><p class="radio-caption">✧ TOUCH TO OPEN THE UNIVERSE ✧</p></div>
+      <div class="room-photos right"><button class="room-photo" type="button" data-goto="aus" aria-label="打开 AU 宇宙">✦</button><button class="room-photo" type="button" data-goto="writing" aria-label="打开文稿">✎</button></div>
     </div>
-    <div class="footer">Made for stories, memories & little universes · 🍎 🍏</div>
+    <button class="room-calendar" type="button" data-goto="calendar" aria-label="打开纪念日历"><strong id="roomMonth">OCTOBER 2026</strong><em id="roomDay">18</em><span>♡ 翻开我们的纪念日</span></button>
+    <div class="room-drawer" id="roomDrawer" hidden><button class="room-close" id="roomClose" type="button" aria-label="关闭菜单">×</button><h3>✦ 宇宙档案室</h3><p>旋转频率，找到属于我们的故事。</p>
+      <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙</button><button data-goto="settings">❖ 档案室</button><button data-goto="dreams">☾ 梦图收藏</button><button data-goto="writing">✎ 文稿</button><button data-goto="letters">✉ 书信</button><button data-goto="divination">☽ 梦占</button><button data-goto="gacha">✧ 抽卡</button><button data-goto="calendar">♡ 日历</button><button data-goto="merch">✧ 谷子</button><button data-goto="appearance">✿ 外观设置</button></div>
+    </div>
+  </div>
+  <div class="v5-home-legacy" hidden aria-hidden="true"><span id="statAus"></span><span id="statEvents"></span><span id="statDreams"></span><span id="statWriting"></span><div id="homeAus"></div><div id="homeEvents"></div></div>
+  <div id="v5HomeDecor" hidden></div><div id="v5HomeCover" hidden></div><div id="v5Progress" hidden></div><div id="v5SecretHero" hidden></div>
   </section>
 
   <section class="page" id="page-aus">
@@ -1484,6 +1526,14 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
 
 renderAll();
 applyAppearance();
+</script>
+<script>
+(function(){
+ const radio=document.getElementById('roomRadio'),drawer=document.getElementById('roomDrawer'),close=document.getElementById('roomClose');
+ if(radio&&drawer){radio.addEventListener('click',()=>{drawer.hidden=!drawer.hidden;radio.setAttribute('aria-expanded',String(!drawer.hidden));if(!drawer.hidden)drawer.scrollIntoView({behavior:'smooth',block:'nearest'});});close.addEventListener('click',()=>{drawer.hidden=true;radio.setAttribute('aria-expanded','false');radio.focus();});}
+ const now=new Date();const months=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+ const m=document.getElementById('roomMonth'),d=document.getElementById('roomDay');if(m)m.textContent=months[now.getMonth()]+' '+now.getFullYear();if(d)d.textContent=now.getDate();
+})();
 </script>
 </body>
 </html>
