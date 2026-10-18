@@ -295,6 +295,26 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .intro-enter{background:rgba(255,244,255,.12);border-color:rgba(255,241,255,.54)}
 /* Three deliberate sizes: orb → bar → record player → orb. */
 .v5-music-player.compact{width:54px!important}
+
+/* V5 illustrated-book splash: centered square cover, warm ivory page, quiet entrance. */
+.intro{background:#fbf3e6!important;color:#5e5047!important;overflow-y:auto;overscroll-behavior:contain;padding:28px 16px}
+.intro:before,.intro:after,.intro-sparkles,.intro-photo{display:none!important}
+.intro-content{width:min(100%,520px);max-width:520px;padding:18px 12px 24px!important;display:flex;flex-direction:column;align-items:center;animation:v5BookContent 1.2s ease both!important;text-shadow:none!important}
+.intro-art-frame{width:min(78vw,410px,47vh);aspect-ratio:1/1;border-radius:17px;background:#f3e7d9 var(--intro-image) center/cover no-repeat;box-shadow:0 3px 20px rgba(95,71,60,.09);border:1px solid rgba(132,105,86,.11);overflow:hidden;display:flex;align-items:center;justify-content:center;animation:v5BookArt 1.8s ease-out both}
+.intro-art-frame.has-image .intro-art-placeholder{display:none}
+.intro-art-placeholder{font-family:Georgia,serif;font-size:clamp(25px,6vw,48px);letter-spacing:.2em;color:#a18a95;opacity:.7}
+.intro-art-placeholder span{color:#cfa2aa}
+.intro-apples{font-size:16px!important;letter-spacing:8px!important;margin:22px 0 6px!important;filter:none!important;opacity:.7}
+.intro-content h1,.intro-content h1.v5-intro-hidden{display:block!important;color:#675749!important;font-family:Georgia,'Songti SC','Noto Serif CJK SC',serif;font-size:clamp(29px,6vw,44px)!important;letter-spacing:.14em!important;font-weight:400!important;margin:0 0 8px!important;text-shadow:none!important}
+.intro-content p{color:#9a827c!important;font-size:clamp(12px,2.6vw,15px)!important;letter-spacing:.1em!important;margin:0 0 23px!important;line-height:1.8}
+.intro-enter{color:#a28d85!important;background:transparent!important;border:0!important;backdrop-filter:none!important;padding:10px 24px!important;font-size:13px;letter-spacing:.16em!important}
+.intro-enter:hover{color:#715b54!important;transform:none!important}
+.intro-bottom{color:#bca89a!important;bottom:16px!important;font-size:10px;letter-spacing:.14em}
+.intro-skip{color:#9a8176!important;background:transparent!important;border:0!important}
+@keyframes v5BookArt{from{opacity:0;transform:translateY(15px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes v5BookContent{from{opacity:0}to{opacity:1}}
+@media(max-height:680px){.intro{padding:12px}.intro-art-frame{width:min(70vw,280px,43vh)}.intro-apples{margin:10px 0 2px!important}.intro-bottom{display:none}}
+@media(prefers-reduced-motion:reduce){.intro-content,.intro-art-frame{animation:none!important}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -303,7 +323,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
   <div class="intro-photo" id="introPhoto"></div>
   <div class="intro-sparkles" id="introSparkles" aria-hidden="true"></div>
   
-  <div class="intro-content"><div class="intro-apples">🍎 🍏</div><h1 id="introTitle" class="v5-intro-hidden">昼起之时</h1><p id="introSubtitle">两颗心相遇，于是爱在无限时空中蔓延。</p><button class="intro-enter" id="introEnter">进入 ✧</button></div>
+  <div class="intro-content"><div class="intro-art-frame" id="introArtFrame" aria-label="开屏封面插画"><div class="intro-art-placeholder">🍎 <span>♡</span> 🍏</div></div><div class="intro-apples">🍎 🍏</div><h1 id="introTitle">昼起之时</h1><p id="introSubtitle">两颗心相遇，于是爱在无限时空中蔓延。</p><button class="intro-enter" id="introEnter">进入 ✧</button></div>
   <div class="intro-bottom">OUR LITTLE UNIVERSE · ✦</div>
 </div>
 <div class="shell">
@@ -690,7 +710,8 @@ function cssImage(src){return src?`url("${src}")`:'none'}
 function applyAppearance(){
  const a=getAppearance();document.documentElement.style.setProperty('--custom-bg-image',cssImage(a.background));
  document.documentElement.style.setProperty('--custom-hero-image',cssImage(a.hero));
- document.documentElement.style.setProperty('--intro-image',a.intro?cssImage(a.intro):'linear-gradient(140deg,#2a1643,#78579c)');
+ document.documentElement.style.setProperty('--intro-image',a.intro?cssImage(a.intro):'none');
+ document.getElementById('introArtFrame').classList.toggle('has-image',!!a.intro);
  document.getElementById('introTitle').textContent=a.title;document.getElementById('introSubtitle').textContent=a.subtitle;
  document.getElementById('introEnter').textContent=a.button;document.title=a.title+' · AU Archive';
  document.querySelector('.brand h1').textContent=a.title;
@@ -702,8 +723,8 @@ function applyAppearance(){
 }
 function closeIntro(){document.getElementById('introScreen').classList.add('hidden')}
 function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden');
- const photo=document.getElementById('introPhoto'),content=el.querySelector('.intro-content');
- [photo,content].forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
+ const art=document.getElementById('introArtFrame'),content=el.querySelector('.intro-content');
+ [art,content].forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
 }
 document.getElementById('introEnter').onclick=closeIntro;
 
