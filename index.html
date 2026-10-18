@@ -233,6 +233,23 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-music-toggle,.v5-music-volume{border:0;background:#e9d9f5;color:#42265b;border-radius:50%;width:37px;height:37px;flex-shrink:0;cursor:pointer}
 .v5-music-details{min-width:0;max-width:155px}.v5-music-details strong,.v5-music-details small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.v5-music-details strong{font-size:12px}.v5-music-details small{font-size:10px;color:#75638b}
 @media(max-width:600px){.v5-music-player{right:10px;bottom:10px;padding:7px;gap:7px}.v5-music-details{max-width:100px}}
+
+.v5-music-player{flex-wrap:wrap;width:max-content;max-width:min(96vw,420px)}
+.v5-music-handle{cursor:grab;touch-action:none;user-select:none;padding:7px 3px;color:#72548a;font-size:20px}
+.v5-music-expanded{display:none;flex-basis:100%;width:100%;text-align:center;padding:12px 6px 4px}
+.v5-music-player.expanded{width:min(92vw,340px);border-radius:24px}
+.v5-music-player.expanded .v5-music-expanded{display:block}
+.v5-record-scene{height:190px;position:relative;display:flex;justify-content:center;align-items:center}
+.v5-record-disc{height:170px;width:170px;border-radius:50%;background:repeating-radial-gradient(circle,#17101e 0px,#292035 3px,#17101e 6px,#3d3150 8px);display:grid;place-items:center;box-shadow:0 8px 20px #29143955}
+.v5-record-center{height:75px;width:75px;border-radius:50%;background-color:#b99ad3;background-position:center;background-size:cover;display:grid;place-items:center;font-size:15px;border:3px solid #e2c7fa}
+.v5-record-arm{position:absolute;width:7px;height:106px;background:linear-gradient(90deg,#a692bd,#e4d4f2);right:45px;top:0;transform:rotate(26deg);transform-origin:top;border-radius:6px;pointer-events:none}
+.v5-music-player.playing .v5-record-disc{animation:v5Spin 5s linear infinite}
+@keyframes v5Spin{to{transform:rotate(360deg)}}
+.v5-record-caption{font-size:11px;letter-spacing:2px;color:#876ba0;margin-bottom:12px}
+.v5-music-track{display:block;width:100%;background:transparent;border:0;border-bottom:1px solid #dfd0eb;padding:8px;text-align:left;color:#4d3364;cursor:pointer}
+.v5-music-track.current{font-weight:700;color:#8250a5}
+.v5-music-listrow{display:flex;gap:6px;align-items:center;margin:7px 0}.v5-music-listrow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:600px){.v5-music-player:not(.expanded) .v5-music-details{max-width:80px}.v5-music-volume{width:30px;height:30px}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -356,7 +373,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
         <div class="field"><label>网站背景照片</label><input id="appearanceBgFile" type="file" accept="image/*"><button class="btn" id="removeBgImage">移除背景照片</button></div>
         <div class="field"><label>首页横幅封面</label><input id="appearanceHeroFile" type="file" accept="image/*"><button class="btn" id="removeHeroImage">移除封面照片</button></div>
       </div>
-      <div class="v5-section-editor"><h3>♫ 迷你音乐播放器</h3><p>可填入音频直链，或临时选择手机里的音频文件。打开网站时不会自动播放。</p><div class="appearance-grid"><div class="field full"><label>音乐直链（https:// 音频文件地址）</label><input id="v5MusicUrl" type="url" placeholder="https://example.com/music.mp3"></div><div class="field"><label>音乐名称</label><input id="v5MusicName" placeholder="我们的歌"></div><div class="field"><label>本次播放的本地音频</label><input id="v5MusicFile" type="file" accept="audio/*"></div></div><button class="btn soft" id="v5MusicSave">保存音乐设置</button></div><div class="v5-section-editor"><h3>✦ 首页装饰贴图</h3><p>可上传两张装饰图片，分别放在首页左右两侧。透明背景 PNG 更适合做贴纸。</p><div class="appearance-grid"><div class="field"><label>左侧装饰</label><input id="v5DecorLeftFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorLeftRemove">移除左侧装饰</button></div><div class="field"><label>右侧装饰</label><input id="v5DecorRightFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorRightRemove">移除右侧装饰</button></div></div></div><div class="v5-section-editor"><h3>☾ 导航顺序</h3><p>点击上下箭头调整侧边栏顺序，保存后下次打开仍会保留。</p><div id="v5NavOrder"></div></div><div class="v5-section-editor"><h3>✧ 页面标题与说明</h3><p>修改每个分区的标题和小字说明，不影响原始档案。</p><div id="v5SectionFields" class="appearance-grid"></div></div>
+      <div class="v5-section-editor"><h3>♫ 迷你音乐播放器</h3><p>可填入音频直链，或临时选择手机里的音频文件。打开网站时不会自动播放。</p><div class="appearance-grid"><div class="field full"><label>音乐直链（https:// 音频文件地址）</label><input id="v5MusicUrl" type="url" placeholder="https://example.com/music.mp3"></div><div class="field"><label>音乐名称</label><input id="v5MusicName" placeholder="我们的歌"></div><div class="field"><label>本次播放的本地音频</label><input id="v5MusicFile" type="file" accept="audio/*"></div></div><button class="btn soft" id="v5MusicSave">添加到歌单</button><div class="field full"><label>唱片封面（可上传照片）</label><input id="v5MusicCoverFile" type="file" accept="image/*"></div><div id="v5MusicPlaylist"></div></div><div class="v5-section-editor"><h3>✦ 首页装饰贴图</h3><p>可上传两张装饰图片，分别放在首页左右两侧。透明背景 PNG 更适合做贴纸。</p><div class="appearance-grid"><div class="field"><label>左侧装饰</label><input id="v5DecorLeftFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorLeftRemove">移除左侧装饰</button></div><div class="field"><label>右侧装饰</label><input id="v5DecorRightFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorRightRemove">移除右侧装饰</button></div></div></div><div class="v5-section-editor"><h3>☾ 导航顺序</h3><p>点击上下箭头调整侧边栏顺序，保存后下次打开仍会保留。</p><div id="v5NavOrder"></div></div><div class="v5-section-editor"><h3>✧ 页面标题与说明</h3><p>修改每个分区的标题和小字说明，不影响原始档案。</p><div id="v5SectionFields" class="appearance-grid"></div></div>
       <div class="appearance-actions"><button class="btn primary" id="saveAppearance">保存文字设置</button><button class="btn danger" id="resetAppearance">恢复默认外观</button></div>
       <p style="color:var(--muted);font-size:11px">图片上传后自动压缩以节省空间。建议定期导出 JSON 备份，清理浏览器数据会删除本地记录。部分手机浏览器以 file:// 打开时可能不支持持久存储。</p>
     </div>
@@ -375,7 +392,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 </main>
 </div>
 
-<div class="v5-music-player" id="v5MusicPlayer"><button class="v5-music-toggle" id="v5MusicToggle" aria-label="播放音乐">♫</button><div class="v5-music-details"><strong id="v5MusicLabel">未选择音乐</strong><small id="v5MusicState">点击播放 · 默认静音</small></div><button class="v5-music-volume" id="v5MusicMute" aria-label="切换静音">🔇</button><audio id="v5MusicAudio" preload="none"></audio></div><div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><h3 id="modalTitle">编辑</h3><button class="x" id="closeModal">✕</button></div><div id="modalBody"></div><div class="modal-actions"><button class="btn" id="cancelModal">取消</button><button class="btn primary" id="saveModal">保存</button></div></div></div>
+<div class="v5-music-player" id="v5MusicPlayer"><div class="v5-music-handle" id="v5MusicHandle" title="拖动位置">⠿</div><button class="v5-music-toggle" id="v5MusicToggle" aria-label="播放音乐">♫</button><div class="v5-music-details"><strong id="v5MusicLabel">未选择音乐</strong><small id="v5MusicState">点击播放 · 默认静音</small></div><button class="v5-music-volume" id="v5MusicPrev" aria-label="上一首">‹</button><button class="v5-music-volume" id="v5MusicNext" aria-label="下一首">›</button><button class="v5-music-volume" id="v5MusicExpand" aria-label="展开唱片机">⤢</button><button class="v5-music-volume" id="v5MusicMute" aria-label="切换静音">🔇</button><div class="v5-music-expanded" id="v5MusicExpanded"><div class="v5-record-scene"><div class="v5-record-disc" id="v5RecordDisc"><div class="v5-record-center" id="v5RecordCenter">🍎🍏</div></div><div class="v5-record-arm"></div></div><div class="v5-record-caption">✧ OUR LITTLE UNIVERSE ✧</div><div id="v5MusicTracks"></div></div><audio id="v5MusicAudio" preload="none"></audio></div><div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><h3 id="modalTitle">编辑</h3><button class="x" id="closeModal">✕</button></div><div id="modalBody"></div><div class="modal-actions"><button class="btn" id="cancelModal">取消</button><button class="btn primary" id="saveModal">保存</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
 const initialAus = [
@@ -617,57 +634,80 @@ function renderV5HomeDecor(a){
  const img=document.createElement('img');img.src=a.decorations[side];img.alt='';img.className='v5-decor-'+side;return img.outerHTML;
  }).join('');
 }
-let v5MusicObjectUrl='';
+
+let v5MusicObjectUrl='',v5MusicIndex=0,v5MusicTempTrack=null,v5MusicPendingCover='';
+function v5MusicList(){const a=getAppearance();return Array.isArray(a.musicPlaylist)?a.musicPlaylist:(a.musicUrl?[{id:'legacy',name:a.musicName||'我们的歌',url:a.musicUrl,cover:''}]:[])}
 function renderV5MusicSettings(a){
  const url=document.getElementById('v5MusicUrl'),name=document.getElementById('v5MusicName');
- if(document.activeElement!==url)url.value=a.musicUrl||'';
- if(document.activeElement!==name)name.value=a.musicName||'';
- document.getElementById('v5MusicLabel').textContent=a.musicName||'未选择音乐';
-}
-function v5MusicStop(){
- const audio=document.getElementById('v5MusicAudio');audio.pause();audio.currentTime=0;
- document.getElementById('v5MusicToggle').textContent='♫';document.getElementById('v5MusicToggle').setAttribute('aria-label','播放音乐');
-}
-document.getElementById('v5MusicSave').onclick=()=>{
- const url=document.getElementById('v5MusicUrl').value.trim();
- if(url&&!/^https:\/\//i.test(url)){toast('请使用 https:// 开头的音频直链');return}
- v5MusicStop();const audio=document.getElementById('v5MusicAudio');
- if(v5MusicObjectUrl){URL.revokeObjectURL(v5MusicObjectUrl);v5MusicObjectUrl=''}
- audio.removeAttribute('src');audio.load();
- db.appearance={...getAppearance(),musicUrl:url,musicName:document.getElementById('v5MusicName').value.trim()};
- persist();applyAppearance();document.getElementById('v5MusicState').textContent='设置已保存 · 点击播放';toast('音乐设置已保存');
-};
-document.getElementById('v5MusicFile').addEventListener('change',e=>{
- const file=e.target.files?.[0];if(!file)return;
- if(!file.type.startsWith('audio/')){toast('请选择音频文件');return}
- v5MusicStop();if(v5MusicObjectUrl)URL.revokeObjectURL(v5MusicObjectUrl);
- v5MusicObjectUrl=URL.createObjectURL(file);const audio=document.getElementById('v5MusicAudio');
- audio.src=v5MusicObjectUrl;audio.load();document.getElementById('v5MusicLabel').textContent=file.name;
- document.getElementById('v5MusicState').textContent='本地音频已选择 · 点击播放';
-});
-document.getElementById('v5MusicToggle').onclick=async()=>{
- const audio=document.getElementById('v5MusicAudio'),btn=document.getElementById('v5MusicToggle');
- if(!audio.paused){audio.pause();return}
- if(!audio.getAttribute('src')){
-  const url=getAppearance().musicUrl;if(!url){toast('请先在外观设置里选择音乐');return}
-  audio.src=url;
+ if(document.activeElement!==url)url.value='';
+ if(document.activeElement!==name)name.value='';
+ const list=v5MusicList();if(v5MusicIndex>=list.length)v5MusicIndex=0;
+ const current=v5MusicTempTrack||list[v5MusicIndex];
+ document.getElementById('v5MusicLabel').textContent=current?.name||'未选择音乐';
+ document.getElementById('v5MusicPlaylist').innerHTML=list.map((t,i)=>'<div class="v5-music-listrow"><span>'+esc(t.name||'未命名')+'</span><button class="btn soft" data-music-pick="'+i+'">试听</button><button class="btn danger" data-music-delete="'+i+'">删除</button></div>').join('')||'<p>歌单还是空的。</p>';
+ document.getElementById('v5MusicTracks').innerHTML=list.map((t,i)=>'<button class="v5-music-track '+(i===v5MusicIndex?'current':'')+'" data-music-pick="'+i+'">'+(i===v5MusicIndex?'♫ ':'✧ ')+esc(t.name||'未命名')+'</button>').join('');
+ document.getElementById('v5RecordCenter').style.backgroundImage=current?.cover?'url('+JSON.stringify(current.cover)+')':'none';
+ document.getElementById('v5RecordCenter').textContent=current?.cover?'':'🍎🍏';
+ const pos=a.musicPosition;if(pos&&Number.isFinite(pos.x)&&Number.isFinite(pos.y)){
+  const el=document.getElementById('v5MusicPlayer');el.style.left=Math.max(0,Math.min(window.innerWidth-el.offsetWidth,pos.x))+'px';el.style.top=Math.max(0,Math.min(window.innerHeight-el.offsetHeight,pos.y))+'px';el.style.right='auto';el.style.bottom='auto';
  }
- audio.muted=false;
- try{await audio.play()}catch(e){toast('无法播放，请检查音频链接或文件格式')}
+}
+function v5MusicStop(){const audio=document.getElementById('v5MusicAudio');audio.pause();audio.currentTime=0;document.getElementById('v5MusicToggle').textContent='♫'}
+function v5MusicLoad(){
+ const track=v5MusicTempTrack||v5MusicList()[v5MusicIndex],audio=document.getElementById('v5MusicAudio');
+ v5MusicStop();audio.removeAttribute('src');
+ if(track?.url)audio.src=track.url;
+ audio.load();renderV5MusicSettings(getAppearance());return !!track?.url;
+}
+async function v5MusicPlay(){
+ const audio=document.getElementById('v5MusicAudio');
+ if(!audio.getAttribute('src')&&!v5MusicLoad()){toast('请先添加歌曲');return}
+ try{await audio.play()}catch(e){toast('无法播放：请检查音频直链或文件格式')}
+}
+async function v5MusicSelect(i,play=true){v5MusicTempTrack=null;v5MusicIndex=i;if(!v5MusicLoad())return;if(play)await v5MusicPlay()}
+document.getElementById('v5MusicSave').onclick=()=>{
+ const url=document.getElementById('v5MusicUrl').value.trim(),name=document.getElementById('v5MusicName').value.trim();
+ if(!/^https:\/\//i.test(url)){toast('请填写 https:// 开头的音频文件直链');return}
+ const list=v5MusicList(),track={id:uid(),name:name||'未命名歌曲',url,cover:v5MusicPendingCover};
+ db.appearance={...getAppearance(),musicPlaylist:[...list,track]};v5MusicIndex=list.length;v5MusicTempTrack=null;v5MusicPendingCover='';
+ persist();v5MusicLoad();toast('已添加到歌单');
 };
-document.getElementById('v5MusicMute').onclick=()=>{
- const audio=document.getElementById('v5MusicAudio');audio.muted=!audio.muted;
- document.getElementById('v5MusicMute').textContent=audio.muted?'🔇':'🔊';
+document.getElementById('v5MusicCoverFile').onchange=async e=>{
+ const file=e.target.files?.[0];if(!file)return;
+ try{v5MusicPendingCover=await compressAppearanceImage(file);toast('封面已选择，添加歌曲时一起保存')}catch(err){toast('封面处理失败')}
 };
-document.getElementById('v5MusicAudio').addEventListener('play',()=>{
- document.getElementById('v5MusicToggle').textContent='Ⅱ';document.getElementById('v5MusicState').textContent='正在播放';
- document.getElementById('v5MusicToggle').setAttribute('aria-label','暂停音乐');
-});
-document.getElementById('v5MusicAudio').addEventListener('pause',()=>{
- document.getElementById('v5MusicToggle').textContent='♫';document.getElementById('v5MusicState').textContent='已暂停';
- document.getElementById('v5MusicToggle').setAttribute('aria-label','播放音乐');
-});
-document.getElementById('v5MusicAudio').addEventListener('ended',()=>{document.getElementById('v5MusicState').textContent='播放结束'});
+document.getElementById('v5MusicFile').onchange=e=>{
+ const file=e.target.files?.[0];if(!file||!file.type.startsWith('audio/'))return;
+ if(v5MusicObjectUrl)URL.revokeObjectURL(v5MusicObjectUrl);
+ v5MusicObjectUrl=URL.createObjectURL(file);v5MusicTempTrack={name:file.name,url:v5MusicObjectUrl,cover:v5MusicPendingCover};
+ v5MusicLoad();toast('本地音频可试听；刷新后需要重新选择');
+};
+function v5MusicListClick(e){
+ const pick=e.target.closest('[data-music-pick]'),del=e.target.closest('[data-music-delete]');
+ if(pick){v5MusicSelect(Number(pick.dataset.musicPick));return}
+ if(del){const list=v5MusicList(),i=Number(del.dataset.musicDelete);list.splice(i,1);db.appearance={...getAppearance(),musicPlaylist:list};v5MusicIndex=0;v5MusicTempTrack=null;persist();v5MusicLoad();toast('歌曲已移除')}
+}
+document.getElementById('v5MusicPlaylist').addEventListener('click',v5MusicListClick);
+document.getElementById('v5MusicTracks').addEventListener('click',v5MusicListClick);
+document.getElementById('v5MusicToggle').onclick=()=>{const audio=document.getElementById('v5MusicAudio');audio.paused?v5MusicPlay():audio.pause()};
+document.getElementById('v5MusicPrev').onclick=()=>{const list=v5MusicList();if(list.length)v5MusicSelect((v5MusicIndex-1+list.length)%list.length)};
+document.getElementById('v5MusicNext').onclick=()=>{const list=v5MusicList();if(list.length)v5MusicSelect((v5MusicIndex+1)%list.length)};
+document.getElementById('v5MusicExpand').onclick=()=>{
+ const el=document.getElementById('v5MusicPlayer');el.classList.toggle('expanded');
+ document.getElementById('v5MusicExpand').textContent=el.classList.contains('expanded')?'⤡':'⤢';
+ const r=el.getBoundingClientRect();el.style.left=Math.max(0,Math.min(window.innerWidth-r.width,r.left))+'px';el.style.top=Math.max(0,Math.min(window.innerHeight-r.height,r.top))+'px';el.style.right='auto';el.style.bottom='auto';
+};
+document.getElementById('v5MusicMute').onclick=()=>{const audio=document.getElementById('v5MusicAudio');audio.muted=!audio.muted;document.getElementById('v5MusicMute').textContent=audio.muted?'🔇':'🔊'};
+document.getElementById('v5MusicAudio').addEventListener('play',()=>{document.getElementById('v5MusicToggle').textContent='Ⅱ';document.getElementById('v5MusicState').textContent='正在播放';document.getElementById('v5MusicPlayer').classList.add('playing')});
+document.getElementById('v5MusicAudio').addEventListener('pause',()=>{document.getElementById('v5MusicToggle').textContent='♫';document.getElementById('v5MusicState').textContent='已暂停';document.getElementById('v5MusicPlayer').classList.remove('playing')});
+document.getElementById('v5MusicAudio').addEventListener('ended',()=>{const list=v5MusicList();if(list.length>1)v5MusicSelect((v5MusicIndex+1)%list.length)});
+(()=>{
+ const handle=document.getElementById('v5MusicHandle'),el=document.getElementById('v5MusicPlayer');let drag=null;
+ handle.addEventListener('pointerdown',e=>{if(e.button!==0)return;const r=el.getBoundingClientRect();drag={dx:e.clientX-r.left,dy:e.clientY-r.top};handle.setPointerCapture(e.pointerId);e.preventDefault()});
+ handle.addEventListener('pointermove',e=>{if(!drag)return;el.style.left=Math.max(0,Math.min(window.innerWidth-el.offsetWidth,e.clientX-drag.dx))+'px';el.style.top=Math.max(0,Math.min(window.innerHeight-el.offsetHeight,e.clientY-drag.dy))+'px';el.style.right='auto';el.style.bottom='auto'});
+ handle.addEventListener('pointerup',()=>{if(!drag)return;drag=null;db.appearance={...getAppearance(),musicPosition:{x:el.offsetLeft,y:el.offsetTop}};persist()});
+ handle.addEventListener('pointercancel',()=>{drag=null});
+})();
 function bindV5Decor(side,inputId,removeId){
  const input=document.getElementById(inputId);
  input.addEventListener('change',async e=>{
