@@ -330,13 +330,28 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 @keyframes v5BookContent{from{opacity:0}to{opacity:1}}
 @media(max-height:680px){.intro{padding:12px}.intro-art-frame{width:min(70vw,280px,43vh)}.intro-apples{margin:10px 0 2px!important}.intro-bottom{display:none}}
 @media(prefers-reduced-motion:reduce){.intro-content,.intro-art-frame{animation:none!important}}
+
+/* Fine embroidered lace trims and a two-sided lace-curtain entrance transition. */
+.v5-lace-edge{position:absolute;left:0;right:0;height:40px;z-index:2;pointer-events:none;opacity:.65;background:radial-gradient(circle at 16px 20px,transparent 9px,#b99acb 9.7px,#b99acb 10.8px,transparent 11.5px) 0 0/32px 32px repeat-x,linear-gradient(90deg,transparent,#c3a7d3a8,transparent) center 7px/100% 1px no-repeat;mask-image:linear-gradient(to bottom,#000,transparent)}
+.v5-lace-top{top:0}
+.v5-lace-bottom{bottom:0;transform:rotate(180deg)}
+.v5-lace-curtain{position:fixed;top:0;bottom:0;width:51%;z-index:15;pointer-events:none;opacity:0;background-color:#e6d4ed;background-image:radial-gradient(circle at 14px 16px,transparent 9px,#c4a8d5 9.7px,#c4a8d5 10.7px,transparent 11.5px),radial-gradient(circle at 30px 32px,transparent 9px,#f2e5f4 9.7px,#f2e5f4 10.7px,transparent 11.5px),repeating-linear-gradient(45deg,transparent 0 16px,#cdb5da66 17px,transparent 18px 32px),linear-gradient(110deg,#f1e0f1,#e2cbea);background-size:44px 44px,44px 44px,36px 36px,cover;box-shadow:inset 0 0 55px #b994c83d}
+.v5-lace-left{left:0;transform:translateX(-105%);border-right:4px double #a984bd}
+.v5-lace-right{right:0;transform:translateX(105%);border-left:4px double #a984bd}
+.intro.lace-closing .v5-lace-left{animation:v5LaceCloseLeft 1.55s cubic-bezier(.65,0,.2,1) forwards}
+.intro.lace-closing .v5-lace-right{animation:v5LaceCloseRight 1.55s cubic-bezier(.65,0,.2,1) forwards}
+.intro.lace-closing .intro-content{animation:v5LaceContentOut .6s ease forwards!important}
+@keyframes v5LaceCloseLeft{0%{opacity:1;transform:translateX(-105%)}100%{opacity:1;transform:translateX(0)}}
+@keyframes v5LaceCloseRight{0%{opacity:1;transform:translateX(105%)}100%{opacity:1;transform:translateX(0)}}
+@keyframes v5LaceContentOut{to{opacity:.15;transform:scale(.98)}}
+@media(prefers-reduced-motion:reduce){.intro.lace-closing .v5-lace-left,.intro.lace-closing .v5-lace-right{animation-duration:.15s}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
 <body>
 <div class="intro" id="introScreen" aria-label="网站开屏">
   <div class="intro-photo" id="introPhoto"></div>
-  <div class="intro-sparkles" id="introSparkles" aria-hidden="true"></div>
+  <div class="intro-sparkles" id="introSparkles" aria-hidden="true"></div><div class="v5-lace-edge v5-lace-top" aria-hidden="true"></div><div class="v5-lace-edge v5-lace-bottom" aria-hidden="true"></div><div class="v5-lace-curtain v5-lace-left" aria-hidden="true"></div><div class="v5-lace-curtain v5-lace-right" aria-hidden="true"></div>
   
   <div class="intro-content"><div class="intro-art-frame" id="introArtFrame" aria-label="开屏封面插画"><div class="intro-art-placeholder">🍎 <span>♡</span> 🍏</div></div><div class="intro-apples">🍎 🍏</div><h1 id="introTitle" class="v5-intro-hidden" aria-hidden="true">昼起之时</h1><p id="introSubtitle">两颗心相遇，于是爱在无限时空中蔓延。</p><button class="intro-enter" id="introEnter">进入 ✧</button></div>
   <div class="intro-bottom">OUR LITTLE UNIVERSE · ✦</div>
@@ -736,8 +751,14 @@ function applyAppearance(){
  document.getElementById('v5HomeCover').style.backgroundImage=a.homeCover?`linear-gradient(180deg,#27183c44,#24133888),url(${JSON.stringify(a.homeCover)})`:'';
  applyV5Sections(a);applyV5NavOrder(a);renderV5HomeDecor(a);renderV5MusicSettings(a);
 }
-function closeIntro(){document.getElementById('introScreen').classList.add('hidden')}
-function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden');
+let v5IntroClosing=false;
+function closeIntro(){
+ if(v5IntroClosing)return;
+ v5IntroClosing=true;
+ const el=document.getElementById('introScreen');el.classList.add('lace-closing');
+ setTimeout(()=>{el.classList.add('hidden');el.classList.remove('lace-closing');v5IntroClosing=false},1750);
+}
+function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden','lace-closing');v5IntroClosing=false;
  const art=document.getElementById('introArtFrame'),wash=document.getElementById('introPhoto'),content=el.querySelector('.intro-content');
  [el,wash,art,content].forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
 }
