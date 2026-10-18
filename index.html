@@ -348,7 +348,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
   </section>
   <section class="page" id="page-divination">
     <div class="section-head"><div><h3>梦占存档</h3><p>收藏塔罗、牌阵、梦占问题、牌面与自己的解读。</p></div><button class="btn primary" id="addDivination">＋ 新建梦占</button></div>
-    <div class="toolbar"><input class="search" id="divinationSearch" placeholder="搜索问题、牌阵、牌面或解读…"><select id="divinationType" style="max-width:170px"><option value="">全部类型</option><option>塔罗</option><option>神谕卡</option><option>梦境占卜</option><option>其他</option></select><div class="grow"></div><span id="divinationCount" class="au-meta"></span></div>
+    <div class="toolbar"><input class="search" id="divinationSearch" placeholder="搜索问题、牌阵、牌面或解读…"><select id="divinationType" style="max-width:170px"><option value="">全部类型</option><option>塔罗</option><option>神谕卡</option><option>梦境占卜</option><option>其他</option></select><select id="v5DivinationOrder" aria-label="梦占排序"><option value="new">日期最新</option><option value="old">日期最早</option><option value="title">按标题</option></select><div class="grow"></div><span id="divinationCount" class="au-meta"></span></div>
     <div class="archive-records" id="divinationGrid"></div>
   </section>
 
@@ -470,16 +470,16 @@ document.querySelectorAll('[data-archive-tab]').forEach(b=>b.addEventListener('c
 function archiveImagePreview(image){return image?`<img class="record-preview" src="${image}" alt="已保存的图片预览">`:''}
 function archiveRecordCard(x,bucket){
  const isD=bucket==='divinations';
- const summary=isD?(x.question||x.interpretation||x.cards||x.note||'尚未填写解读'):(x.result||x.note||'尚未填写结果');
+ const summary=isD?(x.question||x.v5Answer||x.interpretation||x.cards||x.note||'尚未填写解读'):(x.result||x.note||'尚未填写结果');
  const details=isD?[x.date,x.type,x.spread,x.au].filter(Boolean).join(' · '):[x.date,x.pool,x.rarity,x.count?x.count+' 抽':''].filter(Boolean).join(' · ');
  const icon=isD?'☽':'✧';
  const img=x.image?`<img class="archive-record-photo" src="${x.image}" alt="${esc(x.title)} 的存档图片">`:`<div class="archive-record-photo archive-record-placeholder">${icon}</div>`;
- return `<article class="archive-record">${img}<div class="archive-record-body"><h4>${esc(x.title||'未命名记录')}</h4><div class="au-meta">${esc(details)}</div><p>${esc(summary)}</p>${isD&&x.cards?`<div class="tag-row"><span class="tag">${esc(x.cards.slice(0,60))}</span></div>`:''}<div class="card-actions"><button class="btn soft" onclick="editSpecialRecord('${bucket}','${x.id}')">查看 / 编辑</button><button class="btn danger" onclick="deleteItem('${bucket}','${x.id}')">删除</button></div></div></article>`;
+ return `<article class="archive-record">${img}<div class="archive-record-body"><h4>${esc(x.title||'未命名记录')}</h4><div class="au-meta">${esc(details)}</div><p>${esc(summary)}</p>${isD&&x.cards?`<div class="tag-row"><span class="tag">${esc(x.cards.slice(0,60))}</span></div>`:''}${isD&&x.v5Answer?`<p><strong>回答：</strong>${esc(x.v5Answer.slice(0,180))}</p>`:''}<div class="card-actions"><button class="btn soft" onclick="editSpecialRecord('${bucket}','${x.id}')">查看 / 编辑</button><button class="btn danger" onclick="deleteItem('${bucket}','${x.id}')">删除</button></div></div></article>`;
 }
 function renderDivinations(){
  const q=(document.getElementById('divinationSearch').value||'').toLowerCase();
  const type=document.getElementById('divinationType').value;
- const list=db.divinations.filter(x=>(!type||x.type===type)&&[x.title,x.question,x.spread,x.cards,x.interpretation,x.note,x.au].join(' ').toLowerCase().includes(q));
+ const list=db.divinations.filter(x=>(!type||x.type===type)&&[x.title,x.question,x.spread,x.cards,x.interpretation,x.v5Answer,x.v5Dialogue,x.note,x.au].join(' ').toLowerCase().includes(q));const order=document.getElementById('v5DivinationOrder').value;if(order==='title')list.sort((a,b)=>(a.title||'').localeCompare(b.title||'','zh'));else list.sort((a,b)=>order==='old'?String(a.date||'').localeCompare(String(b.date||'')):String(b.date||'').localeCompare(String(a.date||'')));
  document.getElementById('divinationGrid').innerHTML=list.map(x=>archiveRecordCard(x,'divinations')).join('')||empty('还没有梦占记录，添加一次牌阵或解读吧。','☽');
  document.getElementById('divinationCount').textContent=`${list.length} 条记录`;
 }
@@ -498,7 +498,7 @@ function editSpecialRecord(bucket,id){
   ${f('spTitle','记录标题',item.title||'')}${f('spDate','日期',item.date||dateOnly(new Date()),'date')}
   ${sel('spType','占卜类型',['塔罗','神谕卡','梦境占卜','其他'],item.type||'塔罗')}${f('spAu','关联 AU（可选）',item.au||'')}
   ${f('spSpread','牌阵 / 抽牌方式',item.spread||'')}${ta('spQuestion','占卜问题',item.question||'')}
-  ${ta('spCards','牌面记录（牌名、正逆位、位置）',item.cards||'')}${ta('spInterpretation','解读与感想',item.interpretation||'')}
+  ${ta('spCards','牌面记录（牌名、正逆位、位置）',item.cards||'')}${ta('spInterpretation','解读与感想',item.interpretation||'')}${ta('v5DivinationAnswer','得到的回答 / 结论',item.v5Answer||'')}${ta('v5DivinationDialogue','对话 / 追问记录',item.v5Dialogue||'')}
   ${ta('spNote','后续验证 / 备注',item.note||'')}
   ${imageField('spImage','牌阵照片 / 截图（可选）')}
   <div class="field full" id="spPreview">${archiveImagePreview(item.image)}</div>
@@ -514,7 +514,7 @@ function editSpecialRecord(bucket,id){
   if(!val('spTitle')){toast('请填写记录标题');return false}
   const fields=isD?{
    type:val('spType'),au:val('spAu'),spread:val('spSpread'),question:val('spQuestion'),
-   cards:val('spCards'),interpretation:val('spInterpretation'),note:val('spNote')
+   cards:val('spCards'),interpretation:val('spInterpretation'),v5Answer:val('v5DivinationAnswer'),v5Dialogue:val('v5DivinationDialogue'),note:val('spNote')
   }:{pool:val('spPool'),rarity:val('spRarity'),count:val('spCount'),result:val('spResult'),note:val('spNote')};
   const data={...item,...fields,title:val('spTitle'),date:val('spDate'),updated:new Date().toISOString()};
   const file=document.getElementById('spImage').files[0];
@@ -533,7 +533,7 @@ function editSpecialRecord(bucket,id){
 window.editSpecialRecord=editSpecialRecord;
 document.getElementById('addDivination').onclick=()=>editSpecialRecord('divinations');
 document.getElementById('addGacha').onclick=()=>editSpecialRecord('gacha');
-['divinationSearch','divinationType'].forEach(id=>document.getElementById(id).addEventListener('input',renderDivinations));
+['divinationSearch','divinationType','v5DivinationOrder'].forEach(id=>document.getElementById(id).addEventListener('input',renderDivinations));
 ['gachaSearch','gachaRarity'].forEach(id=>document.getElementById(id).addEventListener('input',renderGacha));
 
 /* === Appearance: all settings live inside db and are included in JSON backup === */
