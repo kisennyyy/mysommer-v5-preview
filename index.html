@@ -761,7 +761,7 @@ document.getElementById('previewIntro').onclick=showIntro;
 const v5Flight=document.getElementById('v5Flight');
 const v5BirdNS='http://www.w3.org/2000/svg';
 for(let ribbon=0;ribbon<3;ribbon++){
- const count=[19,17,15][ribbon];
+ const count=[17,15,13][ribbon];
  for(let i=0;i<count;i++){
   const t=i/(count-1),seed=(i*37+ribbon*17)%23/23;
   const svg=document.createElementNS(v5BirdNS,'svg');
@@ -769,9 +769,9 @@ for(let ribbon=0;ribbon<3;ribbon++){
   const path=document.createElementNS(v5BirdNS,'path');
   path.setAttribute('d','M49 35 C35 18 18 9 2 18 C17 21 22 31 28 37 C17 34 9 39 6 46 C25 40 37 48 47 53 L50 49 L53 54 C66 46 78 39 96 43 C90 35 81 32 70 36 C78 28 84 18 99 14 C79 10 61 20 51 35 L50 39 Z M47 49 Q40 62 29 69 Q44 65 51 56 Q59 66 73 68 Q61 60 54 48 Z');
   svg.appendChild(path);
-  const x=5+t*86+(seed-.5)*9;
+  const x=5+t*86+(seed-.5)*15;
   const wave=Math.sin(t*Math.PI*2+(ribbon*.9));
-  const y=[29,57,77][ribbon]+wave*10+(seed-.5)*11;
+  const y=[29,57,77][ribbon]+wave*10+(seed-.5)*17;
   svg.style.setProperty('--left',x+'%');svg.style.setProperty('--top',y+'%');
   svg.style.setProperty('--size',(22+seed*30+(ribbon===1?7:0))+'px');
   svg.style.setProperty('--delay',(t*.24+ribbon*.065)+'s');
@@ -779,6 +779,26 @@ for(let ribbon=0;ribbon<3;ribbon++){
   svg.style.setProperty('--angle',(wave*15-5)+'deg');
   v5Flight.appendChild(svg);
  }
+}
+// A few soft white feathers drift between the birds.
+for(let i=0;i<7;i++){
+ const seed=(i*11%17)/17;
+ const feather=document.createElementNS(v5BirdNS,'svg');
+ feather.setAttribute('viewBox','0 0 40 76');
+ const body=document.createElementNS(v5BirdNS,'path');
+ body.setAttribute('d','M19 3 C2 14 3 37 18 70 C35 47 39 20 19 3 Z');
+ feather.appendChild(body);
+ const quill=document.createElementNS(v5BirdNS,'path');
+ quill.setAttribute('d','M18 69 Q19 34 28 17');
+ quill.setAttribute('fill','none');quill.setAttribute('stroke','#d9c7e9');quill.setAttribute('stroke-width','1.2');
+ feather.appendChild(quill);
+ feather.style.setProperty('--left',(10+i*12+seed*5)+'%');
+ feather.style.setProperty('--top',(23+(i*19)%61)+'%');
+ feather.style.setProperty('--size',(17+seed*17)+'px');
+ feather.style.setProperty('--delay',(.12+i*.035)+'s');
+ feather.style.setProperty('--alpha',(.55+seed*.23).toFixed(2));
+ feather.style.setProperty('--angle',(-18+i*9)+'deg');
+ v5Flight.appendChild(feather);
 }
 // A handful of very small, faint galaxy-like points; no dense silver particles.
 const v5Stars=document.getElementById('introSparkles');
