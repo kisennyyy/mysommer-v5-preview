@@ -250,6 +250,12 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-music-track.current{font-weight:700;color:#8250a5}
 .v5-music-listrow{display:flex;gap:6px;align-items:center;margin:7px 0}.v5-music-listrow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:600px){.v5-music-player:not(.expanded) .v5-music-details{max-width:80px}.v5-music-volume{width:30px;height:30px}}
+
+#page-home .v5-home-legacy{display:none!important}
+#page-home .v5-home-cover{min-height:clamp(240px,36vw,430px)}
+#page-home .v5-home-links{margin-top:24px}
+#page-home .v5-progress{margin-top:24px}
+@media(max-width:600px){#page-home .v5-home-cover{min-height:260px}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -288,16 +294,11 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
     <div class="hero" id="v5SecretHero" title="我们的秘密基地"><div class="hero-copy"><div class="eyebrow">A LITTLE UNIVERSE OF OUR OWN</div><h3>把我们的<br>共同经历好好收藏。</h3><p>就好像我们的秘密基地一样，收藏和存档着一切。</p></div><div class="hero-symbol">☾✧</div></div>
     <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙 <span>↗</span></button><button data-goto="settings">❖ 档案室 <span>↗</span></button><button data-goto="dreams">☾ 梦图收藏 <span>↗</span></button><button data-goto="writing">✎ 文稿 <span>↗</span></button><button data-goto="letters">✉ 书信 <span>↗</span></button><button data-goto="divination">☽ 梦占 <span>↗</span></button><button data-goto="gacha">✧ 抽卡 <span>↗</span></button><button data-goto="calendar">♡ 日历 <span>↗</span></button><button data-goto="merch">✧ 谷子 <span>↗</span></button></div>
     <div class="v5-progress" id="v5Progress"></div>
-    <div class="stats">
-      <div class="stat"><div class="label">AU</div><div class="number" id="statAus">13</div><div class="hint">不同的故事</div></div>
-      <div class="stat"><div class="label">纪念日</div><div class="number" id="statEvents">0</div><div class="hint">值得记下的日期</div></div>
-      <div class="stat"><div class="label">梦图收藏</div><div class="number" id="statDreams">0</div><div class="hint">灵感</div></div>
-      <div class="stat"><div class="label">文字存档</div><div class="number" id="statWriting">0</div><div class="hint">写下来的片段</div></div>
+    <!-- Legacy render targets retained for compatibility; the V5 homepage stays static. -->
+    <div class="v5-home-legacy" hidden aria-hidden="true">
+      <span id="statAus"></span><span id="statEvents"></span><span id="statDreams"></span><span id="statWriting"></span>
+      <div id="homeAus"></div><div id="homeEvents"></div>
     </div>
-    <div class="section-head"><div><h3>最近整理的 AU</h3><p>我们的故事宇宙，一览。</p></div><button class="btn soft" data-goto="aus">查看全部 →</button></div>
-    <div class="cards" id="homeAus"></div>
-    <div class="section-head"><div><h3>近期纪念日</h3><p>重要的日子˶>ᗜ<˶。</p></div><button class="btn soft" data-goto="calendar">打开日历 →</button></div>
-    <div class="panel" id="homeEvents"></div>
     <div class="footer">Made for stories, memories & little universes · 🍎 🍏</div>
   </section>
 
