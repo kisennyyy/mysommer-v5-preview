@@ -228,6 +228,11 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-home-decor img{position:absolute;top:110px;width:clamp(68px,12vw,160px);height:auto;max-height:240px;object-fit:contain;opacity:.9;filter:drop-shadow(0 5px 14px #3b205344)}
 .v5-decor-left{left:0;transform:translateX(-16%)}.v5-decor-right{right:0;transform:translateX(16%)}
 @media(max-width:600px){.v5-home-decor img{width:72px;top:80px;opacity:.75}.v5-decor-left{transform:translateX(-25%)}.v5-decor-right{transform:translateX(25%)}}
+
+.v5-music-player{position:fixed;right:18px;bottom:18px;z-index:60;display:flex;align-items:center;gap:10px;padding:9px 12px;background:#f9f3ffef;backdrop-filter:blur(12px);border:1px solid #c9b6dd;border-radius:22px;box-shadow:0 8px 32px #27143b33;max-width:calc(100vw - 28px);color:#39214f}
+.v5-music-toggle,.v5-music-volume{border:0;background:#e9d9f5;color:#42265b;border-radius:50%;width:37px;height:37px;flex-shrink:0;cursor:pointer}
+.v5-music-details{min-width:0;max-width:155px}.v5-music-details strong,.v5-music-details small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.v5-music-details strong{font-size:12px}.v5-music-details small{font-size:10px;color:#75638b}
+@media(max-width:600px){.v5-music-player{right:10px;bottom:10px;padding:7px;gap:7px}.v5-music-details{max-width:100px}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -351,7 +356,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
         <div class="field"><label>网站背景照片</label><input id="appearanceBgFile" type="file" accept="image/*"><button class="btn" id="removeBgImage">移除背景照片</button></div>
         <div class="field"><label>首页横幅封面</label><input id="appearanceHeroFile" type="file" accept="image/*"><button class="btn" id="removeHeroImage">移除封面照片</button></div>
       </div>
-      <div class="v5-section-editor"><h3>✦ 首页装饰贴图</h3><p>可上传两张装饰图片，分别放在首页左右两侧。透明背景 PNG 更适合做贴纸。</p><div class="appearance-grid"><div class="field"><label>左侧装饰</label><input id="v5DecorLeftFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorLeftRemove">移除左侧装饰</button></div><div class="field"><label>右侧装饰</label><input id="v5DecorRightFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorRightRemove">移除右侧装饰</button></div></div></div><div class="v5-section-editor"><h3>☾ 导航顺序</h3><p>点击上下箭头调整侧边栏顺序，保存后下次打开仍会保留。</p><div id="v5NavOrder"></div></div><div class="v5-section-editor"><h3>✧ 页面标题与说明</h3><p>修改每个分区的标题和小字说明，不影响原始档案。</p><div id="v5SectionFields" class="appearance-grid"></div></div>
+      <div class="v5-section-editor"><h3>♫ 迷你音乐播放器</h3><p>可填入音频直链，或临时选择手机里的音频文件。打开网站时不会自动播放。</p><div class="appearance-grid"><div class="field full"><label>音乐直链（https:// 音频文件地址）</label><input id="v5MusicUrl" type="url" placeholder="https://example.com/music.mp3"></div><div class="field"><label>音乐名称</label><input id="v5MusicName" placeholder="我们的歌"></div><div class="field"><label>本次播放的本地音频</label><input id="v5MusicFile" type="file" accept="audio/*"></div></div><button class="btn soft" id="v5MusicSave">保存音乐设置</button></div><div class="v5-section-editor"><h3>✦ 首页装饰贴图</h3><p>可上传两张装饰图片，分别放在首页左右两侧。透明背景 PNG 更适合做贴纸。</p><div class="appearance-grid"><div class="field"><label>左侧装饰</label><input id="v5DecorLeftFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorLeftRemove">移除左侧装饰</button></div><div class="field"><label>右侧装饰</label><input id="v5DecorRightFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorRightRemove">移除右侧装饰</button></div></div></div><div class="v5-section-editor"><h3>☾ 导航顺序</h3><p>点击上下箭头调整侧边栏顺序，保存后下次打开仍会保留。</p><div id="v5NavOrder"></div></div><div class="v5-section-editor"><h3>✧ 页面标题与说明</h3><p>修改每个分区的标题和小字说明，不影响原始档案。</p><div id="v5SectionFields" class="appearance-grid"></div></div>
       <div class="appearance-actions"><button class="btn primary" id="saveAppearance">保存文字设置</button><button class="btn danger" id="resetAppearance">恢复默认外观</button></div>
       <p style="color:var(--muted);font-size:11px">图片上传后自动压缩以节省空间。建议定期导出 JSON 备份，清理浏览器数据会删除本地记录。部分手机浏览器以 file:// 打开时可能不支持持久存储。</p>
     </div>
@@ -370,7 +375,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 </main>
 </div>
 
-<div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><h3 id="modalTitle">编辑</h3><button class="x" id="closeModal">✕</button></div><div id="modalBody"></div><div class="modal-actions"><button class="btn" id="cancelModal">取消</button><button class="btn primary" id="saveModal">保存</button></div></div></div>
+<div class="v5-music-player" id="v5MusicPlayer"><button class="v5-music-toggle" id="v5MusicToggle" aria-label="播放音乐">♫</button><div class="v5-music-details"><strong id="v5MusicLabel">未选择音乐</strong><small id="v5MusicState">点击播放 · 默认静音</small></div><button class="v5-music-volume" id="v5MusicMute" aria-label="切换静音">🔇</button><audio id="v5MusicAudio" preload="none"></audio></div><div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><h3 id="modalTitle">编辑</h3><button class="x" id="closeModal">✕</button></div><div id="modalBody"></div><div class="modal-actions"><button class="btn" id="cancelModal">取消</button><button class="btn primary" id="saveModal">保存</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
 const initialAus = [
@@ -573,7 +578,7 @@ function applyAppearance(){
  document.getElementById('appearanceButton').value=a.button;
  document.getElementById('appearancePreview').textContent='🍎 🍏  '+a.title;
  document.getElementById('v5HomeCover').style.backgroundImage=a.homeCover?`linear-gradient(180deg,#27183c44,#24133888),url(${JSON.stringify(a.homeCover)})`:'';
- applyV5Sections(a);applyV5NavOrder(a);renderV5HomeDecor(a);
+ applyV5Sections(a);applyV5NavOrder(a);renderV5HomeDecor(a);renderV5MusicSettings(a);
 }
 function closeIntro(){document.getElementById('introScreen').classList.add('hidden')}
 function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden');
@@ -612,6 +617,57 @@ function renderV5HomeDecor(a){
  const img=document.createElement('img');img.src=a.decorations[side];img.alt='';img.className='v5-decor-'+side;return img.outerHTML;
  }).join('');
 }
+let v5MusicObjectUrl='';
+function renderV5MusicSettings(a){
+ const url=document.getElementById('v5MusicUrl'),name=document.getElementById('v5MusicName');
+ if(document.activeElement!==url)url.value=a.musicUrl||'';
+ if(document.activeElement!==name)name.value=a.musicName||'';
+ document.getElementById('v5MusicLabel').textContent=a.musicName||'未选择音乐';
+}
+function v5MusicStop(){
+ const audio=document.getElementById('v5MusicAudio');audio.pause();audio.currentTime=0;
+ document.getElementById('v5MusicToggle').textContent='♫';document.getElementById('v5MusicToggle').setAttribute('aria-label','播放音乐');
+}
+document.getElementById('v5MusicSave').onclick=()=>{
+ const url=document.getElementById('v5MusicUrl').value.trim();
+ if(url&&!/^https:\/\//i.test(url)){toast('请使用 https:// 开头的音频直链');return}
+ v5MusicStop();const audio=document.getElementById('v5MusicAudio');
+ if(v5MusicObjectUrl){URL.revokeObjectURL(v5MusicObjectUrl);v5MusicObjectUrl=''}
+ audio.removeAttribute('src');audio.load();
+ db.appearance={...getAppearance(),musicUrl:url,musicName:document.getElementById('v5MusicName').value.trim()};
+ persist();applyAppearance();document.getElementById('v5MusicState').textContent='设置已保存 · 点击播放';toast('音乐设置已保存');
+};
+document.getElementById('v5MusicFile').addEventListener('change',e=>{
+ const file=e.target.files?.[0];if(!file)return;
+ if(!file.type.startsWith('audio/')){toast('请选择音频文件');return}
+ v5MusicStop();if(v5MusicObjectUrl)URL.revokeObjectURL(v5MusicObjectUrl);
+ v5MusicObjectUrl=URL.createObjectURL(file);const audio=document.getElementById('v5MusicAudio');
+ audio.src=v5MusicObjectUrl;audio.load();document.getElementById('v5MusicLabel').textContent=file.name;
+ document.getElementById('v5MusicState').textContent='本地音频已选择 · 点击播放';
+});
+document.getElementById('v5MusicToggle').onclick=async()=>{
+ const audio=document.getElementById('v5MusicAudio'),btn=document.getElementById('v5MusicToggle');
+ if(!audio.paused){audio.pause();return}
+ if(!audio.getAttribute('src')){
+  const url=getAppearance().musicUrl;if(!url){toast('请先在外观设置里选择音乐');return}
+  audio.src=url;
+ }
+ audio.muted=false;
+ try{await audio.play()}catch(e){toast('无法播放，请检查音频链接或文件格式')}
+};
+document.getElementById('v5MusicMute').onclick=()=>{
+ const audio=document.getElementById('v5MusicAudio');audio.muted=!audio.muted;
+ document.getElementById('v5MusicMute').textContent=audio.muted?'🔇':'🔊';
+};
+document.getElementById('v5MusicAudio').addEventListener('play',()=>{
+ document.getElementById('v5MusicToggle').textContent='Ⅱ';document.getElementById('v5MusicState').textContent='正在播放';
+ document.getElementById('v5MusicToggle').setAttribute('aria-label','暂停音乐');
+});
+document.getElementById('v5MusicAudio').addEventListener('pause',()=>{
+ document.getElementById('v5MusicToggle').textContent='♫';document.getElementById('v5MusicState').textContent='已暂停';
+ document.getElementById('v5MusicToggle').setAttribute('aria-label','播放音乐');
+});
+document.getElementById('v5MusicAudio').addEventListener('ended',()=>{document.getElementById('v5MusicState').textContent='播放结束'});
 function bindV5Decor(side,inputId,removeId){
  const input=document.getElementById(inputId);
  input.addEventListener('change',async e=>{
