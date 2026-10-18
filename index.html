@@ -437,6 +437,24 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 @media(max-width:760px){#page-home .room-scene{grid-template-columns:1fr 1fr;gap:12px}#page-home .radio-area{grid-column:1/-1;grid-row:1;max-width:460px}#page-home .room-memories{grid-row:2;gap:8px}#page-home .room-memories span{min-height:46px;padding:9px 5px;font-size:8px;border-width:3px}#page-home .room-memories i{display:none}}
 @media(prefers-reduced-motion:reduce){#page-home .room-drawer{animation:none}#page-home .radio-machine{transition:none}}
 
+
+/* Weather-responsive TODAY card, only on V5.1 preview. */
+#page-home .room-calendar.today-card{display:block;width:min(100%,680px);margin:24px auto 8px;position:relative;transform:none;overflow:hidden;padding:26px 32px 31px;text-align:left;border:2px solid #d8d7ec;border-radius:28px;background:linear-gradient(145deg,#fffefd,#f6f4fc);color:#465587;box-shadow:0 12px 28px #51406c17;transition:transform .2s ease,box-shadow .2s ease}
+#page-home .room-calendar.today-card:hover{transform:translateY(-3px);box-shadow:0 18px 35px #51406c26}
+#page-home .today-top{display:flex;justify-content:space-between;align-items:center;gap:14px;color:#829ac2}
+#page-home .today-top b{font:500 21px/1.2 Georgia,serif;letter-spacing:.17em}
+#page-home .today-top span{font-size:15px;letter-spacing:.15em}
+#page-home .today-middle{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:15px 0 17px}
+#page-home .today-date{display:flex;align-items:baseline;gap:11px;color:#4964b1}
+#page-home .today-date em{font:400 clamp(64px,9vw,100px)/1 Georgia,serif;padding:0}
+#page-home .today-date strong{display:inline;background:none;color:inherit;padding:0;font:400 25px/1 Georgia,serif;letter-spacing:.08em}
+#page-home .today-weather{display:flex;flex-direction:column;align-items:center;gap:3px;max-width:135px;text-align:center;color:#7d8eaf}
+#page-home .today-weather #todayWeatherIcon{font-size:38px;line-height:1.2}
+#page-home .today-weather #todayWeatherText{font-size:12px;padding:0}
+#page-home .today-quote{display:block;position:relative;z-index:1;padding:0 42px 0 0;font-size:clamp(15px,2vw,21px);line-height:1.65;color:#465587;white-space:normal}
+#page-home .today-flower{position:absolute;right:24px;bottom:14px;font-size:47px;color:#dcddec;opacity:.7;pointer-events:none}
+@media(max-width:600px){#page-home .room-calendar.today-card{padding:20px 20px 25px;border-radius:23px}#page-home .today-top b{font-size:17px}#page-home .today-top span{font-size:12px}#page-home .today-date em{font-size:67px}#page-home .today-date strong{font-size:20px}#page-home .today-weather #todayWeatherIcon{font-size:30px}#page-home .today-weather #todayWeatherText{font-size:10px}#page-home .today-quote{font-size:15px;padding-right:20px}#page-home .today-flower{right:12px;font-size:32px}}
+
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -480,7 +498,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
       <div class="radio-area"><div class="radio-antenna"></div><button class="radio-machine" id="roomRadio" type="button" aria-expanded="false" aria-controls="roomDrawer" aria-label="点击收音机打开宇宙档案菜单"><div class="radio-top"></div><div class="radio-controls"><b></b><span>STEREO CASSETTE · FM 07.09</span><b></b></div><div class="radio-bottom"><div class="radio-speaker"></div><div class="radio-tape"><div class="tape-window"><i></i><i></i></div><div class="tape-label">SIDE A · OUR UNIVERSE</div></div><div class="radio-speaker"></div></div><div class="radio-keys"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="radio-led"></div></button><p class="radio-caption">✧ TOUCH TO OPEN THE UNIVERSE ✧</p></div>
       <div class="room-memories room-memories-right" aria-hidden="true"><span>♡ SUMMER LETTERS</span><i>☾</i><span>MEMORIES ON AIR</span></div>
     </div>
-    <button class="room-calendar" type="button" data-goto="calendar" aria-label="打开纪念日历"><strong id="roomMonth">OCTOBER 2026</strong><em id="roomDay">18</em><span>♡ 翻开我们的纪念日</span></button>
+    <button class="room-calendar today-card" type="button" data-goto="calendar" aria-label="打开纪念日历"><span class="today-top"><b>T O D A Y</b><span id="todayWeek">星期日</span></span><span class="today-middle"><span class="today-date"><em id="roomDay">18</em><strong id="roomMonth">OCT</strong></span><span class="today-weather"><span id="todayWeatherIcon" aria-hidden="true">☁</span><span id="todayWeatherText">正在读取天气…</span></span></span><span class="today-quote" id="todayQuote">今天也要好好照顾自己，妹妹。</span><span class="today-flower" aria-hidden="true">✿</span></button>
     <div class="room-drawer" id="roomDrawer" hidden><button class="room-close" id="roomClose" type="button" aria-label="关闭菜单">×</button><h3>✦ 宇宙档案室</h3><p>旋转频率，找到属于我们的故事。</p>
       <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙</button><button data-goto="settings">❖ 档案室</button><button data-goto="dreams">☾ 梦图收藏</button><button data-goto="writing">✎ 文稿</button><button data-goto="letters">✉ 书信</button><button data-goto="divination">☽ 梦占</button><button data-goto="gacha">✧ 抽卡</button><button data-goto="calendar">♡ 日历</button><button data-goto="merch">✧ 谷子</button><button data-goto="appearance">✿ 外观设置</button></div>
     </div>
@@ -1622,8 +1640,21 @@ applyAppearance();
 (function(){
  const radio=document.getElementById('roomRadio'),drawer=document.getElementById('roomDrawer'),close=document.getElementById('roomClose');
  if(radio&&drawer){radio.addEventListener('click',()=>{drawer.hidden=!drawer.hidden;radio.setAttribute('aria-expanded',String(!drawer.hidden));if(!drawer.hidden)drawer.scrollIntoView({behavior:'smooth',block:'nearest'});});close.addEventListener('click',()=>{drawer.hidden=true;radio.setAttribute('aria-expanded','false');radio.focus();});}
- const now=new Date();const months=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
- const m=document.getElementById('roomMonth'),d=document.getElementById('roomDay');if(m)m.textContent=months[now.getMonth()]+' '+now.getFullYear();if(d)d.textContent=now.getDate();
+ const months=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+ const quotes={sun:'今天天气很好，要不要一起去散步？',rain:'妹妹，今天会下雨，记得带伞。',wind:'要多穿一件外套，妹妹。',snow:'下雪了，妹妹，还记得那场初雪吗？',cloud:'今天没什么太阳，正好可以在家多陪我一会儿。',storm:'外面打雷了，妹妹，今天就待在我身边吧。',default:'今天也要好好照顾自己，妹妹。'};
+ const conditions={sun:['☀','晴天'],rain:['☂','下雨'],wind:['〰','大风'],snow:['❄','下雪'],cloud:['☁','多云'],storm:['ϟ','雷雨'],default:['✧','天气暂不可用']};
+ function updateToday(){const now=new Date(),m=document.getElementById('roomMonth'),d=document.getElementById('roomDay'),w=document.getElementById('todayWeek');if(m)m.textContent=months[now.getMonth()];if(d)d.textContent=now.getDate();if(w)w.textContent=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][now.getDay()];}
+ function showWeather(kind,temp){const c=conditions[kind]||conditions.default;document.getElementById('todayWeatherIcon').textContent=c[0];document.getElementById('todayWeatherText').textContent=c[1]+(Number.isFinite(temp)?' · '+Math.round(temp)+'°C':'');document.getElementById('todayQuote').textContent=quotes[kind]||quotes.default;}
+ function weatherKind(code,wind){if([95,96,99].includes(code))return 'storm';if([71,73,75,77,85,86].includes(code))return 'snow';if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code))return 'rain';if(Number(wind)>=35)return 'wind';if([0,1].includes(code))return 'sun';return 'cloud';}
+ async function refreshWeather(){try{
+  // Brühl, NRW is the initial city. No browser location permission required.
+  const endpoint='https://api.open-meteo.com/v1/forecast?latitude=50.83&longitude=6.90&current=temperature_2m,weather_code,wind_speed_10m&timezone=Europe%2FBerlin';
+  const response=await fetch(endpoint,{cache:'no-store'});if(!response.ok)throw Error('weather request failed');
+  const data=await response.json(),c=data.current;if(!c||!Number.isFinite(c.weather_code))throw Error('missing weather');
+  showWeather(weatherKind(c.weather_code,c.wind_speed_10m),c.temperature_2m);
+ }catch(e){showWeather('default');}}
+ updateToday();showWeather('default');refreshWeather();
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden){updateToday();refreshWeather();}});
 })();
 </script>
 </body>
