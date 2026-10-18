@@ -205,6 +205,14 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-editor-status{font-size:12px;color:var(--muted);padding:8px 0}
 .v5-editor-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
 .v5-version-entry{border-top:1px solid var(--line);padding:12px 0;display:flex;justify-content:space-between;gap:10px;align-items:center}
+
+.v5-dream-viewer{position:fixed;inset:0;z-index:18000;background:#0f0916ef;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:16px;color:white}
+.v5-dream-viewer img{max-width:96vw;max-height:75vh;object-fit:contain;border-radius:10px}
+.v5-dream-viewer .v5-dream-caption{margin:12px auto;text-align:center;max-width:90vw;white-space:pre-wrap}
+.v5-dream-viewer button{margin:6px}
+.v5-dream-upload{position:fixed;inset:0;z-index:17000;background:#190e2baa;display:flex;align-items:center;justify-content:center;padding:15px}
+.v5-dream-upload>div{background:var(--paper);border-radius:20px;padding:24px;width:min(520px,100%)}
+.v5-dream-upload input,.v5-dream-upload select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;margin:8px 0 15px}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -272,8 +280,8 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
   </section>
 
   <section class="page" id="page-dreams">
-    <div class="section-head"><div><h3>梦图分类</h3><p>收纳梦图、约稿、截图与视觉灵感。图片只保存在本机浏览器。</p></div><button class="btn primary" id="addDream">＋ 添加梦图</button></div>
-    <div class="toolbar"><input class="search" id="dreamSearch" placeholder="搜索标题、备注…"><select id="dreamCategory" style="max-width:170px"><option value="">全部分类</option><option>约稿</option><option>自绘</option><option>游戏截图</option><option>梦图</option><option>灵感参考</option><option>其他</option></select><div class="grow"></div><span id="dreamCount" class="au-meta"></span></div>
+    <div class="section-head"><div><h3>梦图分类</h3><p>收纳梦图、约稿、截图与视觉灵感。图片只保存在本机浏览器。</p></div><button class="btn primary" id="addDream">＋ 添加梦图</button> <button class="btn soft" id="v5BatchDream">＋ 批量上传</button><input id="v5BatchDreamFiles" type="file" accept="image/*" multiple hidden></div>
+    <div class="toolbar"><input class="search" id="dreamSearch" placeholder="搜索标题、备注…"><select id="dreamCategory" style="max-width:170px"><option value="">全部分类</option><option>梦稿合照</option><option>游戏合照</option><option>游戏截图</option><option>自绘</option><option>其他</option></select><div class="grow"></div><span id="dreamCount" class="au-meta"></span></div>
     <div class="gallery" id="dreamGallery"></div>
   </section>
 
@@ -415,12 +423,13 @@ window.deleteItem=(bucket,id)=>{if(confirm("确定删除这条记录吗？此操
 function noteCard(item,bucket){const title=item.title||item.name||"未命名",snippet=(item.content||item.desc||"").slice(0,170);return `<article class="note-card" onclick="${bucket==='writing'?'v5ReadWriting':'editRecord'}('${bucket}','${item.id}')"><div class="tag-row" style="margin-bottom:8px"><span class="tag">${esc(item.type||item.role||"档案")}</span>${item.au?`<span class="tag">${esc(item.au)}</span>`:""}</div><h4>${esc(title)}</h4><p>${esc(snippet||"点击打开，继续补充内容。")}</p><div class="card-actions"><button class="btn soft" onclick="event.stopPropagation();${bucket==='writing'?'v5EditWriting':'editRecord'}(${bucket==='writing'?'':'\''+bucket+'\','}'${item.id}')">编辑</button><button class="btn danger" onclick="event.stopPropagation();deleteItem('${bucket}','${item.id}')">删除</button></div></article>`}
 function renderNotes(bucket,gridId,searchId,typeId){const q=(document.getElementById(searchId)?.value||"").toLowerCase(),type=document.getElementById(typeId)?.value||"";const list=db[bucket].filter(x=>(!type||x.type===type)&&[x.title,x.name,x.au,x.type,x.content,x.role].join(" ").toLowerCase().includes(q));document.getElementById(gridId).innerHTML=list.map(x=>noteCard(x,bucket)).join("")||empty("这里还没有存档，点右上角添加第一条。");const countId={settings:"settingCount",writing:"writingCount",characters:"characterCount"}[bucket];document.getElementById(countId).textContent=`${list.length} 条记录`;if(bucket==="characters"){const select=document.getElementById("characterAu"),old=select.value;select.innerHTML='<option value="">全部 AU</option>'+db.aus.map(a=>`<option>${esc(a.name)}</option>`).join("");select.value=old;}}
 function imageField(id,label){return `<div class="field full"><label>${label}</label><input id="${id}" type="file" accept="image/*"><small style="color:var(--muted);font-size:10px">建议使用压缩后的图片，较大的图片会占用浏览器本地空间。</small></div>`}
-function editPhoto(bucket,id){const isDream=bucket==="dreams",item=db[bucket].find(x=>x.id===id)||{id:uid(),title:"",category:isDream?"梦图":"周边",status:isDream?"":"想收",date:"",price:"",series:"",note:"",image:""};let body=`<div class="form-grid">${f("title","名称",item.title)}${isDream?sel("category","分类",["约稿","自绘","游戏截图","梦图","灵感参考","其他"],item.category):sel("status","收藏状态",["已到手","运输中","预售中","想收"],item.status)}${isDream?f("date","日期",item.date,"date"):f("series","作品 / 系列",item.series)}${!isDream?f("price","价格 / 预算",item.price):""}${imageField("imageFile","图片")}${ta("note","备注",item.note||"")}</div>`;openModal(isDream?"添加梦图":"添加谷子",body,()=>{if(!val("title")){toast("请填写名称");return false}const file=document.getElementById("imageFile").files[0];const save=image=>{const data={...item,title:val("title"),category:val("category"),status:val("status"),date:val("date"),series:val("series"),price:val("price"),note:val("note"),image:image||item.image};const i=db[bucket].findIndex(x=>x.id===item.id);if(i>=0)db[bucket][i]=data;else db[bucket].unshift(data);persist();closeModal();renderAll();toast("收藏已保存")};if(file){if(file.size>2.5*1024*1024){toast("图片大于 2.5MB，请先压缩后再上传");return false}const reader=new FileReader();reader.onload=()=>save(reader.result);reader.onerror=()=>toast("图片读取失败");reader.readAsDataURL(file);return false}else{save(item.image);return false}})}
+function editPhoto(bucket,id){const isDream=bucket==="dreams",item=db[bucket].find(x=>x.id===id)||{id:uid(),title:"",category:isDream?"梦稿合照":"周边",status:isDream?"":"想收",date:"",price:"",series:"",note:"",image:""};let body=`<div class="form-grid">${f("title","名称",item.title)}${isDream?sel("category","分类",["梦稿合照","游戏合照","游戏截图","自绘","其他"],item.category):sel("status","收藏状态",["已到手","运输中","预售中","想收"],item.status)}${isDream?f("date","日期",item.date,"date"):f("series","作品 / 系列",item.series)}${!isDream?f("price","价格 / 预算",item.price):""}${imageField("imageFile","图片")}${isDream?f("v5DreamTags","标签（逗号分隔）",item.tags||""):""}${ta("note","备注",item.note||"")}</div>`;openModal(isDream?"添加梦图":"添加谷子",body,()=>{if(!val("title")){toast("请填写名称");return false}const file=document.getElementById("imageFile").files[0];const save=image=>{const data={...item,title:val("title"),category:val("category"),status:val("status"),date:val("date"),series:val("series"),price:val("price"),note:val("note"),tags:isDream?val("v5DreamTags"):item.tags,image:image||item.image};const i=db[bucket].findIndex(x=>x.id===item.id);if(i>=0)db[bucket][i]=data;else db[bucket].unshift(data);persist();closeModal();renderAll();toast("收藏已保存")};if(file){if(file.size>2.5*1024*1024){toast("图片大于 2.5MB，请先压缩后再上传");return false}const reader=new FileReader();reader.onload=()=>save(reader.result);reader.onerror=()=>toast("图片读取失败");reader.readAsDataURL(file);return false}else{save(item.image);return false}})}
 document.getElementById("addDream").onclick=()=>editPhoto("dreams");
 document.getElementById("addMerch").onclick=()=>editPhoto("merch");
-function photoCard(item,bucket){const img=item.image?`<img src="${item.image}" alt="${esc(item.title)}">`:`<div class="photo-placeholder">${bucket==="dreams"?"☾":"✧"}</div>`;return `<article class="photo-card">${img}<div class="photo-info"><strong>${esc(item.title)}</strong><small>${esc(bucket==="dreams"?(item.category||"未分类"):(item.series||"未分类"))}${item.status?" · "+esc(item.status):""}</small>${item.price?`<small style="display:block;margin-top:3px">价格：${esc(item.price)}</small>`:""}<div class="card-actions"><button class="btn soft" onclick="editPhoto('${bucket}','${item.id}')">编辑</button><button class="btn danger" onclick="deleteItem('${bucket}','${item.id}')">删除</button></div></div></article>`}
+function photoCard(item,bucket){const img=item.image?`<img src="${item.image}" alt="${esc(item.title)}" ${bucket==="dreams"?`onclick="v5ViewDream(\'${item.id}\')" style="cursor:zoom-in"`:""}>`:`<div class="photo-placeholder">${bucket==="dreams"?"☾":"✧"}</div>`;return `<article class="photo-card">${img}<div class="photo-info"><strong>${esc(item.title)}</strong><small>${esc(bucket==="dreams"?v5DreamCategory(item.category):(item.series||"未分类"))}${item.status?" · "+esc(item.status):""}</small>${item.price?`<small style="display:block;margin-top:3px">价格：${esc(item.price)}</small>`:""}<div class="card-actions"><button class="btn soft" onclick="editPhoto('${bucket}','${item.id}')">编辑</button><button class="btn danger" onclick="deleteItem('${bucket}','${item.id}')">删除</button></div></div></article>`}
 window.editPhoto=editPhoto;
-function renderPhotos(bucket,gridId,searchId,filterId){const q=(document.getElementById(searchId)?.value||"").toLowerCase(),filter=document.getElementById(filterId)?.value||"";const list=db[bucket].filter(x=>(!filter||(bucket==="dreams"?x.category===filter:x.status===filter))&&[x.title,x.category,x.status,x.note,x.series].join(" ").toLowerCase().includes(q));document.getElementById(gridId).innerHTML=list.map(x=>photoCard(x,bucket)).join("")||empty("这里还没有收藏，上传一张图片开始整理。",bucket==="dreams"?"☾":"✧");document.getElementById(bucket==="dreams"?"dreamCount":"merchCount").textContent=`${list.length} 件`}
+function v5DreamCategory(cat){return ({"约稿":"梦稿合照","梦图":"梦稿合照","灵感参考":"其他"}[cat]||cat||"其他")}
+function renderPhotos(bucket,gridId,searchId,filterId){const q=(document.getElementById(searchId)?.value||"").toLowerCase(),filter=document.getElementById(filterId)?.value||"";const list=db[bucket].filter(x=>(!filter||(bucket==="dreams"?v5DreamCategory(x.category)===filter:x.status===filter))&&[x.title,x.category,x.status,x.note,x.series,x.tags].join(" ").toLowerCase().includes(q));document.getElementById(gridId).innerHTML=list.map(x=>photoCard(x,bucket)).join("")||empty("这里还没有收藏，上传一张图片开始整理。",bucket==="dreams"?"☾":"✧");document.getElementById(bucket==="dreams"?"dreamCount":"merchCount").textContent=`${list.length} 件`}
 function dateOnly(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 let calDate=new Date();calDate.setDate(1);let selectedDate=dateOnly(new Date());
 function dateDiff(date){const now=new Date();now.setHours(0,0,0,0);const d=new Date(date+"T00:00:00");return Math.round((d-now)/86400000)}
@@ -628,6 +637,39 @@ document.getElementById('v5SecretHero').addEventListener('click',()=>{
 
 
 
+
+
+/* V5 dream art: categories, tags, batch import and lightbox */
+window.v5ViewDream=function(id){
+ const item=db.dreams.find(x=>x.id===id);if(!item||!item.image)return;
+ const layer=document.createElement('div');layer.className='v5-dream-viewer';
+ layer.innerHTML='<button class="btn" id="v5DreamClose">✕ 关闭大图</button><img alt="'+esc(item.title||'梦图')+'"><div class="v5-dream-caption"><strong>'+esc(item.title||'梦图')+'</strong><p>'+esc(v5DreamCategory(item.category))+(item.tags?' · '+esc(item.tags):'')+'</p></div>';
+ layer.querySelector('img').src=item.image;document.body.appendChild(layer);
+ layer.querySelector('#v5DreamClose').onclick=()=>layer.remove();
+ layer.addEventListener('click',e=>{if(e.target===layer)layer.remove()});
+};
+document.getElementById('v5BatchDream').onclick=()=>document.getElementById('v5BatchDreamFiles').click();
+document.getElementById('v5BatchDreamFiles').onchange=e=>{
+ const files=[...e.target.files].filter(f=>f.type.startsWith('image/'));e.target.value='';
+ if(!files.length)return;
+ const overlay=document.createElement('div');overlay.className='v5-dream-upload';
+ overlay.innerHTML='<div role="dialog" aria-modal="true"><h3>☾ 批量收藏 '+files.length+' 张梦图</h3><label>统一分类</label><select id="v5BatchCategory">'+['梦稿合照','游戏合照','游戏截图','自绘','其他'].map(c=>'<option>'+c+'</option>').join('')+'</select><label>统一标签（可选）</label><input id="v5BatchTags" placeholder="例如：夏以昼，末日 AU"><p id="v5BatchProgress">上传时会自动压缩图片。</p><button class="btn primary" id="v5BatchStart">开始收藏</button> <button class="btn" id="v5BatchCancel">取消</button></div>';
+ document.body.appendChild(overlay);overlay.querySelector('#v5BatchCancel').onclick=()=>overlay.remove();
+ overlay.querySelector('#v5BatchStart').onclick=async()=>{
+  const category=overlay.querySelector('#v5BatchCategory').value,tags=overlay.querySelector('#v5BatchTags').value.trim(),start=overlay.querySelector('#v5BatchStart');
+  start.disabled=true;let saved=0,failed=0;
+  for(const file of files){
+   try{
+    const image=await compressAppearanceImage(file);
+    const item={id:uid(),title:file.name.replace(/\.[^.]+$/,''),category,tags,date:dateOnly(new Date()),note:'',image};
+    db.dreams.unshift(item);try{localStorage.setItem(STORE,JSON.stringify(db));saved++}catch(err){db.dreams.shift();failed++;break}
+   }catch(err){failed++}
+   overlay.querySelector('#v5BatchProgress').textContent='已处理 '+(saved+failed)+' / '+files.length+' 张';
+  }
+  if(saved){persist();renderAll()}
+  overlay.remove();toast('已收藏 '+saved+' 张'+(failed?'，'+failed+' 张失败':''));
+ };
+};
 
 /* V5 manuscript reader/editor: old plain text remains readable; snapshots stored with each manuscript. */
 let v5WritingCurrentId=null;
