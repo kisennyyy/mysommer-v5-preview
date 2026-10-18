@@ -787,7 +787,7 @@ for(let ribbon=0;ribbon<2;ribbon++){
   v5Flight.appendChild(svg);
  }
 }
-// A few delicate, slim white feathers among the birds.
+// Keep the feathers in a separate lower-left flight lane, away from both bird ribbons.
 for(let i=0;i<4;i++){
  const feather=document.createElementNS(v5BirdNS,'svg');
  feather.setAttribute('viewBox','0 0 30 76');
@@ -798,10 +798,10 @@ for(let i=0;i<4;i++){
  quill.setAttribute('d','M15 69 Q14 37 21 15');
  quill.setAttribute('fill','none');quill.setAttribute('stroke','#d4c3e1');quill.setAttribute('stroke-width','1');
  feather.appendChild(quill);
- feather.style.setProperty('--left',(18+i*21)+'%');
- feather.style.setProperty('--top',(25+(i*19)%52)+'%');
- feather.style.setProperty('--size',(14+i*2)+'px');
- feather.style.setProperty('--delay',(.1+i*.06)+'s');
+ feather.style.setProperty('--left',(7+i*18)+'%');
+ feather.style.setProperty('--top',(86+(i%2)*5)+'%');
+ feather.style.setProperty('--size',(12+i*2)+'px');
+ feather.style.setProperty('--delay',(.34+i*.08)+'s');
  feather.style.setProperty('--alpha','.55');
  feather.style.setProperty('--angle',(-10+i*7)+'deg');
  v5Flight.appendChild(feather);
