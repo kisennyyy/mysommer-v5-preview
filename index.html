@@ -455,6 +455,38 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 #page-home .today-flower{position:absolute;right:24px;bottom:14px;font-size:47px;color:#dcddec;opacity:.7;pointer-events:none}
 @media(max-width:600px){#page-home .room-calendar.today-card{padding:20px 20px 25px;border-radius:23px}#page-home .today-top b{font-size:17px}#page-home .today-top span{font-size:12px}#page-home .today-date em{font-size:67px}#page-home .today-date strong{font-size:20px}#page-home .today-weather #todayWeatherIcon{font-size:30px}#page-home .today-weather #todayWeatherText{font-size:10px}#page-home .today-quote{font-size:15px;padding-right:20px}#page-home .today-flower{right:12px;font-size:32px}}
 
+
+/* V5.1 refinement: illustration-like 1980s boombox, clean gallery and soft archive menu */
+#page-home .room-scene{display:flex!important;justify-content:center;align-items:center;max-width:940px;margin:0 auto;min-height:0}
+#page-home .radio-area{width:min(100%,650px)!important;max-width:650px!important;grid-column:auto}
+#page-home .radio-antenna{height:57px;width:77%;border:8px solid #b6b4b2;border-bottom:0;border-radius:8px 8px 0 0;box-shadow:inset 0 3px 1px #f7f3ee,3px -3px 0 #66636b;opacity:1}
+#page-home .radio-machine{aspect-ratio:1.72!important;overflow:visible!important;border:5px solid #777779!important;border-radius:6px!important;padding:15px 17px 13px!important;background:linear-gradient(180deg,#f3f0e9 0%,#d4d1ca 17%,#f2eee5 29%,#b7b6b2 78%,#e3e1d9 100%)!important;box-shadow:0 7px 0 #8d8989,0 12px 0 #55535c,0 23px 28px #29203660,inset 2px 2px 0 #fff!important;filter:drop-shadow(0 9px 6px #3b31582b)!important}
+#page-home .radio-machine:before{opacity:.12!important;background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 4px)!important;z-index:1!important}
+#page-home .radio-machine:after{content:"";position:absolute;right:-10px;top:29%;width:9px;height:22%;background:linear-gradient(90deg,#77757a,#ddd9d3,#74717a);border-radius:0 5px 5px 0;box-shadow:1px 2px 1px #47414a}
+#page-home .radio-top{height:24%!important;border:7px solid #ddd9d2!important;border-radius:2px!important;background:repeating-linear-gradient(0deg,#363b47 0 2px,#86909a 2px 4px,#404958 4px 6px)!important;box-shadow:inset 0 0 0 2px #4e5360,0 2px 0 #a4a19d!important;position:relative}
+#page-home .radio-top:after{content:"FM   88    92    96    100    104    108     MHz";position:absolute;top:3px;left:5%;right:5%;font:500 clamp(5px,.9vw,10px)/1.2 monospace;color:#f1e9d4;text-align:center;letter-spacing:.03em;white-space:nowrap;overflow:hidden}
+#page-home .radio-controls{align-items:center;margin:6px 0!important;color:#535158;font:600 clamp(6px,.9vw,10px)/1.1 monospace!important}
+#page-home .radio-controls b{width:13px!important;height:13px!important;background:radial-gradient(circle at 35% 30%,#f5f2ea,#929098 60%,#55515a)!important;box-shadow:0 1px 2px #49464e!important}
+#page-home .radio-bottom{grid-template-columns:1fr .9fr 1fr;gap:8px!important;align-items:stretch!important;height:51%}
+#page-home .radio-speaker{aspect-ratio:auto!important;height:100%;border-radius:3px!important;border:5px solid #b8b6b3!important;background:radial-gradient(circle,#3b3e49 0 12%,#717987 13% 16%,#31343d 17% 42%,#9ca4ae 43% 45%,#272b34 46% 69%,#7f8791 70% 73%,#30333d 74%)!important;box-shadow:inset 0 0 0 2px #d9d8d1,0 0 0 1px #6e6e70!important;position:relative}
+#page-home .radio-speaker:after{content:"";position:absolute;inset:5%;border-radius:50%;background:repeating-conic-gradient(from 0deg,#161a2260 0 2deg,transparent 2deg 8deg);opacity:.42}
+#page-home .radio-tape{height:100%!important;border:6px solid #b6b2af!important;border-radius:3px!important;background:linear-gradient(#393943,#77767a 14%,#e0dcd4 15%,#eeeae1 75%,#6b6971 76%,#3f3d46)!important;display:flex!important;flex-direction:column!important;gap:4px;padding:8px 5px!important;box-shadow:inset 0 0 0 2px #56535c!important}
+#page-home .tape-window{display:flex!important;justify-content:space-evenly!important;align-items:center!important;width:100%;height:62%;border:4px solid #373842;background:linear-gradient(160deg,#515a6b,#222631)!important;border-radius:2px}
+#page-home .radio-tape i{width:clamp(11px,3.3vw,27px)!important;height:clamp(11px,3.3vw,27px)!important;background:repeating-conic-gradient(#dedbd1 0 18deg,#575966 18deg 40deg)!important;border:3px solid #b2a9a3!important}
+#page-home .tape-label{font:700 clamp(6px,.9vw,10px)/1.1 monospace!important;color:#343642!important;text-align:center}
+#page-home .radio-keys{display:flex!important;justify-content:center!important;gap:3px!important;margin-top:7px!important}
+#page-home .radio-keys i{width:12%!important;height:clamp(8px,1.8vw,16px)!important;border-radius:2px!important;background:linear-gradient(#eae6df 0%,#aaa8a5 70%,#77757b 100%)!important;border:1px solid #77747c!important;box-shadow:0 3px 0 #5b5860!important}
+#page-home .radio-led{background:#a65050!important}
+#page-home .radio-caption{margin:30px 0 0!important;font-size:11px;letter-spacing:.19em}
+#page-home .room-drawer{width:min(660px,96%)!important;padding:28px 24px!important;margin:24px auto 0!important;background:linear-gradient(155deg,#fffdfd,#f8f2fc 60%,#f4ecfa)!important;border:1px solid #e9dff2!important;border-radius:26px!important;box-shadow:0 16px 45px #55426a22!important;color:#5c4672!important}
+#page-home .room-drawer h3{font-size:23px!important;font-weight:600!important;letter-spacing:.16em!important;color:#6b4d8e!important}
+#page-home .room-drawer p{font:400 10px/1.6 Georgia,serif!important;letter-spacing:.17em;color:#ac94bd!important;margin:8px 0 23px!important}
+#page-home .room-drawer .v5-home-links{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+#page-home .room-drawer .v5-home-links button{padding:17px 12px!important;border:1px solid #e9dbef!important;border-radius:16px!important;background:linear-gradient(135deg,#fffafd,#f1e6f6)!important;box-shadow:0 4px 12px #73578d0d!important;color:#71538b!important;font-weight:500!important;letter-spacing:.04em!important;transition:transform .2s,background .2s,box-shadow .2s}
+#page-home .room-drawer .v5-home-links button:hover{background:#e9dbf4!important;transform:translateY(-2px);box-shadow:0 7px 16px #73578d1d!important}
+#page-home .room-close{color:#977daf!important}
+@media(max-width:600px){#page-home .radio-area{width:100%!important}#page-home .radio-machine{padding:10px 10px 12px!important;border-width:4px!important}#page-home .radio-top{border-width:4px!important}#page-home .radio-speaker{border-width:3px!important}#page-home .radio-tape{border-width:4px!important;padding:4px 3px!important}#page-home .room-drawer{padding:22px 15px!important}#page-home .room-drawer .v5-home-links{gap:9px!important}#page-home .room-drawer .v5-home-links button{padding:15px 6px!important;font-size:13px!important}}
+
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -494,12 +526,12 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
   <div class="dream-room">
     <p class="room-sub">✧ TUNE INTO OUR LITTLE UNIVERSE ✧</p>
     <div class="room-scene">
-      <div class="room-memories room-memories-left" aria-hidden="true"><span>✦ OUR STORIES</span><i>✧</i><span>THE OTHER SIDE OF TIME</span></div>
-      <div class="radio-area"><div class="radio-antenna"></div><button class="radio-machine" id="roomRadio" type="button" aria-expanded="false" aria-controls="roomDrawer" aria-label="点击收音机打开宇宙档案菜单"><div class="radio-top"></div><div class="radio-controls"><b></b><span>STEREO CASSETTE · FM 07.09</span><b></b></div><div class="radio-bottom"><div class="radio-speaker"></div><div class="radio-tape"><div class="tape-window"><i></i><i></i></div><div class="tape-label">SIDE A · OUR UNIVERSE</div></div><div class="radio-speaker"></div></div><div class="radio-keys"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="radio-led"></div></button><p class="radio-caption">✧ TOUCH TO OPEN THE UNIVERSE ✧</p></div>
-      <div class="room-memories room-memories-right" aria-hidden="true"><span>♡ SUMMER LETTERS</span><i>☾</i><span>MEMORIES ON AIR</span></div>
+      
+      <div class="radio-area"><div class="radio-antenna"></div><button class="radio-machine" id="roomRadio" type="button" aria-expanded="false" aria-controls="roomDrawer" aria-label="点击收音机打开合集"><div class="radio-top"></div><div class="radio-controls"><b></b><span>STEREO CASSETTE · FM 07.09</span><b></b></div><div class="radio-bottom"><div class="radio-speaker"></div><div class="radio-tape"><div class="tape-window"><i></i><i></i></div><div class="tape-label">SIDE A · OUR UNIVERSE</div></div><div class="radio-speaker"></div></div><div class="radio-keys"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="radio-led"></div></button><p class="radio-caption">✧ TOUCH TO OPEN THE UNIVERSE ✧</p></div>
+      
     </div>
     <button class="room-calendar today-card" type="button" data-goto="calendar" aria-label="打开纪念日历"><span class="today-top"><b>T O D A Y</b><span id="todayWeek">星期日</span></span><span class="today-middle"><span class="today-date"><em id="roomDay">18</em><strong id="roomMonth">OCT</strong></span><span class="today-weather"><span id="todayWeatherIcon" aria-hidden="true">☁</span><span id="todayWeatherText">正在读取天气…</span></span></span><span class="today-quote" id="todayQuote">今天也要好好照顾自己，妹妹。</span><span class="today-flower" aria-hidden="true">✿</span></button>
-    <div class="room-drawer" id="roomDrawer" hidden><button class="room-close" id="roomClose" type="button" aria-label="关闭菜单">×</button><h3>✦ 宇宙档案室</h3><p>旋转频率，找到属于我们的故事。</p>
+    <div class="room-drawer" id="roomDrawer" hidden><button class="room-close" id="roomClose" type="button" aria-label="关闭菜单">×</button><h3>合集</h3><p>✦ TUNE INTO OUR LITTLE UNIVERSE ✦</p>
       <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙</button><button data-goto="settings">❖ 档案室</button><button data-goto="dreams">☾ 梦图收藏</button><button data-goto="writing">✎ 文稿</button><button data-goto="letters">✉ 书信</button><button data-goto="divination">☽ 梦占</button><button data-goto="gacha">✧ 抽卡</button><button data-goto="calendar">♡ 日历</button><button data-goto="merch">✧ 谷子</button><button data-goto="appearance">✿ 外观设置</button></div>
     </div>
   </div>
