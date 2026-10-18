@@ -220,6 +220,9 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 @media(max-width:680px){.v5-merch-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 .v5-month-journal{margin:0 0 18px;padding:18px 20px}.v5-month-journal .section-head{margin:0 0 12px}.v5-month-journal p{line-height:1.8}.v5-month-label{font-size:13px;color:var(--accent);font-weight:700}
+
+.v5-nav-order-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
+.v5-nav-order-row span{flex:1;min-width:0;font-size:13px}.v5-nav-order-row button{min-width:40px}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -343,7 +346,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
         <div class="field"><label>网站背景照片</label><input id="appearanceBgFile" type="file" accept="image/*"><button class="btn" id="removeBgImage">移除背景照片</button></div>
         <div class="field"><label>首页横幅封面</label><input id="appearanceHeroFile" type="file" accept="image/*"><button class="btn" id="removeHeroImage">移除封面照片</button></div>
       </div>
-      <div class="v5-section-editor"><h3>✧ 页面标题与说明</h3><p>修改每个分区的标题和小字说明，不影响原始档案。</p><div id="v5SectionFields" class="appearance-grid"></div></div>
+      <div class="v5-section-editor"><h3>☾ 导航顺序</h3><p>点击上下箭头调整侧边栏顺序，保存后下次打开仍会保留。</p><div id="v5NavOrder"></div></div><div class="v5-section-editor"><h3>✧ 页面标题与说明</h3><p>修改每个分区的标题和小字说明，不影响原始档案。</p><div id="v5SectionFields" class="appearance-grid"></div></div>
       <div class="appearance-actions"><button class="btn primary" id="saveAppearance">保存文字设置</button><button class="btn danger" id="resetAppearance">恢复默认外观</button></div>
       <p style="color:var(--muted);font-size:11px">图片上传后自动压缩以节省空间。建议定期导出 JSON 备份，清理浏览器数据会删除本地记录。部分手机浏览器以 file:// 打开时可能不支持持久存储。</p>
     </div>
@@ -565,7 +568,7 @@ function applyAppearance(){
  document.getElementById('appearanceButton').value=a.button;
  document.getElementById('appearancePreview').textContent='🍎 🍏  '+a.title;
  document.getElementById('v5HomeCover').style.backgroundImage=a.homeCover?`linear-gradient(180deg,#27183c44,#24133888),url(${JSON.stringify(a.homeCover)})`:'';
- applyV5Sections(a);
+ applyV5Sections(a);applyV5NavOrder(a);
 }
 function closeIntro(){document.getElementById('introScreen').classList.add('hidden')}
 function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden');
@@ -579,7 +582,7 @@ const sparkles=document.getElementById('introSparkles');
 for(let i=0;i<24;i++){const dot=document.createElement('span');dot.style.left=((i*41+17)%97)+'%';dot.style.top=((i*37+9)%94)+'%';dot.style.animationDelay=-(i%7)*.7+'s';sparkles.appendChild(dot)}
 document.getElementById('saveAppearance').onclick=()=>{
  db.appearance={...getAppearance(),title:document.getElementById('appearanceTitle').value.trim()||APPEARANCE_DEFAULTS.title,
- subtitle:document.getElementById('appearanceSubtitle').value.trim(),button:document.getElementById('appearanceButton').value.trim()||APPEARANCE_DEFAULTS.button,sections:readV5Sections()};
+ subtitle:document.getElementById('appearanceSubtitle').value.trim(),button:document.getElementById('appearanceButton').value.trim()||APPEARANCE_DEFAULTS.button,sections:readV5Sections(),navOrder:[...document.querySelectorAll("#nav button[data-page]")].map(b=>b.dataset.page)};
  persist();applyAppearance();toast('外观文字已保存');
 };
 async function compressAppearanceImage(file){
@@ -636,6 +639,21 @@ function applyV5Sections(a){
  '<div class="field"><label>'+esc(defaults[0])+' · 小字说明</label><input data-v5-page="'+page+'" data-v5-field="subtitle" value="'+esc(item.subtitle??defaults[1])+'"></div>';
  }).join('');
 }
+function applyV5NavOrder(a){
+ const nav=document.getElementById('nav');if(!nav)return;
+ const buttons=[...nav.querySelectorAll('button[data-page]')],byId=new Map(buttons.map(b=>[b.dataset.page,b]));
+ const order=[...(Array.isArray(a.navOrder)?a.navOrder:[]),...buttons.map(b=>b.dataset.page)].filter((x,i,arr)=>byId.has(x)&&arr.indexOf(x)===i);
+ order.forEach(id=>nav.appendChild(byId.get(id)));
+ const root=document.getElementById('v5NavOrder');if(!root)return;
+ root.innerHTML=order.map((id,i)=>'<div class="v5-nav-order-row"><span>'+esc(getAppearance().sections?.[id]?.title||V5_SECTION_DEFAULTS[id]?.[0]||id)+'</span><button class="btn soft" data-v5-nav-move="'+id+'" data-dir="-1" '+(i===0?'disabled':'')+'>↑</button><button class="btn soft" data-v5-nav-move="'+id+'" data-dir="1" '+(i===order.length-1?'disabled':'')+'>↓</button></div>').join('');
+}
+document.getElementById('v5NavOrder').addEventListener('click',e=>{
+ const btn=e.target.closest('[data-v5-nav-move]');if(!btn)return;
+ const ids=[...document.querySelectorAll('#nav button[data-page]')].map(b=>b.dataset.page),i=ids.indexOf(btn.dataset.v5NavMove),j=i+Number(btn.dataset.dir);
+ if(i<0||j<0||j>=ids.length)return;
+ [ids[i],ids[j]]=[ids[j],ids[i]];
+ db.appearance={...getAppearance(),navOrder:ids};persist();applyV5NavOrder(getAppearance());
+});
 function readV5Sections(){
  const result={};document.querySelectorAll('[data-v5-page][data-v5-field]').forEach(input=>{
  const key=input.dataset.v5Page;result[key]??={};result[key][input.dataset.v5Field]=input.value.trim();
