@@ -301,20 +301,20 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .intro:before,.intro:after{display:none!important}
 /* Soft, overlapping cool-pink fog blooms: no hard moving curtain edge. */
 .intro-photo{display:block!important;position:absolute;inset:-28%;z-index:8!important;pointer-events:none;background:
- radial-gradient(ellipse 52% 65% at 25% 60%,rgba(222,174,225,.92) 0%,rgba(232,195,235,.6) 40%,transparent 78%),
- radial-gradient(ellipse 58% 58% at 77% 35%,rgba(218,168,224,.85) 0%,rgba(230,190,234,.55) 44%,transparent 79%),
- radial-gradient(ellipse 75% 70% at 55% 78%,rgba(232,187,229,.85) 0%,rgba(237,205,238,.55) 48%,transparent 85%);
+ radial-gradient(ellipse 52% 65% at 25% 60%,rgba(224,188,230,.48) 0%,rgba(236,208,237,.27) 40%,transparent 78%),
+ radial-gradient(ellipse 58% 58% at 77% 35%,rgba(221,183,232,.45) 0%,rgba(237,210,239,.24) 44%,transparent 79%),
+ radial-gradient(ellipse 75% 70% at 55% 78%,rgba(232,200,235,.42) 0%,rgba(242,222,244,.24) 48%,transparent 85%);
  filter:blur(48px);opacity:0;transform:scale(1.45) translateY(12%);animation:none!important;will-change:opacity,transform,filter}
-.intro.pink-closing .intro-photo{animation:v5PinkMist 2.7s cubic-bezier(.22,.6,.25,1) forwards!important}
+.intro.pink-closing .intro-photo{animation:v5PinkMist 1.3s ease-out forwards!important}
 .intro.pink-closing{background-color:#e9c6dc!important}
 @keyframes v5PinkMist{
- 0%{opacity:0;transform:scale(1.45) translateY(12%);filter:blur(65px)}
- 36%{opacity:.52;transform:scale(1.15) translateY(5%);filter:blur(55px)}
- 76%{opacity:.93;transform:scale(1.02) translateY(0);filter:blur(43px)}
- 100%{opacity:1;transform:scale(1) translateY(0);filter:blur(34px)}
+ 0%{opacity:0;transform:scale(1.2) translateY(5%);filter:blur(55px)}
+ 55%{opacity:.6;transform:scale(1.04) translateY(1%);filter:blur(46px)}
+ 100%{opacity:.85;transform:scale(1) translateY(0);filter:blur(40px)}
 }
-.intro.pink-closing:after{display:block!important;content:"";position:absolute;inset:0;z-index:9;pointer-events:none;background:rgba(228,189,232,.94);animation:v5MistVeil 2.7s ease-in forwards}
-@keyframes v5MistVeil{0%,48%{opacity:0}80%{opacity:.28}100%{opacity:.88}}
+/* The home page emerges through the mist instead of waiting for a solid overlay. */
+.intro.pink-closing{animation:v5IntroDissolve 1.3s ease-in-out forwards!important}
+@keyframes v5IntroDissolve{0%,25%{opacity:1}100%{opacity:0;visibility:hidden}}
 .intro-sparkles{display:block!important;position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.65}
 .intro-sparkles span{display:block!important;width:2px;height:2px;background:#fff6ff;box-shadow:0 0 5px 1px #fdf0ff91;animation:v5QuietTwinkle 5s ease-in-out infinite alternate}
 @keyframes v5QuietTwinkle{0%{opacity:.2;transform:scale(.7)}100%{opacity:.7;transform:scale(1.1)}}
@@ -751,7 +751,7 @@ function closeIntro(){
  const el=document.getElementById('introScreen');
  el.classList.add('pink-closing');
  clearTimeout(v5IntroCloseTimer);
- v5IntroCloseTimer=setTimeout(()=>{el.classList.add('hidden');el.classList.remove('pink-closing');v5IntroClosing=false},2800);
+ v5IntroCloseTimer=setTimeout(()=>{el.classList.add('hidden');el.classList.remove('pink-closing');v5IntroClosing=false},1320);
 }
 function showIntro(){
  const el=document.getElementById('introScreen');
