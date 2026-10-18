@@ -213,6 +213,11 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-dream-upload{position:fixed;inset:0;z-index:17000;background:#190e2baa;display:flex;align-items:center;justify-content:center;padding:15px}
 .v5-dream-upload>div{background:var(--paper);border-radius:20px;padding:24px;width:min(520px,100%)}
 .v5-dream-upload input,.v5-dream-upload select{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;margin:8px 0 15px}
+
+.v5-merch-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0 20px}
+.v5-merch-stat{border:1px solid var(--line);background:linear-gradient(135deg,#fbf7ff,#eee4f8);border-radius:15px;padding:16px;min-width:0}
+.v5-merch-stat span{font-size:12px;color:var(--muted);display:block}.v5-merch-stat strong{font-size:clamp(18px,2.5vw,27px);color:var(--deep);display:block;margin-top:8px;overflow-wrap:anywhere}
+@media(max-width:680px){.v5-merch-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -287,8 +292,8 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 
   <section class="page" id="page-merch">
     <div class="section-head"><div><h3>谷子收藏</h3><p>记录实物收藏、购买状态、价格与入手日期。</p></div><button class="btn primary" id="addMerch">＋ 添加收藏</button></div>
-    <div class="toolbar"><input class="search" id="merchSearch" placeholder="搜索名称、系列、备注…"><select id="merchStatus" style="max-width:160px"><option value="">全部状态</option><option>已到手</option><option>运输中</option><option>预售中</option><option>想收</option></select><div class="grow"></div><span id="merchCount" class="au-meta"></span></div>
-    <div class="gallery" id="merchGallery"></div>
+    <div class="toolbar"><input class="search" id="merchSearch" placeholder="搜索名称、系列、备注…"><select id="merchStatus" style="max-width:160px"><option value="">全部状态</option><option>已到手</option><option>运输中</option><option>预售中</option><option>想收</option></select><select id="v5MerchSort" aria-label="谷子排序"><option value="new">最近添加</option><option value="price-high">价格从高到低</option><option value="price-low">价格从低到高</option><option value="title">按名称</option></select><div class="grow"></div><span id="merchCount" class="au-meta"></span></div>
+    <div class="v5-merch-stats" id="v5MerchStats"></div><div class="gallery" id="merchGallery"></div>
   </section>
 
   <section class="page" id="page-settings">
@@ -423,13 +428,13 @@ window.deleteItem=(bucket,id)=>{if(confirm("确定删除这条记录吗？此操
 function noteCard(item,bucket){const title=item.title||item.name||"未命名",snippet=(item.content||item.desc||"").slice(0,170);return `<article class="note-card" onclick="${bucket==='writing'?'v5ReadWriting':'editRecord'}('${bucket}','${item.id}')"><div class="tag-row" style="margin-bottom:8px"><span class="tag">${esc(item.type||item.role||"档案")}</span>${item.au?`<span class="tag">${esc(item.au)}</span>`:""}</div><h4>${esc(title)}</h4><p>${esc(snippet||"点击打开，继续补充内容。")}</p><div class="card-actions"><button class="btn soft" onclick="event.stopPropagation();${bucket==='writing'?'v5EditWriting':'editRecord'}(${bucket==='writing'?'':'\''+bucket+'\','}'${item.id}')">编辑</button><button class="btn danger" onclick="event.stopPropagation();deleteItem('${bucket}','${item.id}')">删除</button></div></article>`}
 function renderNotes(bucket,gridId,searchId,typeId){const q=(document.getElementById(searchId)?.value||"").toLowerCase(),type=document.getElementById(typeId)?.value||"";const list=db[bucket].filter(x=>(!type||x.type===type)&&[x.title,x.name,x.au,x.type,x.content,x.role].join(" ").toLowerCase().includes(q));document.getElementById(gridId).innerHTML=list.map(x=>noteCard(x,bucket)).join("")||empty("这里还没有存档，点右上角添加第一条。");const countId={settings:"settingCount",writing:"writingCount",characters:"characterCount"}[bucket];document.getElementById(countId).textContent=`${list.length} 条记录`;if(bucket==="characters"){const select=document.getElementById("characterAu"),old=select.value;select.innerHTML='<option value="">全部 AU</option>'+db.aus.map(a=>`<option>${esc(a.name)}</option>`).join("");select.value=old;}}
 function imageField(id,label){return `<div class="field full"><label>${label}</label><input id="${id}" type="file" accept="image/*"><small style="color:var(--muted);font-size:10px">建议使用压缩后的图片，较大的图片会占用浏览器本地空间。</small></div>`}
-function editPhoto(bucket,id){const isDream=bucket==="dreams",item=db[bucket].find(x=>x.id===id)||{id:uid(),title:"",category:isDream?"梦稿合照":"周边",status:isDream?"":"想收",date:"",price:"",series:"",note:"",image:""};let body=`<div class="form-grid">${f("title","名称",item.title)}${isDream?sel("category","分类",["梦稿合照","游戏合照","游戏截图","自绘","其他"],item.category):sel("status","收藏状态",["已到手","运输中","预售中","想收"],item.status)}${isDream?f("date","日期",item.date,"date"):f("series","作品 / 系列",item.series)}${!isDream?f("price","价格 / 预算",item.price):""}${imageField("imageFile","图片")}${isDream?f("v5DreamTags","标签（逗号分隔）",item.tags||""):""}${ta("note","备注",item.note||"")}</div>`;openModal(isDream?"添加梦图":"添加谷子",body,()=>{if(!val("title")){toast("请填写名称");return false}const file=document.getElementById("imageFile").files[0];const save=image=>{const data={...item,title:val("title"),category:val("category"),status:val("status"),date:val("date"),series:val("series"),price:val("price"),note:val("note"),tags:isDream?val("v5DreamTags"):item.tags,image:image||item.image};const i=db[bucket].findIndex(x=>x.id===item.id);if(i>=0)db[bucket][i]=data;else db[bucket].unshift(data);persist();closeModal();renderAll();toast("收藏已保存")};if(file){if(file.size>2.5*1024*1024){toast("图片大于 2.5MB，请先压缩后再上传");return false}const reader=new FileReader();reader.onload=()=>save(reader.result);reader.onerror=()=>toast("图片读取失败");reader.readAsDataURL(file);return false}else{save(item.image);return false}})}
+function editPhoto(bucket,id){const isDream=bucket==="dreams",item=db[bucket].find(x=>x.id===id)||{id:uid(),title:"",category:isDream?"梦稿合照":"周边",status:isDream?"":"想收",date:"",price:"",series:"",note:"",image:""};let body=`<div class="form-grid">${f("title","名称",item.title)}${isDream?sel("category","分类",["梦稿合照","游戏合照","游戏截图","自绘","其他"],item.category):sel("status","收藏状态",["已到手","运输中","预售中","想收"],item.status)}${isDream?f("date","日期",item.date,"date"):f("series","作品 / 系列",item.series)}${!isDream?f("price","单件价格（€）",item.price):""}${!isDream?f("v5MerchQuantity","数量",item.quantity??1,"number"):""}${!isDream?f("v5MerchDate","入手 / 下单日期",item.purchaseDate||"","date"):""}${imageField("imageFile","图片")}${isDream?f("v5DreamTags","标签（逗号分隔）",item.tags||""):""}${ta("note","备注",item.note||"")}</div>`;openModal(isDream?"添加梦图":"添加谷子",body,()=>{if(!val("title")){toast("请填写名称");return false}const file=document.getElementById("imageFile").files[0];const save=image=>{const data={...item,title:val("title"),category:val("category"),status:val("status"),date:val("date"),series:val("series"),price:val("price"),quantity:isDream?item.quantity:Math.max(1,Math.floor(Number(val("v5MerchQuantity"))||1)),purchaseDate:isDream?item.purchaseDate:val("v5MerchDate"),note:val("note"),tags:isDream?val("v5DreamTags"):item.tags,image:image||item.image};const i=db[bucket].findIndex(x=>x.id===item.id);if(i>=0)db[bucket][i]=data;else db[bucket].unshift(data);persist();closeModal();renderAll();toast("收藏已保存")};if(file){if(file.size>2.5*1024*1024){toast("图片大于 2.5MB，请先压缩后再上传");return false}const reader=new FileReader();reader.onload=()=>save(reader.result);reader.onerror=()=>toast("图片读取失败");reader.readAsDataURL(file);return false}else{save(item.image);return false}})}
 document.getElementById("addDream").onclick=()=>editPhoto("dreams");
 document.getElementById("addMerch").onclick=()=>editPhoto("merch");
-function photoCard(item,bucket){const img=item.image?`<img src="${item.image}" alt="${esc(item.title)}" ${bucket==="dreams"?`onclick="v5ViewDream(\'${item.id}\')" style="cursor:zoom-in"`:""}>`:`<div class="photo-placeholder">${bucket==="dreams"?"☾":"✧"}</div>`;return `<article class="photo-card">${img}<div class="photo-info"><strong>${esc(item.title)}</strong><small>${esc(bucket==="dreams"?v5DreamCategory(item.category):(item.series||"未分类"))}${item.status?" · "+esc(item.status):""}</small>${item.price?`<small style="display:block;margin-top:3px">价格：${esc(item.price)}</small>`:""}<div class="card-actions"><button class="btn soft" onclick="editPhoto('${bucket}','${item.id}')">编辑</button><button class="btn danger" onclick="deleteItem('${bucket}','${item.id}')">删除</button></div></div></article>`}
+function photoCard(item,bucket){const img=item.image?`<img src="${item.image}" alt="${esc(item.title)}" ${bucket==="dreams"?`onclick="v5ViewDream(\'${item.id}\')" style="cursor:zoom-in"`:""}>`:`<div class="photo-placeholder">${bucket==="dreams"?"☾":"✧"}</div>`;return `<article class="photo-card">${img}<div class="photo-info"><strong>${esc(item.title)}</strong><small>${esc(bucket==="dreams"?v5DreamCategory(item.category):(item.series||"未分类"))}${item.status?" · "+esc(item.status):""}</small>${item.price?`<small style="display:block;margin-top:3px">单价：${esc(item.price)}${bucket==="merch"?" · 数量："+esc(item.quantity||1):""}</small>`:""}<div class="card-actions"><button class="btn soft" onclick="editPhoto('${bucket}','${item.id}')">编辑</button><button class="btn danger" onclick="deleteItem('${bucket}','${item.id}')">删除</button></div></div></article>`}
 window.editPhoto=editPhoto;
 function v5DreamCategory(cat){return ({"约稿":"梦稿合照","梦图":"梦稿合照","灵感参考":"其他"}[cat]||cat||"其他")}
-function renderPhotos(bucket,gridId,searchId,filterId){const q=(document.getElementById(searchId)?.value||"").toLowerCase(),filter=document.getElementById(filterId)?.value||"";const list=db[bucket].filter(x=>(!filter||(bucket==="dreams"?v5DreamCategory(x.category)===filter:x.status===filter))&&[x.title,x.category,x.status,x.note,x.series,x.tags].join(" ").toLowerCase().includes(q));document.getElementById(gridId).innerHTML=list.map(x=>photoCard(x,bucket)).join("")||empty("这里还没有收藏，上传一张图片开始整理。",bucket==="dreams"?"☾":"✧");document.getElementById(bucket==="dreams"?"dreamCount":"merchCount").textContent=`${list.length} 件`}
+function renderPhotos(bucket,gridId,searchId,filterId){const q=(document.getElementById(searchId)?.value||"").toLowerCase(),filter=document.getElementById(filterId)?.value||"";let list=db[bucket].filter(x=>(!filter||(bucket==="dreams"?v5DreamCategory(x.category)===filter:x.status===filter))&&[x.title,x.category,x.status,x.note,x.series,x.tags].join(" ").toLowerCase().includes(q));if(bucket==="merch"){const sort=document.getElementById("v5MerchSort")?.value||"new";if(sort==="price-high")list.sort((a,b)=>v5MerchPrice(b.price)-v5MerchPrice(a.price));if(sort==="price-low")list.sort((a,b)=>v5MerchPrice(a.price)-v5MerchPrice(b.price));if(sort==="title")list.sort((a,b)=>(a.title||"").localeCompare(b.title||"","zh"));renderV5MerchStats()}document.getElementById(gridId).innerHTML=list.map(x=>photoCard(x,bucket)).join("")||empty("这里还没有收藏，上传一张图片开始整理。",bucket==="dreams"?"☾":"✧");document.getElementById(bucket==="dreams"?"dreamCount":"merchCount").textContent=`${list.length} 件`}
 function dateOnly(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 let calDate=new Date();calDate.setDate(1);let selectedDate=dateOnly(new Date());
 function dateDiff(date){const now=new Date();now.setHours(0,0,0,0);const d=new Date(date+"T00:00:00");return Math.round((d-now)/86400000)}
@@ -443,7 +448,7 @@ function renderCharacters(){renderNotes("characters","characterGrid","characterS
 function renderAll(){if(document.getElementById("page-au-detail").classList.contains("active"))renderV5AuDetail();updateStats();renderAus();renderCalendar();renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory");renderPhotos("merch","merchGallery","merchSearch","merchStatus");renderNotes("settings","settingGrid","settingSearch","settingType");renderNotes("writing","writingGrid","writingSearch","writingType");renderCharacters();renderDivinations();renderGacha();renderV5Letters()}
 ["auSearch","auStatus"].forEach(id=>document.getElementById(id).addEventListener("input",renderAus));
 ["dreamSearch","dreamCategory"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory")));
-["merchSearch","merchStatus"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderPhotos("merch","merchGallery","merchSearch","merchStatus")));
+["merchSearch","merchStatus","v5MerchSort"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderPhotos("merch","merchGallery","merchSearch","merchStatus")));
 ["settingSearch","settingType"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderNotes("settings","settingGrid","settingSearch","settingType")));
 ["writingSearch","writingType"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderNotes("writing","writingGrid","writingSearch","writingType")));
 ["characterSearch","characterAu"].forEach(id=>document.getElementById(id).addEventListener("input",renderCharacters));
@@ -638,6 +643,24 @@ document.getElementById('v5SecretHero').addEventListener('click',()=>{
 
 
 
+
+
+/* V5 merchandise summary: only recognized EUR prices included in totals */
+function v5MerchPrice(price){
+ if(typeof price==='number')return Number.isFinite(price)&&price>=0?price:NaN;
+ const s=String(price??'').trim();
+ if(!s)return NaN;
+ const match=s.match(/^(?:€\s*)?(\d+(?:[.,]\d{1,2})?)(?:\s*€)?$/);
+ return match?Number(match[1].replace(',','.')):NaN;
+}
+function renderV5MerchStats(){
+ const items=db.merch||[],owned=items.filter(x=>x.status==='已到手'),qty=x=>Math.max(1,Math.floor(Number(x.quantity)||1));
+ const valid=owned.filter(x=>Number.isFinite(v5MerchPrice(x.price)));
+ const total=valid.reduce((sum,x)=>sum+v5MerchPrice(x.price)*qty(x),0);
+ const missing=owned.length-valid.length;
+ const stats=[['收藏条目',items.length],['已到手数量',owned.reduce((sum,x)=>sum+qty(x),0)],['已到手已知总价',total.toLocaleString('de-DE',{style:'currency',currency:'EUR'})],['待收 / 运输 / 预售',items.filter(x=>x.status!=='已到手').length]];
+ document.getElementById('v5MerchStats').innerHTML=stats.map(([label,value])=>'<div class="v5-merch-stat"><span>'+label+'</span><strong>'+value+'</strong></div>').join('')+(missing?'<p style="grid-column:1/-1;color:var(--muted);font-size:12px">另有 '+missing+' 条已到手记录没有可识别的欧元单价，未计入总价。</p>':'');
+}
 
 /* V5 dream art: categories, tags, batch import and lightbox */
 window.v5ViewDream=function(id){
