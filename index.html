@@ -508,8 +508,71 @@ function renderAll(){if(document.getElementById("page-au-detail").classList.cont
 ["characterSearch","characterAu"].forEach(id=>document.getElementById(id).addEventListener("input",renderCharacters));
 document.getElementById("exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="🍎 🍏 -备份-"+dateOnly(new Date())+".json";a.click();URL.revokeObjectURL(url);toast("备份已导出")};
 document.getElementById("importBtn").onclick=()=>document.getElementById("importFile").click();
-document.getElementById("importFile").onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const incoming=JSON.parse(r.result);if(!incoming||!Array.isArray(incoming.aus))throw new Error();if(confirm("导入会覆盖当前档案。建议先导出备份，确定继续吗？")){db={...db,...incoming};for(const b of ["events","dreams","merch","settings","writing","characters","divinations","gacha","letters"]){if(!Array.isArray(db[b]))db[b]=[]}persist();renderAll();applyAppearance();toast("备份已导入")}}catch(err){toast("文件格式不正确，无法导入")}e.target.value=""};r.readAsText(file)};
-
+const V5_IMPORT_BUCKETS=['aus','events','dreams','merch','settings','writing','characters','divinations','gacha','letters'];
+function v5DownloadSafetyCopy(){
+ const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='v5-before-import-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';
+ a.click();setTimeout(()=>URL.revokeObjectURL(url),5000);
+}
+function v5PrepareImport(raw){
+ const source=raw&&typeof raw==='object'&&raw.data&&Array.isArray(raw.data.aus)?raw.data:raw;
+ if(!source||typeof source!=='object'||!Array.isArray(source.aus))throw Error('不是可识别的档案备份');
+ for(const k of V5_IMPORT_BUCKETS)if(source[k]!==undefined&&!Array.isArray(source[k]))throw Error(k+' 格式错误');
+ return source;
+}
+function v5MergePreview(source){
+ const result={...db},counts={},auIdMap=new Map();
+ const incomingAus=source.aus||[],currentAus=db.aus||[],names=new Map(currentAus.map(a=>[String(a.name||'').trim(),a]));
+ const aus=[...currentAus],usedIds=new Set(aus.map(a=>String(a.id)));
+ let auAdded=0;
+ for(const record of incomingAus){
+  if(!record||typeof record!=='object')continue;
+  const match=aus.find(a=>record.id&&String(a.id)===String(record.id))||names.get(String(record.name||'').trim());
+  if(match){if(record.id)auIdMap.set(String(record.id),match.id);continue}
+  const copy={...record};if(!copy.id||usedIds.has(String(copy.id)))copy.id=uid();
+  usedIds.add(String(copy.id));aus.push(copy);if(record.id)auIdMap.set(String(record.id),copy.id);
+  if(copy.name)names.set(String(copy.name).trim(),copy);auAdded++;
+ }
+ result.aus=aus;counts.aus=auAdded;
+ for(const bucket of V5_IMPORT_BUCKETS.filter(x=>x!=='aus')){
+  const original=Array.isArray(db[bucket])?db[bucket]:[],incoming=source[bucket]||[];
+  const merged=[...original],ids=new Set(original.map(x=>String(x?.id||''))),seen=new Set();
+  let added=0;
+  for(const record of incoming){
+   if(!record||typeof record!=='object')continue;
+   const oldId=String(record.id||'');
+   if(oldId&&ids.has(oldId))continue;
+   const copy={...record};
+   if(copy.auId&&auIdMap.has(String(copy.auId)))copy.auId=auIdMap.get(String(copy.auId));
+   if(!copy.id||seen.has(oldId))copy.id=uid();
+   const key=String(copy.id);if(ids.has(key))continue;
+   ids.add(key);seen.add(oldId);merged.push(copy);added++;
+  }
+  result[bucket]=merged;counts[bucket]=added;
+ }
+ // Keep V5 appearance unchanged. V4 appearance is not applied implicitly.
+ return {result,counts};
+}
+document.getElementById("importFile").onchange=e=>{
+ const file=e.target.files?.[0];if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const source=v5PrepareImport(JSON.parse(reader.result));
+   const preview=v5MergePreview(source);
+   const total=Object.values(preview.counts).reduce((a,b)=>a+b,0);
+   const summary=V5_IMPORT_BUCKETS.filter(k=>preview.counts[k]).map(k=>k+': +'+preview.counts[k]).join('\\n');
+   if(!confirm('V5 安全导入预览\\n\\n将新增 '+total+' 条记录（同 ID 的记录不会覆盖，AU 同名不会重复添加）。\\n'+(summary||'没有发现新记录')+'\\n\\n不会覆盖现有外观设置。\\n导入前会自动下载当前 V5 备份。\\n\\n确定合并吗？'))return;
+   v5DownloadSafetyCopy();
+   db=preview.result;persist();renderAll();applyAppearance();
+   toast('已安全合并 '+total+' 条记录');
+  }catch(err){console.error('V5 import error',err);toast('导入失败：'+(err?.message||'文件格式错误'))}
+  finally{e.target.value=''}
+ };
+ reader.onerror=()=>{toast('读取备份失败');e.target.value=''};
+ reader.readAsText(file);
+};
 
 /* === V3: Archive tabs and independent divination/gacha records === */
 function setArchiveTab(tab){
