@@ -296,24 +296,18 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 /* Three deliberate sizes: orb → bar → record player → orb. */
 .v5-music-player.compact{width:54px!important}
 
-/* V5 illustrated-book splash: warm violet → cool blush → pink-lavender, without particles. */
-.intro{background:#e9d9ed!important;color:#594473!important;overflow-y:auto;overscroll-behavior:contain;padding:28px 16px;animation:v5IntroColorJourney 7.2s ease-in-out both}
-.intro:before,.intro:after,.intro-sparkles{display:none!important}
-.intro-photo{display:block!important;position:absolute;inset:-2%;z-index:0!important;pointer-events:none;background:linear-gradient(120deg,rgba(242,200,225,0) 4%,rgba(237,186,217,.32) 44%,rgba(233,190,229,.48) 76%,rgba(234,204,241,.35) 100%)!important;opacity:0;transform:translateX(-22%);animation:v5PinkWash 7.2s ease-in-out forwards!important}
-@keyframes v5PinkWash{0%,15%{opacity:0;transform:translateX(-22%)}40%{opacity:.42}76%{opacity:.85;transform:translateX(0)}100%{opacity:.8;transform:translateX(0)}}
-.intro-content,.intro-bottom,.intro-skip{position:relative;z-index:1}
-.intro-bottom{position:absolute}
-.intro-skip{position:absolute}
-
-@keyframes v5IntroColorJourney{
- 0%{background-color:#e8d5e8}
- 38%{background-color:#e5d8ed}
- 72%{background-color:#f2dce9}
- 100%{background-color:#eedcf3}
-}
-/* A translucent wash moves across the page while the book-cover illustration stays clear. */
-.intro::selection{background:#d9b4e5;color:#4e3466}
-@media(prefers-reduced-motion:reduce){.intro{animation:none!important;background:#eedcf3!important}.intro-photo{animation:none!important;opacity:.8;transform:none}}
+/* V5: warm violet illustrated-book splash; pink wash only after entering. */
+.intro{background:#e8d5e8!important;color:#594473!important;overflow-y:auto;overscroll-behavior:contain;padding:28px 16px;animation:none!important}
+.intro:before,.intro:after{display:none!important}
+.intro-photo{display:block!important;position:absolute;inset:0;z-index:8!important;pointer-events:none;background:linear-gradient(115deg,#e9d0e8 0%,#edcce3 35%,#edc2de 75%,#f0cbe9 100%)!important;opacity:0;transform:translateX(-101%);animation:none!important}
+.intro.pink-closing .intro-photo{animation:v5PinkCover 1.8s cubic-bezier(.56,.02,.24,1) forwards!important}
+@keyframes v5PinkCover{0%{opacity:.15;transform:translateX(-101%)}35%{opacity:.8}100%{opacity:1;transform:translateX(0)}}
+.intro-sparkles{display:block!important;position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.65}
+.intro-sparkles span{display:block!important;width:2px;height:2px;background:#fff6ff;box-shadow:0 0 5px 1px #fdf0ff91;animation:v5QuietTwinkle 5s ease-in-out infinite alternate}
+@keyframes v5QuietTwinkle{0%{opacity:.2;transform:scale(.7)}100%{opacity:.7;transform:scale(1.1)}}
+.intro-content{position:relative;z-index:2}
+.intro-bottom{position:absolute;z-index:2}
+@media(prefers-reduced-motion:reduce){.intro.pink-closing .intro-photo{animation-duration:.15s!important}.intro-sparkles span{animation:none}}
 .intro-content{width:min(100%,520px);max-width:520px;padding:18px 12px 24px!important;display:flex;flex-direction:column;align-items:center;animation:v5BookContent 1.2s ease both!important;text-shadow:none!important}
 .intro-art-frame{width:min(78vw,410px,47vh);aspect-ratio:1/1;border-radius:17px;background:#e4d7f1 var(--intro-image) center/cover no-repeat;box-shadow:0 3px 20px rgba(77,48,116,.12);border:1px solid rgba(126,94,165,.18);overflow:hidden;display:flex;align-items:center;justify-content:center;animation:v5BookArt 1.8s ease-out both}
 .intro-art-frame.has-image .intro-art-placeholder{display:none}
@@ -331,27 +325,13 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 @media(max-height:680px){.intro{padding:12px}.intro-art-frame{width:min(70vw,280px,43vh)}.intro-apples{margin:10px 0 2px!important}.intro-bottom{display:none}}
 @media(prefers-reduced-motion:reduce){.intro-content,.intro-art-frame{animation:none!important}}
 
-/* Fine embroidered lace trims and a two-sided lace-curtain entrance transition. */
-.v5-lace-edge{position:absolute;left:0;right:0;height:40px;z-index:2;pointer-events:none;opacity:.65;background:radial-gradient(circle at 16px 20px,transparent 9px,#b99acb 9.7px,#b99acb 10.8px,transparent 11.5px) 0 0/32px 32px repeat-x,linear-gradient(90deg,transparent,#c3a7d3a8,transparent) center 7px/100% 1px no-repeat;mask-image:linear-gradient(to bottom,#000,transparent)}
-.v5-lace-top{top:0}
-.v5-lace-bottom{bottom:0;transform:rotate(180deg)}
-.v5-lace-curtain{position:fixed;top:0;bottom:0;width:51%;z-index:15;pointer-events:none;opacity:0;background-color:#e6d4ed;background-image:radial-gradient(circle at 14px 16px,transparent 9px,#c4a8d5 9.7px,#c4a8d5 10.7px,transparent 11.5px),radial-gradient(circle at 30px 32px,transparent 9px,#f2e5f4 9.7px,#f2e5f4 10.7px,transparent 11.5px),repeating-linear-gradient(45deg,transparent 0 16px,#cdb5da66 17px,transparent 18px 32px),linear-gradient(110deg,#f1e0f1,#e2cbea);background-size:44px 44px,44px 44px,36px 36px,cover;box-shadow:inset 0 0 55px #b994c83d}
-.v5-lace-left{left:0;transform:translateX(-105%);border-right:4px double #a984bd}
-.v5-lace-right{right:0;transform:translateX(105%);border-left:4px double #a984bd}
-.intro.lace-closing .v5-lace-left{animation:v5LaceCloseLeft 1.55s cubic-bezier(.65,0,.2,1) forwards}
-.intro.lace-closing .v5-lace-right{animation:v5LaceCloseRight 1.55s cubic-bezier(.65,0,.2,1) forwards}
-.intro.lace-closing .intro-content{animation:v5LaceContentOut .6s ease forwards!important}
-@keyframes v5LaceCloseLeft{0%{opacity:1;transform:translateX(-105%)}100%{opacity:1;transform:translateX(0)}}
-@keyframes v5LaceCloseRight{0%{opacity:1;transform:translateX(105%)}100%{opacity:1;transform:translateX(0)}}
-@keyframes v5LaceContentOut{to{opacity:.15;transform:scale(.98)}}
-@media(prefers-reduced-motion:reduce){.intro.lace-closing .v5-lace-left,.intro.lace-closing .v5-lace-right{animation-duration:.15s}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
 <body>
 <div class="intro" id="introScreen" aria-label="网站开屏">
   <div class="intro-photo" id="introPhoto"></div>
-  <div class="intro-sparkles" id="introSparkles" aria-hidden="true"></div><div class="v5-lace-edge v5-lace-top" aria-hidden="true"></div><div class="v5-lace-edge v5-lace-bottom" aria-hidden="true"></div><div class="v5-lace-curtain v5-lace-left" aria-hidden="true"></div><div class="v5-lace-curtain v5-lace-right" aria-hidden="true"></div>
+  <div class="intro-sparkles" id="introSparkles" aria-hidden="true"></div>
   
   <div class="intro-content"><div class="intro-art-frame" id="introArtFrame" aria-label="开屏封面插画"><div class="intro-art-placeholder">🍎 <span>♡</span> 🍏</div></div><div class="intro-apples">🍎 🍏</div><h1 id="introTitle" class="v5-intro-hidden" aria-hidden="true">昼起之时</h1><p id="introSubtitle">两颗心相遇，于是爱在无限时空中蔓延。</p><button class="intro-enter" id="introEnter">进入 ✧</button></div>
   <div class="intro-bottom">OUR LITTLE UNIVERSE · ✦</div>
@@ -751,21 +731,34 @@ function applyAppearance(){
  document.getElementById('v5HomeCover').style.backgroundImage=a.homeCover?`linear-gradient(180deg,#27183c44,#24133888),url(${JSON.stringify(a.homeCover)})`:'';
  applyV5Sections(a);applyV5NavOrder(a);renderV5HomeDecor(a);renderV5MusicSettings(a);
 }
-let v5IntroClosing=false;
+let v5IntroClosing=false,v5IntroCloseTimer;
 function closeIntro(){
  if(v5IntroClosing)return;
  v5IntroClosing=true;
- const el=document.getElementById('introScreen');el.classList.add('lace-closing');
- setTimeout(()=>{el.classList.add('hidden');el.classList.remove('lace-closing');v5IntroClosing=false},1750);
+ const el=document.getElementById('introScreen');
+ el.classList.add('pink-closing');
+ clearTimeout(v5IntroCloseTimer);
+ v5IntroCloseTimer=setTimeout(()=>{el.classList.add('hidden');el.classList.remove('pink-closing');v5IntroClosing=false},1850);
 }
-function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden','lace-closing');v5IntroClosing=false;
+function showIntro(){
+ const el=document.getElementById('introScreen');
+ clearTimeout(v5IntroCloseTimer);el.classList.remove('hidden','pink-closing');v5IntroClosing=false;
  const art=document.getElementById('introArtFrame'),wash=document.getElementById('introPhoto'),content=el.querySelector('.intro-content');
  [el,wash,art,content].forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
 }
 document.getElementById('introEnter').onclick=closeIntro;
 
 document.getElementById('previewIntro').onclick=showIntro;
-// The splash uses soft light and mist instead of silver/purple dotted sparkles.
+// A handful of very small, faint galaxy-like points; no dense silver particles.
+const v5Stars=document.getElementById('introSparkles');
+v5Stars.replaceChildren();
+for(let i=0;i<15;i++){
+ const star=document.createElement('span');
+ star.style.left=((i*47+13)%97)+'%';
+ star.style.top=((i*31+11)%91)+'%';
+ star.style.animationDelay=-(i%6)*.83+'s';
+ v5Stars.appendChild(star);
+}
 document.getElementById('saveAppearance').onclick=()=>{
  db.appearance={...getAppearance(),title:document.getElementById('appearanceTitle').value.trim()||APPEARANCE_DEFAULTS.title,
  subtitle:document.getElementById('appearanceSubtitle').value.trim(),button:document.getElementById('appearanceButton').value.trim()||APPEARANCE_DEFAULTS.button,sections:readV5Sections(),navOrder:[...document.querySelectorAll("#nav button[data-page]")].map(b=>b.dataset.page)};
