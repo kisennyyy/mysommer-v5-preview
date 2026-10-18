@@ -520,6 +520,39 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 @media(max-width:850px){#page-calendar .calendar-layout{grid-template-columns:1fr}#page-calendar .calendar-layout>.panel{padding:15px!important}}
 @media(max-width:480px){#page-calendar .day{min-height:45px;padding:6px 5px;font-size:12px}#page-calendar .calendar-grid{gap:3px}#page-calendar .calendar-head h3{font-size:18px}#page-calendar .v5-month-journal{padding:17px}}
 
+
+/* V5.1.2: nostalgic lavender cassette boombox and scattered cassette archive */
+#page-home .dream-room{background:linear-gradient(155deg,#e8dff2 0%,#c6b2d8 46%,#e4d8ed 100%)!important}
+#page-home .radio-area{width:min(100%,640px)!important}
+#page-home .radio-antenna{width:76%!important;height:60px!important;border:9px solid #aaa0b9!important;border-bottom:0!important;box-shadow:inset 0 3px 0 #e7dced,3px -2px 0 #6c607e!important}
+#page-home .radio-machine{aspect-ratio:1.58!important;border:6px solid #72667e!important;border-radius:6px!important;background:linear-gradient(120deg,#b9aec7 0%,#eee8f1 19%,#c8bed2 48%,#eee6ed 73%,#a99bb8 100%)!important;box-shadow:0 7px 0 #71667e,0 15px 0 #4f435e,0 25px 30px #33263b65,inset 2px 2px 0 #fff9!important;padding:13px 15px 13px!important}
+#page-home .radio-top{height:23%!important;border:7px solid #c7bdd0!important;background:repeating-linear-gradient(0deg,#302b3d 0 2px,#6d657a 2px 4px,#3a3346 4px 6px)!important;box-shadow:inset 0 0 0 2px #635b70,0 2px 0 #8d829b!important}
+#page-home .radio-top:after{color:#ddd0e7!important}
+#page-home .radio-controls{height:13%!important;margin:3px 0!important;color:#5a5065!important}
+#page-home .radio-bottom{height:49%!important;grid-template-columns:1fr .85fr 1fr!important;gap:7px!important}
+#page-home .radio-speaker{border:5px solid #aea2bc!important;background:radial-gradient(circle,#2b2736 0 9%,#777086 10% 12%,#292634 13% 37%,#82798e 38% 41%,#24222d 42% 64%,#8d8399 65% 68%,#292532 69%)!important}
+#page-home .radio-tape{border:5px solid #aaa0b7!important;background:linear-gradient(#50485f 0 12%,#d8cfdf 13% 77%,#756b82 78%,#4b4358)!important}
+#page-home .tape-window{background:#332f41!important;border-color:#5d536c!important}
+#page-home .tape-label{color:#544b5e!important}
+#page-home .radio-keys i{background:linear-gradient(#f4eef5,#afa5bc 70%,#7a7089)!important;border-color:#72687d!important}
+#page-home .room-drawer{position:relative!important;margin:12px auto 24px!important;padding:12px 4px 20px!important;width:min(100%,760px)!important;border:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
+#page-home .room-drawer h3{font:500 23px/1.3 Georgia,serif!important;letter-spacing:.3em!important;color:#5d4677!important;text-align:center!important;margin:10px 0 6px!important}
+#page-home .room-drawer p{text-align:center!important;color:#79658d!important;margin:0 0 20px!important}
+#page-home .room-drawer .v5-home-links{display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:center!important;gap:10px 12px!important;perspective:850px}
+#page-home .room-drawer .v5-home-links button{position:relative!important;flex:0 1 calc(30% - 12px)!important;min-width:130px!important;min-height:83px!important;padding:31px 10px 11px!important;background:linear-gradient(165deg,#f7f0fa 0 19%,#d2c1e0 20% 23%,#f7f2f8 24% 76%,#c3b0d5 77% 81%,#eee5f4 82%)!important;border:2px solid #f8f2fa!important;border-radius:5px!important;box-shadow:0 3px 0 #a48bb9,3px 9px 12px #4e3a5c35!important;color:#5c4775!important;font:600 13px/1.4 ui-sans-serif,system-ui!important;transform:rotate(var(--tilt,0deg)) translateY(var(--offset,0px))!important;transition:transform .22s ease,box-shadow .22s ease!important}
+#page-home .room-drawer .v5-home-links button:before{content:"";position:absolute;top:7px;left:12%;right:12%;height:16px;border:2px solid #a38fb6;border-radius:2px;background:linear-gradient(90deg,#8b779e 0 18%,#e9dff0 18% 30%,#89749d 30% 70%,#e9dff0 70% 82%,#8b779e 82%)}
+#page-home .room-drawer .v5-home-links button:after{content:"●     ●";position:absolute;top:7px;left:0;right:0;text-align:center;letter-spacing:18px;font-size:8px;color:#e8ddf0}
+#page-home .room-drawer .v5-home-links button:nth-child(5n+1){--tilt:-9deg;--offset:9px}
+#page-home .room-drawer .v5-home-links button:nth-child(5n+2){--tilt:6deg;--offset:-7px}
+#page-home .room-drawer .v5-home-links button:nth-child(5n+3){--tilt:-3deg;--offset:6px}
+#page-home .room-drawer .v5-home-links button:nth-child(5n+4){--tilt:9deg;--offset:0px}
+#page-home .room-drawer .v5-home-links button:nth-child(5n+5){--tilt:-6deg;--offset:-5px}
+#page-home .room-drawer .v5-home-links button:hover,#page-home .room-drawer .v5-home-links button:focus-visible{transform:rotate(0deg) translateY(-8px) scale(1.05)!important;z-index:2;box-shadow:0 12px 20px #4e3a5c45!important}
+#page-home .room-drawer .room-close{position:absolute!important;top:0!important;right:10px!important;background:#f7eff9!important;border-radius:50%!important;width:34px!important;height:34px!important}
+#page-home .room-calendar.today-card{margin-top:24px!important}
+@media(max-width:600px){#page-home .radio-machine{padding:8px!important;border-width:4px!important}#page-home .radio-top{border-width:4px!important}#page-home .radio-bottom{gap:4px!important}#page-home .radio-speaker,#page-home .radio-tape{border-width:3px!important}#page-home .room-drawer .v5-home-links{gap:10px 9px!important}#page-home .room-drawer .v5-home-links button{flex:0 1 calc(47% - 7px)!important;min-width:0!important;min-height:75px!important;font-size:12px!important;padding:30px 4px 9px!important}#page-home .room-drawer h3{font-size:20px!important}}
+@media(prefers-reduced-motion:reduce){#page-home .room-drawer .v5-home-links button{transition:none!important}}
+
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -563,10 +596,10 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
       <div class="radio-area"><div class="radio-antenna"></div><button class="radio-machine" id="roomRadio" type="button" aria-expanded="false" aria-controls="roomDrawer" aria-label="点击收音机打开合集"><div class="radio-top"></div><div class="radio-controls"><b></b><span>STEREO CASSETTE · FM 07.09</span><b></b></div><div class="radio-bottom"><div class="radio-speaker"></div><div class="radio-tape"><div class="tape-window"><i></i><i></i></div><div class="tape-label">SIDE A · OUR UNIVERSE</div></div><div class="radio-speaker"></div></div><div class="radio-keys"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="radio-led"></div></button><p class="radio-caption">✧ TOUCH TO OPEN THE UNIVERSE ✧</p></div>
       
     </div>
-    <button class="room-calendar today-card" type="button" data-goto="calendar" aria-label="打开纪念日历"><span class="today-top"><b>T O D A Y</b><span id="todayWeek">星期日</span></span><span class="today-middle"><span class="today-date"><em id="roomDay">18</em><strong id="roomMonth">OCT</strong></span><span class="today-weather"><span id="todayWeatherIcon" aria-hidden="true">☁</span><span id="todayWeatherText">正在读取天气…</span></span></span><span class="today-quote" id="todayQuote">今天也要好好照顾自己，妹妹。</span><span class="today-flower" aria-hidden="true">✿</span></button>
     <div class="room-drawer" id="roomDrawer" hidden><button class="room-close" id="roomClose" type="button" aria-label="关闭菜单">×</button><h3>合集</h3><p>✦ TUNE INTO OUR LITTLE UNIVERSE ✦</p>
       <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙</button><button data-goto="settings">❖ 档案室</button><button data-goto="dreams">☾ 梦图收藏</button><button data-goto="writing">✎ 文稿</button><button data-goto="letters">✉ 书信</button><button data-goto="divination">☽ 梦占</button><button data-goto="gacha">✧ 抽卡</button><button data-goto="calendar">♡ 日历</button><button data-goto="merch">✧ 谷子</button><button data-goto="appearance">✿ 外观设置</button></div>
-    </div>
+    </div>    <button class="room-calendar today-card" type="button" data-goto="calendar" aria-label="打开纪念日历"><span class="today-top"><b>T O D A Y</b><span id="todayWeek">星期日</span></span><span class="today-middle"><span class="today-date"><em id="roomDay">18</em><strong id="roomMonth">OCT</strong></span><span class="today-weather"><span id="todayWeatherIcon" aria-hidden="true">☁</span><span id="todayWeatherText">正在读取天气…</span></span></span><span class="today-quote" id="todayQuote">今天也要好好照顾自己，妹妹。</span><span class="today-flower" aria-hidden="true">✿</span></button>
+
   </div>
     <div class="v5-progress" id="v5Progress"></div>
     <!-- Legacy render targets retained for compatibility; the V5 homepage stays static. -->
