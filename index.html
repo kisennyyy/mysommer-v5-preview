@@ -1130,7 +1130,7 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
  const login=document.getElementById('cloudLogin');
  const sync=document.getElementById('cloudSync');
  const reload=document.getElementById('cloudReload');
- let connected=false, dirty=false, saving=false, lastCloudStamp='', timer=null, lastPull=0, syncError=false;
+ let connected=false, dirty=false, saving=false, lastCloudStamp='', timer=null, lastPull=0, syncError=false, editRevision=0;
  const setStatus=(message)=>{status.textContent='☁ '+message};
  const exists=()=>typeof puter!=='undefined' && puter.auth && puter.fs;
  const snapshot=()=>JSON.parse(JSON.stringify(db));
@@ -1153,17 +1153,19 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
  }
  async function push(force=false){
   if(!connected||saving)return;
-  clearTimeout(timer);saving=true;setStatus('正在上传云端…');
+  clearTimeout(timer);saving=true;setStatus('正在上传云端…');const revisionAtStart=editRevision;
   try{
    const remote=await fetchCloud();
-   if(!force && remote && lastCloudStamp && remote.updatedAt!==lastCloudStamp){
+   if(remote && lastCloudStamp && remote.updatedAt!==lastCloudStamp){
     dirty=true;setStatus('发现其他设备的更新 · 请先解决冲突');
     toast('云端已变化，请点击「立即同步」处理冲突');return;
    }
-   if(!force && remote && !lastCloudStamp){dirty=true;setStatus('云端已有档案 · 请先选择读取或覆盖');return;}
+   if(remote && !lastCloudStamp){dirty=true;setStatus('云端已有档案 · 请先选择读取或覆盖');return;}
    const stamp=new Date().toISOString();
    await puter.fs.write(CLOUD_FILE,JSON.stringify({version:1,updatedAt:stamp,data:snapshot()}));
-   lastCloudStamp=stamp;dirty=false;syncError=false;setStatus('已同步 · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}));
+   lastCloudStamp=stamp;dirty=editRevision!==revisionAtStart;syncError=false;
+   if(dirty){setStatus('上传期间有新修改 · 继续同步');clearTimeout(timer);timer=setTimeout(()=>push(false),1700)}
+   else setStatus('已同步 · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}));
   }catch(e){syncError=true;dirty=true;setStatus('同步失败 · 本机已保存，可重试');console.error('Puter sync error',e);toast('云端同步失败，请检查网络或 Puter 存储空间')}
   finally{saving=false;}
  }
@@ -1174,7 +1176,7 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
    if(!remote){setStatus('云端暂无档案');return null;}
    if(remote.updatedAt===lastCloudStamp){if(!dirty)setStatus('云端已是最新');return remote;}
    if(dirty && !interactive){setStatus('本地和云端都有改动 · 需要手动处理');return remote;}
-   if(dirty && interactive && !confirm('本机有尚未上传的修改。读取云端会覆盖这些本机修改。建议先导出 JSON 备份。确定读取云端吗？'))return remote;
+   if(dirty && interactive){setStatus('本机有未同步的修改 · 已阻止覆盖，请先导出两份备份');toast('为防止丢失数据，不能直接覆盖未同步的本机档案');return remote;}
    loadData(remote.data);lastCloudStamp=remote.updatedAt;dirty=false;syncError=false;
    setStatus('已读取云端最新档案');if(interactive)toast('已从云端更新');return remote;
   }catch(e){console.error('Puter load error',e);setStatus('读取云端失败 · 请检查网络');if(interactive)toast('读取失败，请稍后重试');return undefined;}
@@ -1193,9 +1195,7 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
    }else if(isSeedOnly()){
     loadData(remote.data);lastCloudStamp=remote.updatedAt;dirty=false;setStatus('已读取云端档案');
    }else{
-    const takeCloud=confirm('检测到云端已有档案，且当前浏览器也有本机内容。\n\n确定：读取云端（会替换本机内容）\n取消：保留本机，稍后手动选择同步。\n\n建议先导出本机 JSON 备份。');
-    if(takeCloud){loadData(remote.data);lastCloudStamp=remote.updatedAt;dirty=false;setStatus('已读取云端档案')}
-    else{lastCloudStamp='';dirty=true;setStatus('保留本机内容 · 尚未覆盖云端')}
+    lastCloudStamp='';dirty=true;setStatus('本机与云端都有档案 · 已暂停同步，避免覆盖');toast('请先导出本机备份，再决定如何合并档案');
    }
   }catch(e){console.error('Puter login error',e);setStatus('连接失败 · 请允许登录弹窗并重试');toast('Puter 登录失败或已取消')}
  }
@@ -1205,13 +1205,14 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
   try{
    const remote=await fetchCloud();
    if(remote && remote.updatedAt!==lastCloudStamp){
-    if(!confirm('云端存在另一份更新。\n\n确定：将当前本机数据覆盖云端。\n取消：不覆盖，保留两边数据。\n\n建议先导出本机 JSON 备份。'))return;
-    await push(true);
-   }else await push(true);
+    dirty=true;setStatus('检测到云端不同版本 · 已阻止覆盖');
+    toast('存在同步冲突，请先分别备份本机与云端数据');return;
+   }
+   await push(false);
   }catch(e){setStatus('同步前检查失败 · 请重试');toast('云端读取失败，未覆盖任何数据')}
  });
  reload.addEventListener('click',()=>pull({interactive:true}));
- window.archiveCloud={changed(){dirty=true;if(!connected){setStatus('本机已保存 · 连接 Puter 后可同步');return;}
+ window.archiveCloud={changed(){editRevision++;dirty=true;if(!connected){setStatus('本机已保存 · 连接 Puter 后可同步');return;}
    setStatus('本机已保存 · 等待云端同步…');clearTimeout(timer);timer=setTimeout(()=>push(false),1700);
  }};
  // Check for remote edits after switching tabs/devices, without overwriting local drafts.
