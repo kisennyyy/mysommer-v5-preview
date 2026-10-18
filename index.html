@@ -354,8 +354,8 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 
   <section class="page" id="page-gacha">
     <div class="section-head"><div><h3>抽卡存档</h3><p>记录卡池、抽数、出货结果、日期与截图。</p></div><button class="btn primary" id="addGacha">＋ 新建抽卡记录</button></div>
-    <div class="toolbar"><input class="search" id="gachaSearch" placeholder="搜索卡池、卡名、备注…"><select id="gachaRarity" style="max-width:160px"><option value="">全部稀有度</option><option>五星</option><option>四星</option><option>三星及以下</option><option>未出货</option><option>其他</option></select><div class="grow"></div><span id="gachaCount" class="au-meta"></span></div>
-    <div class="archive-records" id="gachaGrid"></div>
+    <div class="toolbar"><input class="search" id="gachaSearch" placeholder="搜索卡池、卡名、备注…"><select id="gachaRarity" style="max-width:160px"><option value="">全部稀有度</option><option>五星</option><option>四星</option><option>三星及以下</option><option>未出货</option><option>其他</option></select><select id="v5GachaPoolType" aria-label="卡池类型"><option value="">全部卡池</option><option value="新卡">新卡</option><option value="复刻">复刻</option><option value="常驻">常驻</option><option value="其他">其他</option></select><div class="grow"></div><span id="gachaCount" class="au-meta"></span></div>
+    <div class="v5-merch-stats" id="v5GachaStats"></div><div class="archive-records" id="gachaGrid"></div>
   </section>
 </main>
 </div>
@@ -471,7 +471,7 @@ function archiveImagePreview(image){return image?`<img class="record-preview" sr
 function archiveRecordCard(x,bucket){
  const isD=bucket==='divinations';
  const summary=isD?(x.question||x.v5Answer||x.interpretation||x.cards||x.note||'尚未填写解读'):(x.result||x.note||'尚未填写结果');
- const details=isD?[x.date,x.type,x.spread,x.au].filter(Boolean).join(' · '):[x.date,x.pool,x.rarity,x.count?x.count+' 抽':''].filter(Boolean).join(' · ');
+ const details=isD?[x.date,x.type,x.spread,x.au].filter(Boolean).join(' · '):[x.date,x.pool,x.v5PoolType,x.v5Affection,x.rarity,x.count?x.count+' 抽':''].filter(Boolean).join(' · ');
  const icon=isD?'☽':'✧';
  const img=x.image?`<img class="archive-record-photo" src="${x.image}" alt="${esc(x.title)} 的存档图片">`:`<div class="archive-record-photo archive-record-placeholder">${icon}</div>`;
  return `<article class="archive-record">${img}<div class="archive-record-body"><h4>${esc(x.title||'未命名记录')}</h4><div class="au-meta">${esc(details)}</div><p>${esc(summary)}</p>${isD&&x.cards?`<div class="tag-row"><span class="tag">${esc(x.cards.slice(0,60))}</span></div>`:''}${isD&&x.v5Answer?`<p><strong>回答：</strong>${esc(x.v5Answer.slice(0,180))}</p>`:''}<div class="card-actions"><button class="btn soft" onclick="editSpecialRecord('${bucket}','${x.id}')">查看 / 编辑</button><button class="btn danger" onclick="deleteItem('${bucket}','${x.id}')">删除</button></div></div></article>`;
@@ -486,7 +486,7 @@ function renderDivinations(){
 function renderGacha(){
  const q=(document.getElementById('gachaSearch').value||'').toLowerCase();
  const rarity=document.getElementById('gachaRarity').value;
- const list=db.gacha.filter(x=>(!rarity||x.rarity===rarity)&&[x.title,x.pool,x.rarity,x.result,x.note].join(' ').toLowerCase().includes(q));
+ const poolType=document.getElementById('v5GachaPoolType').value;const list=db.gacha.filter(x=>(!rarity||x.rarity===rarity)&&(!poolType||x.v5PoolType===poolType)&&[x.title,x.pool,x.v5PoolType,x.v5Affection,x.rarity,x.result,x.note].join(' ').toLowerCase().includes(q));renderV5GachaStats();
  document.getElementById('gachaGrid').innerHTML=list.map(x=>archiveRecordCard(x,'gacha')).join('')||empty('还没有抽卡记录，可以先记下第一次出货。','✧');
  document.getElementById('gachaCount').textContent=`${list.length} 条记录`;
 }
@@ -504,7 +504,7 @@ function editSpecialRecord(bucket,id){
   <div class="field full" id="spPreview">${archiveImagePreview(item.image)}</div>
  </div>`:`<div class="form-grid">
   ${f('spTitle','卡片 / 记录名称',item.title||'')}${f('spDate','抽卡日期',item.date||dateOnly(new Date()),'date')}
-  ${f('spPool','卡池 / 活动名称',item.pool||'')}${sel('spRarity','稀有度 / 结果',['五星','四星','三星及以下','未出货','其他'],item.rarity||'五星')}
+  ${f('spPool','卡池 / 活动名称',item.pool||'')}${sel('v5GachaPoolTypeEdit','卡池类型',['新卡','复刻','常驻','其他'],item.v5PoolType||'新卡')}${f('v5GachaAffection','牵绊 / 卡片系列',item.v5Affection||'')}${f('v5GachaRelease','卡片发布日期',item.v5Release||'','date')}${sel('spRarity','稀有度 / 结果',['五星','四星','三星及以下','未出货','其他'],item.rarity||'五星')}
   ${f('spCount','本次抽数',item.count||'','number','例如 70')}${ta('spResult','抽卡结果 / 出货内容',item.result||'')}
   ${ta('spNote','备注 / 心情 / 保底情况',item.note||'')}
   ${imageField('spImage','抽卡截图 / 卡面（可选）')}
@@ -515,7 +515,7 @@ function editSpecialRecord(bucket,id){
   const fields=isD?{
    type:val('spType'),au:val('spAu'),spread:val('spSpread'),question:val('spQuestion'),
    cards:val('spCards'),interpretation:val('spInterpretation'),v5Answer:val('v5DivinationAnswer'),v5Dialogue:val('v5DivinationDialogue'),note:val('spNote')
-  }:{pool:val('spPool'),rarity:val('spRarity'),count:val('spCount'),result:val('spResult'),note:val('spNote')};
+  }:{pool:val('spPool'),v5PoolType:val('v5GachaPoolTypeEdit'),v5Affection:val('v5GachaAffection'),v5Release:val('v5GachaRelease'),rarity:val('spRarity'),count:val('spCount'),result:val('spResult'),note:val('spNote')};
   const data={...item,...fields,title:val('spTitle'),date:val('spDate'),updated:new Date().toISOString()};
   const file=document.getElementById('spImage').files[0];
   const finish=(image)=>{
@@ -534,7 +534,7 @@ window.editSpecialRecord=editSpecialRecord;
 document.getElementById('addDivination').onclick=()=>editSpecialRecord('divinations');
 document.getElementById('addGacha').onclick=()=>editSpecialRecord('gacha');
 ['divinationSearch','divinationType','v5DivinationOrder'].forEach(id=>document.getElementById(id).addEventListener('input',renderDivinations));
-['gachaSearch','gachaRarity'].forEach(id=>document.getElementById(id).addEventListener('input',renderGacha));
+['gachaSearch','gachaRarity','v5GachaPoolType'].forEach(id=>document.getElementById(id).addEventListener('input',renderGacha));
 
 /* === Appearance: all settings live inside db and are included in JSON backup === */
 const APPEARANCE_DEFAULTS={title:"昼起之时",subtitle:"两颗心相遇，于是爱在无限时空中蔓延。",button:"进入 ✧",intro:"",background:"",hero:"",homeCover:"",sections:{}};
@@ -644,6 +644,18 @@ document.getElementById('v5SecretHero').addEventListener('click',()=>{
 
 
 
+
+
+/* V5 gacha overview: totals are descriptive, never probability estimates. */
+function renderV5GachaStats(){
+ const entries=db.gacha||[];
+ const numeric=entries.filter(x=>String(x.count??'').trim()!==''&&Number.isFinite(Number(x.count))&&Number(x.count)>=0);
+ const total=numeric.reduce((n,x)=>n+Number(x.count),0);
+ const wins=entries.filter(x=>x.rarity==='五星').length;
+ const stats=[['抽卡记录',entries.length],['已记录抽数',total],['五星记录',wins],['复刻记录',entries.filter(x=>x.v5PoolType==='复刻').length]];
+ const el=document.getElementById('v5GachaStats');if(!el)return;
+ el.innerHTML=stats.map(([label,value])=>'<div class="v5-merch-stat"><span>'+label+'</span><strong>'+value+'</strong></div>').join('')+(numeric.length!==entries.length?'<p style="grid-column:1/-1;color:var(--muted);font-size:12px">有 '+(entries.length-numeric.length)+' 条记录没有有效抽数，未计入总抽数。</p>':'');
+}
 
 /* V5 merchandise summary: only recognized EUR prices included in totals */
 function v5MerchPrice(price){
