@@ -175,7 +175,20 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-letter-dialog{width:min(650px,100%);max-height:90vh;overflow:auto;background:var(--paper);padding:24px;border-radius:22px}
 .v5-letter-dialog input,.v5-letter-dialog textarea,.v5-letter-dialog select{width:100%;margin:8px 0 14px;padding:12px;border:1px solid var(--line);border-radius:10px;background:white}
 .v5-letter-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.v5-au-hero{min-height:270px;border-radius:22px;padding:30px;background:linear-gradient(135deg,#2c1a43,#705194);background-size:cover;background-position:center;display:flex;align-items:end;color:white;margin-bottom:22px}.v5-au-hero h2{font-family:Georgia,serif;font-size:clamp(25px,4vw,42px);margin:8px 0;color:white}.v5-au-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(240px,1fr);gap:18px}.v5-au-box{border:1px solid var(--line);border-radius:18px;padding:22px;background:var(--paper);margin-bottom:16px}.v5-au-box h3{margin:0 0 12px;color:var(--deep)}.v5-au-entry{padding:12px 0;border-top:1px solid var(--line)}.v5-au-entry small{display:block;color:var(--muted)}.v5-au-timeline textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:12px;padding:12px;background:white}@media(max-width:760px){.v5-au-layout{grid-template-columns:1fr}.v5-au-hero{min-height:220px;padding:20px}}</style>
+.v5-au-hero{min-height:270px;border-radius:22px;padding:30px;background:linear-gradient(135deg,#2c1a43,#705194);background-size:cover;background-position:center;display:flex;align-items:end;color:white;margin-bottom:22px}.v5-au-hero h2{font-family:Georgia,serif;font-size:clamp(25px,4vw,42px);margin:8px 0;color:white}.v5-au-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(240px,1fr);gap:18px}.v5-au-box{border:1px solid var(--line);border-radius:18px;padding:22px;background:var(--paper);margin-bottom:16px}.v5-au-box h3{margin:0 0 12px;color:var(--deep)}.v5-au-entry{padding:12px 0;border-top:1px solid var(--line)}.v5-au-entry small{display:block;color:var(--muted)}.v5-au-timeline textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:12px;padding:12px;background:white}@media(max-width:760px){.v5-au-layout{grid-template-columns:1fr}.v5-au-hero{min-height:220px;padding:20px}}
+.v5-wardrobe-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.v5-wardrobe-person{min-width:0;border:1px solid var(--line);border-radius:15px;padding:15px;background:linear-gradient(150deg,#fcf9ff,#f2eaf9)}
+.v5-wardrobe-person h4{margin:0 0 12px;color:var(--deep)}
+.v5-outfit{background:var(--paper);border:1px solid var(--line);border-radius:13px;overflow:hidden;margin:10px 0}
+.v5-outfit img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.v5-outfit-text{padding:12px}.v5-outfit-text strong{display:block}.v5-outfit-text p{white-space:pre-wrap;font-size:12px;color:var(--muted);margin:6px 0}
+.v5-outfit-text .btn{margin:3px}
+.v5-outfit-modal{position:fixed;inset:0;z-index:13000;background:#160d29b8;display:flex;align-items:center;justify-content:center;padding:16px}
+.v5-outfit-dialog{width:min(540px,100%);max-height:92vh;overflow:auto;background:var(--paper);padding:23px;border-radius:20px}
+.v5-outfit-dialog input,.v5-outfit-dialog textarea{display:block;width:100%;margin:8px 0 14px;padding:12px;border:1px solid var(--line);border-radius:10px}
+.v5-outfit-dialog label{display:block;font-size:13px;color:var(--deep)}
+@media(max-width:620px){.v5-wardrobe-pair{grid-template-columns:1fr}}
+</style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
 <body>
@@ -613,10 +626,11 @@ function renderV5AuDetail(){
  const timeline=(a.v5Timeline||[]).map((x,i)=>'<div class="v5-au-entry"><small>'+esc(x.date||'未注明时间')+'</small><strong>'+esc(x.title||'时间节点')+'</strong><p>'+esc(x.note||'')+'</p><button class="btn" data-v5-timeline-delete="'+i+'">删除</button></div>').join('');
  root.innerHTML='<div class="v5-au-hero" style="'+cover+'"><div><span>✦ AU ARCHIVE · '+esc(a.status||'')+'</span><h2>'+esc(a.name)+'</h2><p>'+esc(a.pair||'')+'</p></div></div>'+
  '<div class="v5-au-layout"><div><section class="v5-au-box"><h3>世界设定</h3><p style="white-space:pre-wrap">'+esc(a.desc||a.mark||'尚未填写简介')+'</p><button class="btn soft" id="v5AuEdit">编辑 AU 基本资料</button></section>'+
- entries('settings','❖ 世界观与设定')+entries('writing','✎ 关联文稿')+entries('characters','♙ 角色档案')+entries('letters','✉ 关联书信')+
+ entries('settings','❖ 世界观与设定')+entries('writing','✎ 关联文稿')+entries('characters','♙ 角色档案')+entries('letters','✉ 关联书信')+v5WardrobeMarkup(a)+
  '</div><div><section class="v5-au-box"><h3>✧ 封面</h3><input type="file" accept="image/*" id="v5AuCoverFile"><p><button class="btn" id="v5AuCoverRemove">移除封面</button></p></section>'+
  '<section class="v5-au-box v5-au-timeline"><h3>♡ AU 内部时间线</h3>'+timeline+'<input id="v5TimelineDate" placeholder="时间 / 日期（可以是虚构纪年）"><input id="v5TimelineTitle" placeholder="事件标题"><textarea id="v5TimelineNote" placeholder="事件说明"></textarea><button class="btn primary" id="v5TimelineAdd">＋ 添加时间节点</button></section>'+
  '<section class="v5-au-box"><h3>＋ 新增关联档案</h3><button class="btn soft" id="v5AuNewSetting">添加设定</button> <button class="btn soft" id="v5AuNewWriting">添加文稿</button></section></div></div>';
+ bindV5Wardrobe(root,a);
  root.querySelector('#v5AuEdit').onclick=()=>editAu(a.id);
  root.querySelector('#v5AuNewSetting').onclick=()=>editRecord('settings',null,{title:a.name+' · 新设定',type:'世界观',au:a.name,content:''});
  root.querySelector('#v5AuNewWriting').onclick=()=>editRecord('writing',null,{title:'',type:'正文',au:a.name,content:''});
@@ -638,6 +652,60 @@ function renderV5AuDetail(){
  try{a.v5Cover=await compressAppearanceImage(file);persist();renderV5AuDetail()}catch(err){toast(err.message||'图片上传失败')}
  };
  root.querySelector('#v5AuCoverRemove').onclick=()=>{a.v5Cover='';persist();renderV5AuDetail()};
+}
+
+
+/* V5 AU-first wardrobe: two core characters, outfit image and identity per AU */
+const V5_WARDROBE_PEOPLE=['夏以昼','锺起'];
+function v5WardrobeMarkup(a){
+ const items=Array.isArray(a.v5Wardrobe)?a.v5Wardrobe:[];
+ return '<section class="v5-au-box"><h3>✧ AU 专属双人衣柜</h3><p style="color:var(--muted);font-size:12px">每个 AU 单独保存夏以昼和锺起的身份、服装与图片。</p><div class="v5-wardrobe-pair">'+
+ V5_WARDROBE_PEOPLE.map(person=>'<div class="v5-wardrobe-person"><h4>'+person+'</h4>'+
+ (items.filter(x=>x.person===person).map(x=>'<article class="v5-outfit">'+
+ (x.image?'<img src="'+esc(x.image)+'" alt="'+esc(x.title||person+'服装')+'">':'')+
+ '<div class="v5-outfit-text"><strong>'+esc(x.title||'未命名服装')+'</strong><p>身份：'+esc(x.identity||'尚未填写')+'</p><p>'+esc(x.note||'')+'</p><button class="btn soft" data-v5-outfit-edit="'+esc(x.id)+'">编辑</button><button class="btn danger" data-v5-outfit-delete="'+esc(x.id)+'">删除</button></div></article>').join('')||'<p style="font-size:12px;color:var(--muted)">还没有收藏服装</p>')+
+ '<button class="btn primary" data-v5-outfit-add="'+person+'">＋ 添加服装</button></div>').join('')+'</div></section>';
+}
+function bindV5Wardrobe(root,a){
+ root.querySelectorAll('[data-v5-outfit-add]').forEach(btn=>btn.onclick=()=>v5EditOutfit(a,btn.dataset.v5OutfitAdd));
+ root.querySelectorAll('[data-v5-outfit-edit]').forEach(btn=>btn.onclick=()=>{
+ const item=(a.v5Wardrobe||[]).find(x=>x.id===btn.dataset.v5OutfitEdit);if(item)v5EditOutfit(a,item.person,item.id);
+ });
+ root.querySelectorAll('[data-v5-outfit-delete]').forEach(btn=>btn.onclick=()=>{
+ if(!confirm('确定删除这套服装？'))return;
+ a.v5Wardrobe=(a.v5Wardrobe||[]).filter(x=>x.id!==btn.dataset.v5OutfitDelete);
+ persist();renderV5AuDetail();
+ });
+}
+function v5EditOutfit(a,person,id){
+ const old=(a.v5Wardrobe||[]).find(x=>x.id===id);
+ const item=old||{id:'outfit_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),person,title:'',identity:'',note:'',image:''};
+ const overlay=document.createElement('div');overlay.className='v5-outfit-modal';
+ overlay.innerHTML='<div class="v5-outfit-dialog" role="dialog" aria-modal="true"><h3>✧ '+esc(a.name)+' · '+esc(person)+'</h3>'+
+ '<label>服装 / 造型名称<input id="v5OutfitTitle" placeholder="例如：宫廷礼服"></label>'+
+ '<label>这个 AU 的身份<input id="v5OutfitIdentity" placeholder="例如：游侠 / 飞行员"></label>'+
+ '<label>服装图片<input id="v5OutfitImage" type="file" accept="image/*"></label>'+
+ '<label>服装与人物设定<textarea id="v5OutfitNote" rows="5"></textarea></label>'+
+ '<div class="v5-letter-actions"><button class="btn primary" id="v5OutfitSave">保存造型</button><button class="btn" id="v5OutfitCancel">取消</button></div></div>';
+ document.body.appendChild(overlay);
+ overlay.querySelector('#v5OutfitTitle').value=item.title;
+ overlay.querySelector('#v5OutfitIdentity').value=item.identity;
+ overlay.querySelector('#v5OutfitNote').value=item.note;
+ overlay.querySelector('#v5OutfitCancel').onclick=()=>overlay.remove();
+ overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});
+ overlay.querySelector('#v5OutfitSave').onclick=async()=>{
+ const title=overlay.querySelector('#v5OutfitTitle').value.trim();
+ if(!title){toast('请填写服装名称');return}
+ const btn=overlay.querySelector('#v5OutfitSave');btn.disabled=true;
+ try{
+  const file=overlay.querySelector('#v5OutfitImage').files[0];
+  const image=file?await compressAppearanceImage(file):item.image;
+  const next={...item,title,identity:overlay.querySelector('#v5OutfitIdentity').value.trim(),note:overlay.querySelector('#v5OutfitNote').value.trim(),image};
+  a.v5Wardrobe??=[];const index=a.v5Wardrobe.findIndex(x=>x.id===next.id);
+  if(index<0)a.v5Wardrobe.push(next);else a.v5Wardrobe[index]=next;
+  persist();overlay.remove();renderV5AuDetail();toast('服装已保存');
+ }catch(e){toast(e.message||'保存失败')}finally{btn.disabled=false}
+ };
 }
 
 /* V5 letters: separate test data, animated reading and editing */
