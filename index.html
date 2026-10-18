@@ -265,6 +265,24 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-secret-message:after{content:'▏';animation:v5SecretBlink .7s step-end infinite;color:#edccff}
 @keyframes v5SecretBlink{50%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.v5-secret-overlay,.v5-secret-overlay.fade-out{transition-duration:.2s}.v5-secret-message:after{animation:none}}
+
+/* V5 minimal three-stage music widget: orb → slim bar → vinyl player. */
+.v5-music-player.compact{width:54px!important;height:54px;min-width:54px;min-height:54px;padding:0!important;gap:0;border-radius:50%;justify-content:center;overflow:visible}
+.v5-music-orb{display:none;border:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff,#e3d0f0 65%,#c4a2d8);color:#563875;font-size:25px;cursor:pointer;box-shadow:0 3px 16px #593b7140}
+.v5-music-player.compact .v5-music-orb{display:block}
+.v5-music-player.compact .v5-music-handle{position:absolute;right:-6px;top:-9px;padding:0 3px;font-size:14px;background:#f9f3ff;border-radius:8px;z-index:2}
+.v5-music-player.compact > :not(.v5-music-orb):not(.v5-music-handle):not(audio){display:none!important}
+.v5-music-player.playing.compact .v5-music-orb{animation:v5OrbPulse 2.8s ease-in-out infinite}
+@keyframes v5OrbPulse{50%{box-shadow:0 0 0 7px #bba0d12b,0 3px 18px #593b7140}}
+.v5-music-details{cursor:pointer}
+.v5-music-details:focus-visible,.v5-music-orb:focus-visible{outline:2px solid #7752a5;outline-offset:3px}
+/* Opening: muted midnight blue and warm pearl glow; no metallic glitter dots. */
+.intro{background:#141b2b}
+.intro-photo{background-image:linear-gradient(180deg,#0e1725ba,#29314655 45%,#111723ce),var(--intro-image,linear-gradient(145deg,#1b293c,#485166));}
+.intro:before{background:radial-gradient(ellipse at 24% 48%,#c79e9761,transparent 53%),radial-gradient(ellipse at 75% 35%,#b3c4cf39,transparent 50%)}
+.intro:after{background:radial-gradient(ellipse at 70% 65%,#e7cbb637,transparent 55%)}
+.intro-sparkles{display:none!important}
+.intro-apples{filter:drop-shadow(0 0 10px #e8d5c26b)}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -402,7 +420,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 </main>
 </div>
 
-<div class="v5-music-player" id="v5MusicPlayer"><div class="v5-music-handle" id="v5MusicHandle" title="拖动位置">⠿</div><button class="v5-music-toggle" id="v5MusicToggle" aria-label="播放音乐">♫</button><div class="v5-music-details"><strong id="v5MusicLabel">未选择音乐</strong><small id="v5MusicState">点击播放 · 默认静音</small></div><button class="v5-music-volume" id="v5MusicPrev" aria-label="上一首">‹</button><button class="v5-music-volume" id="v5MusicNext" aria-label="下一首">›</button><button class="v5-music-volume" id="v5MusicExpand" aria-label="展开唱片机">⤢</button><button class="v5-music-volume" id="v5MusicMute" aria-label="切换静音">🔇</button><div class="v5-music-expanded" id="v5MusicExpanded"><div class="v5-record-scene"><div class="v5-record-disc" id="v5RecordDisc"><div class="v5-record-center" id="v5RecordCenter">🍎🍏</div></div><div class="v5-record-arm"></div></div><div class="v5-record-caption">✧ OUR LITTLE UNIVERSE ✧</div><div id="v5MusicTracks"></div></div><audio id="v5MusicAudio" preload="none"></audio></div><div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><h3 id="modalTitle">编辑</h3><button class="x" id="closeModal">✕</button></div><div id="modalBody"></div><div class="modal-actions"><button class="btn" id="cancelModal">取消</button><button class="btn primary" id="saveModal">保存</button></div></div></div>
+<div class="v5-music-player compact" id="v5MusicPlayer"><button class="v5-music-orb" id="v5MusicOrb" aria-label="展开音乐播放器" title="展开音乐播放器">♫</button><div class="v5-music-handle" id="v5MusicHandle" title="拖动位置">⠿</div><button class="v5-music-toggle" id="v5MusicToggle" aria-label="播放音乐">♫</button><div class="v5-music-details" id="v5MusicDetails" role="button" tabindex="0" title="展开唱片机"><strong id="v5MusicLabel">未选择音乐</strong><small id="v5MusicState">点击播放 · 默认静音</small></div><button class="v5-music-volume" id="v5MusicPrev" aria-label="上一首">‹</button><button class="v5-music-volume" id="v5MusicNext" aria-label="下一首">›</button><button class="v5-music-volume" id="v5MusicExpand" aria-label="展开唱片机">⤢</button><button class="v5-music-volume" id="v5MusicMute" aria-label="切换静音">🔇</button><div class="v5-music-expanded" id="v5MusicExpanded"><div class="v5-record-scene"><div class="v5-record-disc" id="v5RecordDisc"><div class="v5-record-center" id="v5RecordCenter">🍎🍏</div></div><div class="v5-record-arm"></div></div><div class="v5-record-caption">✧ OUR LITTLE UNIVERSE ✧</div><div id="v5MusicTracks"></div></div><audio id="v5MusicAudio" preload="none"></audio></div><div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><h3 id="modalTitle">编辑</h3><button class="x" id="closeModal">✕</button></div><div id="modalBody"></div><div class="modal-actions"><button class="btn" id="cancelModal">取消</button><button class="btn primary" id="saveModal">保存</button></div></div></div>
 <div class="toast" id="toast"></div><div class="v5-secret-overlay" id="v5SecretOverlay" aria-hidden="true"><div class="v5-secret-glow"></div><div class="v5-secret-message" id="v5SecretMessage"></div></div>
 <script>
 const initialAus = [
@@ -765,11 +783,19 @@ document.getElementById('v5MusicTracks').addEventListener('click',v5MusicListCli
 document.getElementById('v5MusicToggle').onclick=()=>{const audio=document.getElementById('v5MusicAudio');audio.paused?v5MusicPlay():audio.pause()};
 document.getElementById('v5MusicPrev').onclick=()=>{const list=v5MusicList();if(list.length)v5MusicSelect((v5MusicIndex-1+list.length)%list.length)};
 document.getElementById('v5MusicNext').onclick=()=>{const list=v5MusicList();if(list.length)v5MusicSelect((v5MusicIndex+1)%list.length)};
-document.getElementById('v5MusicExpand').onclick=()=>{
- const el=document.getElementById('v5MusicPlayer');el.classList.toggle('expanded');
- document.getElementById('v5MusicExpand').textContent=el.classList.contains('expanded')?'⤡':'⤢';
- const r=el.getBoundingClientRect();el.style.left=Math.max(0,Math.min(window.innerWidth-r.width,r.left))+'px';el.style.top=Math.max(0,Math.min(window.innerHeight-r.height,r.top))+'px';el.style.right='auto';el.style.bottom='auto';
-};
+function v5MusicSetMode(mode){
+ const el=document.getElementById('v5MusicPlayer');
+ el.classList.remove('compact','expanded');
+ if(mode==='compact'||mode==='expanded')el.classList.add(mode);
+ document.getElementById('v5MusicExpand').textContent=mode==='expanded'?'◌':'⤢';
+ document.getElementById('v5MusicExpand').setAttribute('aria-label',mode==='expanded'?'收起为小圆球':'展开唱片机');
+ const r=el.getBoundingClientRect();
+ if(el.style.left){el.style.left=Math.max(0,Math.min(window.innerWidth-r.width,r.left))+'px';el.style.top=Math.max(0,Math.min(window.innerHeight-r.height,r.top))+'px'}
+}
+document.getElementById('v5MusicOrb').onclick=()=>v5MusicSetMode('bar');
+document.getElementById('v5MusicExpand').onclick=()=>v5MusicSetMode(document.getElementById('v5MusicPlayer').classList.contains('expanded')?'compact':'expanded');
+document.getElementById('v5MusicDetails').onclick=()=>v5MusicSetMode('expanded');
+document.getElementById('v5MusicDetails').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();v5MusicSetMode('expanded')}};
 document.getElementById('v5MusicMute').onclick=()=>{const audio=document.getElementById('v5MusicAudio');audio.muted=!audio.muted;document.getElementById('v5MusicMute').textContent=audio.muted?'🔇':'🔊'};
 document.getElementById('v5MusicAudio').addEventListener('play',()=>{document.getElementById('v5MusicToggle').textContent='Ⅱ';document.getElementById('v5MusicState').textContent='正在播放';document.getElementById('v5MusicPlayer').classList.add('playing')});
 document.getElementById('v5MusicAudio').addEventListener('pause',()=>{document.getElementById('v5MusicToggle').textContent='♫';document.getElementById('v5MusicState').textContent='已暂停';document.getElementById('v5MusicPlayer').classList.remove('playing')});
