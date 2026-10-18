@@ -175,7 +175,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .v5-letter-dialog{width:min(650px,100%);max-height:90vh;overflow:auto;background:var(--paper);padding:24px;border-radius:22px}
 .v5-letter-dialog input,.v5-letter-dialog textarea,.v5-letter-dialog select{width:100%;margin:8px 0 14px;padding:12px;border:1px solid var(--line);border-radius:10px;background:white}
 .v5-letter-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-</style>
+.v5-au-hero{min-height:270px;border-radius:22px;padding:30px;background:linear-gradient(135deg,#2c1a43,#705194);background-size:cover;background-position:center;display:flex;align-items:end;color:white;margin-bottom:22px}.v5-au-hero h2{font-family:Georgia,serif;font-size:clamp(25px,4vw,42px);margin:8px 0;color:white}.v5-au-layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(240px,1fr);gap:18px}.v5-au-box{border:1px solid var(--line);border-radius:18px;padding:22px;background:var(--paper);margin-bottom:16px}.v5-au-box h3{margin:0 0 12px;color:var(--deep)}.v5-au-entry{padding:12px 0;border-top:1px solid var(--line)}.v5-au-entry small{display:block;color:var(--muted)}.v5-au-timeline textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:12px;padding:12px;background:white}@media(max-width:760px){.v5-au-layout{grid-template-columns:1fr}.v5-au-hero{min-height:220px;padding:20px}}</style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
 <body>
@@ -232,6 +232,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
     <div class="cards" id="auGrid"></div>
   </section>
 
+  <section class="page" id="page-au-detail"><div class="section-head"><div><h3 id="v5AuTitle">AU 档案</h3><p id="v5AuSubtitle">属于我们的另一段时空</p></div><button class="btn" id="v5AuBack">← 返回 AU 索引</button></div><div id="v5AuDetail"></div></section>
   <section class="page" id="page-calendar">
     <div class="section-head"><div><h3>纪念日历</h3><p>纪念日、生日、计划日与倒数日都可以放在这里。</p></div><button class="btn primary" id="addEvent">＋ 添加日期</button></div>
     <div class="calendar-layout">
@@ -349,7 +350,7 @@ document.getElementById("nav").addEventListener("click",e=>{const b=e.target.clo
 document.addEventListener("click",e=>{const b=e.target.closest("[data-goto]");if(b)go(b.dataset.goto)});
 function updateStats(){renderV5Progress();document.getElementById("statAus").textContent=db.aus.length;document.getElementById("statEvents").textContent=db.events.length;document.getElementById("statDreams").textContent=db.dreams.length;document.getElementById("statWriting").textContent=db.writing.length}
 function statusClass(s){return s==="已完成"?"已完成":s||"待写"}
-function auCard(a){return `<article class="au-card"><div class="au-cover">${esc(a.icon||"✧")}</div><div class="au-content"><div class="au-title">${esc(a.name)}</div><div class="au-pair">${esc(a.pair)}</div><div class="au-meta">${esc(a.type)} · ${esc(a.status)}</div><div class="au-desc">${esc(a.desc||a.mark||"尚未添加简介。")}</div><div class="tag-row">${(a.tags||"").split(/[,，]/).filter(Boolean).slice(0,4).map(t=>`<span class="tag">${esc(t.trim())}</span>`).join("")}</div><div class="card-actions"><button class="btn soft" onclick="editAu('${a.id}')">编辑设定</button><button class="btn" onclick="newSettingFor('${a.id}')">＋存档</button></div></div></article>`}
+function auCard(a){return `<article class="au-card"><div class="au-cover">${esc(a.icon||"✧")}</div><div class="au-content"><div class="au-title">${esc(a.name)}</div><div class="au-pair">${esc(a.pair)}</div><div class="au-meta">${esc(a.type)} · ${esc(a.status)}</div><div class="au-desc">${esc(a.desc||a.mark||"尚未添加简介。")}</div><div class="tag-row">${(a.tags||"").split(/[,，]/).filter(Boolean).slice(0,4).map(t=>`<span class="tag">${esc(t.trim())}</span>`).join("")}</div><div class="card-actions"><button class="btn primary" onclick="v5OpenAu('${a.id}')">打开档案 ↗</button><button class="btn soft" onclick="editAu('${a.id}')">编辑设定</button><button class="btn" onclick="newSettingFor('${a.id}')">＋存档</button></div></div></article>`}
 function renderAus(){const q=(document.getElementById("auSearch")?.value||"").toLowerCase(),st=document.getElementById("auStatus")?.value||"";const list=db.aus.filter(a=>(!st||a.status===st)&&[a.name,a.pair,a.type,a.desc,a.tags].join(" ").toLowerCase().includes(q));document.getElementById("auGrid").innerHTML=list.map(auCard).join("")||empty("没有找到匹配的 AU","✦");document.getElementById("auCount").textContent=`${list.length} / ${db.aus.length}`;document.getElementById("homeAus").innerHTML=db.aus.slice(0,3).map(auCard).join("")}
 function empty(text,icon="✧"){return `<div class="empty"><div class="empty-icon">${icon}</div>${esc(text)}</div>`}
 let modalSave=null;
@@ -362,7 +363,7 @@ function val(id){return document.getElementById(id)?.value?.trim()||""}
 function f(id,label,value="",type="text",placeholder=""){return `<div class="field"><label for="${id}">${label}</label><input id="${id}" type="${type}" value="${esc(value)}" placeholder="${esc(placeholder)}"></div>`}
 function ta(id,label,value="",placeholder=""){return `<div class="field full"><label for="${id}">${label}</label><textarea id="${id}" placeholder="${esc(placeholder)}">${esc(value)}</textarea></div>`}
 function sel(id,label,opts,value){return `<div class="field"><label for="${id}">${label}</label><select id="${id}">${opts.map(o=>`<option ${o===value?"selected":""}>${esc(o)}</option>`).join("")}</select></div>`}
-function editAu(id){const a=db.aus.find(x=>x.id===id)||{id:uid(),name:"",pair:"",type:"",status:"待写",mark:"",desc:"",icon:"✧",tags:""};openModal(id?"编辑 AU":"新建 AU",`<div class="form-grid">${f("name","AU 名称",a.name)}${f("pair","关系设定",a.pair)}${f("type","类型 / 题材",a.type)}${sel("status","创作进度",["已完成","计划写","构思中","待写","灵感","待发展"],a.status)}${f("mark","主题关键词",a.mark)}${f("icon","卡片符号",a.icon||"✧")}${f("tags","标签（逗号分隔）",a.tags)}${ta("desc","简介 / 核心设定",a.desc)}</div>`,()=>{if(!val("name")){toast("请填写 AU 名称");return false}const data={id:a.id,name:val("name"),pair:val("pair"),type:val("type"),status:val("status"),mark:val("mark"),icon:val("icon")||"✧",tags:val("tags"),desc:val("desc")};const i=db.aus.findIndex(x=>x.id===a.id);if(i>=0)db.aus[i]=data;else db.aus.unshift(data);toast("AU 已保存")})}
+function editAu(id){const a=db.aus.find(x=>x.id===id)||{id:uid(),name:"",pair:"",type:"",status:"待写",mark:"",desc:"",icon:"✧",tags:""};openModal(id?"编辑 AU":"新建 AU",`<div class="form-grid">${f("name","AU 名称",a.name)}${f("pair","关系设定",a.pair)}${f("type","类型 / 题材",a.type)}${sel("status","创作进度",["已完成","计划写","构思中","待写","灵感","待发展"],a.status)}${f("mark","主题关键词",a.mark)}${f("icon","卡片符号",a.icon||"✧")}${f("tags","标签（逗号分隔）",a.tags)}${ta("desc","简介 / 核心设定",a.desc)}</div>`,()=>{if(!val("name")){toast("请填写 AU 名称");return false}const data={...a,id:a.id,name:val("name"),pair:val("pair"),type:val("type"),status:val("status"),mark:val("mark"),icon:val("icon")||"✧",tags:val("tags"),desc:val("desc")};const i=db.aus.findIndex(x=>x.id===a.id);if(i>=0)db.aus[i]=data;else db.aus.unshift(data);toast("AU 已保存")})}
 window.editAu=editAu;
 document.getElementById("addAu").onclick=()=>editAu(null);
 window.newSettingFor=id=>{const a=db.aus.find(x=>x.id===id);editRecord("settings",null,{title:a?.name+" · 新设定",type:"世界观",au:a?.name||"",content:""});};
@@ -396,7 +397,7 @@ document.getElementById("prevMonth").onclick=()=>{calDate.setMonth(calDate.getMo
 document.getElementById("nextMonth").onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCalendar()};
 document.getElementById("addEvent").onclick=()=>openModal("添加纪念日",`<div class="form-grid">${f("title","名称","")}${f("date","日期",dateOnly(new Date()),"date")}${sel("kind","类型",["纪念日","倒数日","生日","计划日"],"纪念日")}${ta("note","备注","")}</div>`,()=>{if(!val("title")||!val("date")){toast("请填写名称和日期");return false}db.events.push({id:uid(),title:val("title"),date:val("date"),kind:val("kind"),note:val("note")});selectedDate=val("date");calDate=new Date(val("date")+"T00:00:00");calDate.setDate(1);toast("日期已添加")});
 function renderCharacters(){renderNotes("characters","characterGrid","characterSearch","characterAu");const filter=document.getElementById("characterAu").value;if(filter){const list=db.characters.filter(x=>x.au===filter&&[x.title,x.name,x.au,x.content,x.role].join(" ").toLowerCase().includes((document.getElementById("characterSearch").value||"").toLowerCase()));document.getElementById("characterGrid").innerHTML=list.map(x=>noteCard(x,"characters")).join("")||empty("这个 AU 还没有角色档案。")}}
-function renderAll(){updateStats();renderAus();renderCalendar();renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory");renderPhotos("merch","merchGallery","merchSearch","merchStatus");renderNotes("settings","settingGrid","settingSearch","settingType");renderNotes("writing","writingGrid","writingSearch","writingType");renderCharacters();renderDivinations();renderGacha();renderV5Letters()}
+function renderAll(){if(document.getElementById("page-au-detail").classList.contains("active"))renderV5AuDetail();updateStats();renderAus();renderCalendar();renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory");renderPhotos("merch","merchGallery","merchSearch","merchStatus");renderNotes("settings","settingGrid","settingSearch","settingType");renderNotes("writing","writingGrid","writingSearch","writingType");renderCharacters();renderDivinations();renderGacha();renderV5Letters()}
 ["auSearch","auStatus"].forEach(id=>document.getElementById(id).addEventListener("input",renderAus));
 ["dreamSearch","dreamCategory"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory")));
 ["merchSearch","merchStatus"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderPhotos("merch","merchGallery","merchSearch","merchStatus")));
@@ -591,6 +592,53 @@ document.getElementById('v5SecretHero').addEventListener('click',()=>{
  else v5SecretTimer=setTimeout(()=>v5SecretClicks=0,1800);
 });
 
+
+
+let v5CurrentAu=null;
+function v5OpenAu(id){v5CurrentAu=id;go('au-detail');renderV5AuDetail()}
+window.v5OpenAu=v5OpenAu;
+document.getElementById('v5AuBack').onclick=()=>go('aus');
+function renderV5AuDetail(){
+ const a=db.aus.find(x=>x.id===v5CurrentAu),root=document.getElementById('v5AuDetail');
+ if(!a){root.innerHTML='<p>没有找到这个 AU。</p>';return}
+ document.getElementById('v5AuTitle').textContent=a.name;
+ document.getElementById('v5AuSubtitle').textContent=[a.pair,a.type,a.status].filter(Boolean).join(' · ');
+ document.getElementById('pageTitle').textContent=a.name;
+ const cover=a.v5Cover?'background-image:linear-gradient(0deg,#241233aa,#24123320),url('+JSON.stringify(a.v5Cover)+');':'';
+ const entries=(bucket,label)=>{
+ const list=(db[bucket]||[]).filter(x=>x.au===a.name||x.auId===a.id);
+ return '<section class="v5-au-box"><h3>'+label+' ('+list.length+')</h3>'+
+ (list.map(x=>'<div class="v5-au-entry"><strong>'+esc(x.title||x.name||'无题')+'</strong><small>'+esc(x.type||x.role||'')+'</small><button class="btn soft" data-v5-record="'+esc(bucket)+'" data-v5-id="'+esc(x.id)+'">查看 / 编辑 ↗</button></div>').join('')||'<p>暂无关联记录</p>')+'</section>';
+ };
+ const timeline=(a.v5Timeline||[]).map((x,i)=>'<div class="v5-au-entry"><small>'+esc(x.date||'未注明时间')+'</small><strong>'+esc(x.title||'时间节点')+'</strong><p>'+esc(x.note||'')+'</p><button class="btn" data-v5-timeline-delete="'+i+'">删除</button></div>').join('');
+ root.innerHTML='<div class="v5-au-hero" style="'+cover+'"><div><span>✦ AU ARCHIVE · '+esc(a.status||'')+'</span><h2>'+esc(a.name)+'</h2><p>'+esc(a.pair||'')+'</p></div></div>'+
+ '<div class="v5-au-layout"><div><section class="v5-au-box"><h3>世界设定</h3><p style="white-space:pre-wrap">'+esc(a.desc||a.mark||'尚未填写简介')+'</p><button class="btn soft" id="v5AuEdit">编辑 AU 基本资料</button></section>'+
+ entries('settings','❖ 世界观与设定')+entries('writing','✎ 关联文稿')+entries('characters','♙ 角色档案')+entries('letters','✉ 关联书信')+
+ '</div><div><section class="v5-au-box"><h3>✧ 封面</h3><input type="file" accept="image/*" id="v5AuCoverFile"><p><button class="btn" id="v5AuCoverRemove">移除封面</button></p></section>'+
+ '<section class="v5-au-box v5-au-timeline"><h3>♡ AU 内部时间线</h3>'+timeline+'<input id="v5TimelineDate" placeholder="时间 / 日期（可以是虚构纪年）"><input id="v5TimelineTitle" placeholder="事件标题"><textarea id="v5TimelineNote" placeholder="事件说明"></textarea><button class="btn primary" id="v5TimelineAdd">＋ 添加时间节点</button></section>'+
+ '<section class="v5-au-box"><h3>＋ 新增关联档案</h3><button class="btn soft" id="v5AuNewSetting">添加设定</button> <button class="btn soft" id="v5AuNewWriting">添加文稿</button></section></div></div>';
+ root.querySelector('#v5AuEdit').onclick=()=>editAu(a.id);
+ root.querySelector('#v5AuNewSetting').onclick=()=>editRecord('settings',null,{title:a.name+' · 新设定',type:'世界观',au:a.name,content:''});
+ root.querySelector('#v5AuNewWriting').onclick=()=>editRecord('writing',null,{title:'',type:'正文',au:a.name,content:''});
+ root.querySelectorAll('[data-v5-record]').forEach(b=>b.onclick=()=>{
+ const bucket=b.dataset.v5Record,id=b.dataset.v5Id;
+ if(bucket==='letters'){v5OpenLetter(id);return}editRecord(bucket,id);
+ });
+ root.querySelector('#v5TimelineAdd').onclick=()=>{
+ const title=root.querySelector('#v5TimelineTitle').value.trim();if(!title){toast('请填写时间节点标题');return}
+ a.v5Timeline??=[];a.v5Timeline.push({date:root.querySelector('#v5TimelineDate').value.trim(),title,note:root.querySelector('#v5TimelineNote').value.trim()});
+ persist();renderV5AuDetail();
+ };
+ root.querySelectorAll('[data-v5-timeline-delete]').forEach(b=>b.onclick=()=>{
+ if(!confirm('删除这个时间节点？'))return;
+ a.v5Timeline.splice(Number(b.dataset.v5TimelineDelete),1);persist();renderV5AuDetail();
+ });
+ root.querySelector('#v5AuCoverFile').onchange=async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{a.v5Cover=await compressAppearanceImage(file);persist();renderV5AuDetail()}catch(err){toast(err.message||'图片上传失败')}
+ };
+ root.querySelector('#v5AuCoverRemove').onclick=()=>{a.v5Cover='';persist();renderV5AuDetail()};
+}
 
 /* V5 letters: separate test data, animated reading and editing */
 function renderV5Letters(){
