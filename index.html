@@ -553,6 +553,36 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 @media(max-width:600px){#page-home .radio-machine{padding:8px!important;border-width:4px!important}#page-home .radio-top{border-width:4px!important}#page-home .radio-bottom{gap:4px!important}#page-home .radio-speaker,#page-home .radio-tape{border-width:3px!important}#page-home .room-drawer .v5-home-links{gap:10px 9px!important}#page-home .room-drawer .v5-home-links button{flex:0 1 calc(47% - 7px)!important;min-width:0!important;min-height:75px!important;font-size:12px!important;padding:30px 4px 9px!important}#page-home .room-drawer h3{font-size:20px!important}}
 @media(prefers-reduced-motion:reduce){#page-home .room-drawer .v5-home-links button{transition:none!important}}
 
+
+/* V5.1.4 calendar: actual layered orbital editorial composition, white + lavender. */
+#page-calendar{--orb-ink:#5a4677;--orb-line:#d8c9e6}
+#page-calendar .orbit-hero{height:clamp(330px,54vw,520px);margin:0 0 30px;position:relative;overflow:hidden;background:#fdfbff;border:1px solid #e5dbee;color:var(--orb-ink);box-shadow:0 15px 45px #5a437719}
+#page-calendar .orbit-hero:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#a18ab9 1px,transparent 1.5px);background-size:55px 57px;opacity:.3}
+#page-calendar .orbit-hero-top,#page-calendar .orbit-hero-bottom{position:absolute;left:5%;right:5%;display:flex;justify-content:space-between;gap:10px;font:500 10px/1.4 Georgia,serif;letter-spacing:.18em;z-index:4}
+#page-calendar .orbit-hero-top{top:23px}#page-calendar .orbit-hero-bottom{bottom:20px}
+#page-calendar .orbit-hero-art{position:absolute;inset:12% 6% 10%}
+#page-calendar .orbit-path{position:absolute;left:50%;top:49%;width:90%;height:95%;border:1px solid #c6b3d9;border-radius:50%;transform:translate(-50%,-50%) rotate(-18deg)}
+#page-calendar .orbit-path-two{width:68%;height:122%;transform:translate(-50%,-50%) rotate(35deg);border-color:#e0d4eb}
+#page-calendar .orbit-path-three{width:115%;height:67%;transform:translate(-50%,-50%) rotate(-42deg);border-style:dotted}
+#page-calendar .orbit-satellite{position:absolute;top:9%;right:9%;font-size:21px;color:#8061a5}
+#page-calendar .orbit-window{position:absolute;overflow:hidden;background:#fff;border:1px solid #cab6dd;box-shadow:0 11px 23px #3e27502b;padding:28px 18px 15px;color:#604a7a}
+#page-calendar .orbit-window:before{content:"●   ●   ●";position:absolute;left:0;right:0;top:0;height:21px;padding-left:10px;background:#f0e8f7;border-bottom:1px solid #d9c9e8;color:#ae99c1;font:9px/21px monospace;letter-spacing:2px}
+#page-calendar .orbit-window span{display:block;font:9px/1.5 monospace;letter-spacing:.12em}
+#page-calendar .orbit-window strong{display:block;font:400 clamp(17px,3vw,32px)/1.05 Georgia,serif;letter-spacing:.09em;margin:12px 0 2px}
+#page-calendar .orbit-window-left{left:8%;top:12%;width:40%;height:59%;transform:rotate(-7deg);background:linear-gradient(155deg,#fbf8ff,#e6d8f0)}
+#page-calendar .orbit-window-left em{font:italic 16px Georgia,serif}
+#page-calendar .orbit-window-lines{position:absolute;left:12%;right:12%;bottom:15%;height:30%;border:1px solid #bca6d2;border-radius:50%;box-shadow:0 0 0 17px #ede3f577,0 0 0 18px #baa6d077}
+#page-calendar .orbit-window-right{right:8%;top:5%;width:45%;height:67%;transform:rotate(5deg);background:linear-gradient(145deg,#efe6f6,#fff)}
+#page-calendar .orbit-moon{position:absolute;right:12%;top:22%;width:42%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 34%,#f7f2fb 0 9%,#a58abd 10% 18%,#d1c0e2 19% 27%,#a891c4 28% 32%,#c2a8d9 33% 65%,#765b9d 100%);box-shadow:inset -12px -10px 20px #5d447e6b,0 0 0 14px #e3d7ed33}
+#page-calendar .orbit-window-right strong{position:absolute;left:9%;bottom:12%;font-size:clamp(12px,2vw,21px)}
+#page-calendar .orbit-window-front{left:27%;bottom:3%;width:46%;height:43%;transform:rotate(-2deg);background:linear-gradient(125deg,#fff,#f8f3fc);text-align:center}
+#page-calendar .orbit-window-front strong{font:500 clamp(23px,4vw,43px)/1.1 serif;letter-spacing:.17em;margin:12px 0}
+#page-calendar .orbit-window-front small{font:8px/1.4 monospace;letter-spacing:.08em}
+#page-calendar .orbit-window-stars{margin-top:10px;font-size:17px;color:#ac93c7}
+#page-calendar>.section-head{margin-bottom:20px}
+#page-calendar .v5-month-journal{margin-bottom:22px}
+@media(max-width:600px){#page-calendar .orbit-hero{height:350px;margin-bottom:20px}#page-calendar .orbit-hero-art{inset:15% 1% 12%}#page-calendar .orbit-window{padding:27px 9px 8px}#page-calendar .orbit-window-left{left:2%;width:50%;top:12%;height:58%}#page-calendar .orbit-window-right{right:2%;width:54%;height:62%}#page-calendar .orbit-window-front{left:20%;width:64%;height:40%;bottom:1%}#page-calendar .orbit-window span{font-size:7px}#page-calendar .orbit-window strong{font-size:17px}#page-calendar .orbit-window-front strong{font-size:25px}#page-calendar .orbit-hero-top,#page-calendar .orbit-hero-bottom{font-size:8px}}
+
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -593,7 +623,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
     <p class="room-sub">✧ TUNE INTO OUR LITTLE UNIVERSE ✧</p>
     <div class="room-scene">
       
-      <div class="radio-area"><div class="radio-antenna"></div><button class="radio-machine" id="roomRadio" type="button" aria-expanded="false" aria-controls="roomDrawer" aria-label="点击收音机打开合集"><div class="radio-top"></div><div class="radio-controls"><b></b><span>STEREO CASSETTE · FM 07.09</span><b></b></div><div class="radio-bottom"><div class="radio-speaker"></div><div class="radio-tape"><div class="tape-window"><i></i><i></i></div><div class="tape-label">SIDE A · OUR UNIVERSE</div></div><div class="radio-speaker"></div></div><div class="radio-keys"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="radio-led"></div></button><p class="radio-caption">✧ TOUCH TO OPEN THE UNIVERSE ✧ <span style="display:inline-block;margin-left:8px;font-size:10px;letter-spacing:.04em;color:#765c93;background:#ffffffbb;padding:3px 7px;border-radius:12px">V5.1.3</span></p></div>
+      <div class="radio-area"><div class="radio-antenna"></div><button class="radio-machine" id="roomRadio" type="button" aria-expanded="false" aria-controls="roomDrawer" aria-label="点击收音机打开合集"><div class="radio-top"></div><div class="radio-controls"><b></b><span>STEREO CASSETTE · XA 02.01</span><b></b></div><div class="radio-bottom"><div class="radio-speaker"></div><div class="radio-tape"><div class="tape-window"><i></i><i></i></div><div class="tape-label">SIDE A · OUR UNIVERSE</div></div><div class="radio-speaker"></div></div><div class="radio-keys"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="radio-led"></div></button><p class="radio-caption">✧ TOUCH TO OPEN THE UNIVERSE ✧ <span style="display:inline-block;margin-left:8px;font-size:10px;letter-spacing:.04em;color:#765c93;background:#ffffffbb;padding:3px 7px;border-radius:12px">V5.1.4</span></p></div>
       
     </div>
     <div class="room-drawer" id="roomDrawer" hidden><button class="room-close" id="roomClose" type="button" aria-label="关闭菜单">×</button><h3>合集</h3><p>✦ TUNE INTO OUR LITTLE UNIVERSE ✦</p>
@@ -618,6 +648,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 
   <section class="page" id="page-au-detail"><div class="section-head"><div><h3 id="v5AuTitle">AU 档案</h3><p id="v5AuSubtitle">属于我们的另一段时空</p></div><button class="btn" id="v5AuBack">← 返回 AU 索引</button></div><div id="v5AuDetail"></div></section>
   <section class="page" id="page-calendar">
+    <div class="orbit-hero" aria-hidden="true"><div class="orbit-hero-top"><span>ARCHIVE / OUR TIME</span><span>01 / ∞</span></div><div class="orbit-hero-art"><div class="orbit-path orbit-path-one"></div><div class="orbit-path orbit-path-two"></div><div class="orbit-path orbit-path-three"></div><div class="orbit-satellite">✦</div><div class="orbit-window orbit-window-left"><span>MEMORY INDEX</span><strong>THE DAYS</strong><em>WE KEEP</em><div class="orbit-window-lines"></div></div><div class="orbit-window orbit-window-right"><span>OUR LITTLE UNIVERSE</span><div class="orbit-moon"></div><strong>INFINITE<br> MOMENTS</strong></div><div class="orbit-window orbit-window-front"><span>✦  CALENDAR / ARCHIVE</span><strong>时光存档</strong><small>THE DAYS WE CHOOSE TO REMEMBER</small><div class="orbit-window-stars">✧　·　✦　·　✧</div></div></div><div class="orbit-hero-bottom"><span>✧ EVERY MOMENT IS A LITTLE UNIVERSE</span><span>EST. 02.01</span></div></div>
     <div class="section-head"><div><h3>纪念日历</h3><p>纪念日、生日、计划日与倒数日都可以放在这里。</p></div><button class="btn primary" id="addEvent">＋ 添加日期</button></div>
     <div class="v5-month-journal panel"><div class="section-head"><div><h3>☾ 月度纪事</h3><p>每个月收藏一段共同经历，不影响 AU 内部时间线。</p></div><button class="btn soft" id="v5EditMonth">✎ 编辑本月</button></div><div id="v5MonthJournal"></div></div><div class="calendar-layout">
       <div class="panel"><div class="calendar-head"><button class="btn" id="prevMonth">‹</button><h3 id="monthLabel"></h3><button class="btn" id="nextMonth">›</button></div><div class="calendar-grid" id="calendarGrid"></div></div>
