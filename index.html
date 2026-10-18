@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6e4aa1">
+<title>夏以昼x锺起</title>
+<style>
+:root{
+  --bg:#f7f3fb;--paper:#fffdfd;--panel:#f0e8f8;--panel2:#e8dcf3;
+  --ink:#30243d;--muted:#887994;--line:#e4d8ee;--accent:#7952a8;
+  --accent2:#b79ad7;--deep:#4d326f;--pink:#efd9eb;--gold:#c9a86a;
+  --shadow:0 12px 32px rgba(76,48,101,.09);--radius:20px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 8% 0%,#eee3fa 0,transparent 28%),radial-gradient(circle at 100% 20%,#f8e9f3 0,transparent 25%),var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.55}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #c4a7e7;outline-offset:2px}
+a{color:var(--accent)}
+.shell{max-width:1420px;margin:auto;display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+.sidebar{padding:28px 18px 22px 24px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--line);background:rgba(250,247,253,.76);backdrop-filter:blur(16px)}
+.brand{display:flex;gap:12px;align-items:center;margin-bottom:30px;padding:8px}
+.brand-mark{width:44px;height:44px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#a78bca,#68478f);color:white;font-size:22px;box-shadow:0 8px 18px #8d6ab044}
+.brand h1{font-size:16px;margin:0;letter-spacing:.08em}.brand p{font-size:11px;color:var(--muted);margin:3px 0 0;letter-spacing:.14em}
+.nav-label{font-size:10px;color:#a18daF;letter-spacing:.18em;padding:0 12px;margin:22px 0 8px}
+.nav{display:flex;flex-direction:column;gap:5px}
+.nav button{border:0;background:transparent;color:#756581;text-align:left;padding:11px 13px;border-radius:13px;display:flex;align-items:center;gap:11px;transition:.2s;font-size:13px}
+.nav button:hover{background:#f0e7f7;color:var(--deep)}.nav button.active{background:linear-gradient(100deg,#e7d9f4,#f2e8f7);color:var(--deep);font-weight:700;box-shadow:inset 3px 0 #8c68b5}
+.nav-icon{width:20px;text-align:center;font-size:16px}
+.side-note{margin-top:30px;padding:15px;border:1px solid var(--line);background:#fff9;border-radius:16px;font-size:12px;color:var(--muted)}
+.side-note strong{display:block;color:var(--deep);margin-bottom:5px}
+main{min-width:0;padding:28px clamp(18px,3vw,44px) 60px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
+.eyebrow{font-size:11px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}
+.topbar h2{font-size:clamp(22px,3vw,30px);margin:4px 0 0;letter-spacing:-.03em}
+.top-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);border-radius:12px;padding:9px 13px;background:#fff;color:var(--deep);font-size:12px;transition:.18s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 5px 12px #65428c15}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn.soft{background:var(--panel);border-color:transparent}
+.btn.danger{color:#a84f73;background:#fff6f8;border-color:#f0d6e0}
+.page{display:none;animation:fade .22s ease}.page.active{display:block}
+@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;padding:clamp(22px,4vw,40px);border-radius:26px;background:linear-gradient(115deg,#60417f,#8765aa 58%,#c0a4d6);color:#fff;box-shadow:var(--shadow);min-height:205px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.hero:before,.hero:after{content:"";position:absolute;border:1px solid #ffffff36;border-radius:50%;width:230px;height:230px;right:7%;top:-110px}
+.hero:after{width:160px;height:160px;right:12%;top:-75px}
+.hero-copy{position:relative;z-index:1;max-width:580px}.hero .eyebrow{color:#e9d9fa}.hero h3{font-size:clamp(24px,4vw,38px);line-height:1.2;margin:10px 0 12px}.hero p{color:#f1e9f8;font-size:13px;max-width:480px;margin:0}
+.hero-symbol{position:relative;z-index:1;font-size:clamp(55px,9vw,100px);opacity:.9;padding:0 2vw;text-shadow:0 8px 25px #3e245b55}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 28px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:17px;padding:17px;box-shadow:0 5px 20px #67448c08}
+.stat .label{font-size:11px;color:var(--muted)}.stat .number{font-size:26px;font-weight:750;margin-top:3px;color:var(--deep)}.stat .hint{font-size:10px;color:#a393b0;margin-top:2px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:28px 0 14px}
+.section-head h3{font-size:17px;margin:0}.section-head p{font-size:12px;color:var(--muted);margin:4px 0 0}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.au-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 5px 20px #67448c08;display:flex;flex-direction:column;min-width:0}
+.au-cover{height:94px;background:linear-gradient(130deg,#ded0ee,#f6eaf5);position:relative;display:flex;align-items:center;justify-content:center;font-size:34px;color:#76569a}
+.au-cover:after{content:"";position:absolute;inset:12px;border:1px solid #ffffffaa;border-radius:10px}
+.au-content{padding:15px;display:flex;flex-direction:column;gap:7px;flex:1}
+.au-title{font-size:14px;font-weight:750}.au-pair{font-size:12px;color:var(--accent)}.au-meta{font-size:11px;color:var(--muted)}
+.au-desc{font-size:12px;color:#675a72;min-height:35px}
+.tag-row{display:flex;flex-wrap:wrap;gap:5px}.tag{font-size:10px;padding:4px 8px;border-radius:999px;background:#f1e9f8;color:#75548f}
+.card-actions{display:flex;gap:6px;margin-top:auto;padding-top:8px}.card-actions .btn{padding:7px 9px;font-size:11px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:19px;padding:18px;box-shadow:0 5px 20px #67448c08}
+.toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:15px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:11px;color:var(--muted)}
+input,textarea,select{width:100%;border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 11px;color:var(--ink);font-size:12px}
+textarea{resize:vertical;min-height:100px;line-height:1.65}
+input[type="file"]{padding:8px;background:#faf7fd}
+.search{max-width:280px}.grow{flex:1}
+.empty{padding:35px 15px;text-align:center;color:var(--muted);font-size:13px}.empty .empty-icon{font-size:28px;margin-bottom:8px}
+.list{display:flex;flex-direction:column;gap:9px}
+.list-item{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.list-item .item-main{flex:1;min-width:0}.list-item strong{font-size:13px;display:block}.list-item small{font-size:11px;color:var(--muted)}
+.calendar-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(240px,.7fr);gap:16px}
+.calendar-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.calendar-head h3{margin:0;font-size:16px}.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.day-name{text-align:center;font-size:10px;color:var(--muted);padding:5px 0}
+.day{position:relative;min-height:62px;border:1px solid transparent;background:#fbf8fd;border-radius:10px;text-align:left;padding:7px 6px;color:var(--ink);font-size:11px}
+.day:hover{border-color:#cbb4e1}.day.muted{opacity:.35}.day.today{border-color:var(--accent2);background:#f3eafa;font-weight:800}.day.selected{background:var(--accent);color:white}
+.day .dot{position:absolute;bottom:7px;left:8px;width:5px;height:5px;border-radius:50%;background:#c27eaf}
+.day.selected .dot{background:#fff}.day-events{margin-top:10px}
+.gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.photo-card{border:1px solid var(--line);background:#fff;border-radius:15px;overflow:hidden;min-width:0}
+.photo-card img{width:100%;height:155px;object-fit:cover;display:block;background:#f0e8f7}
+.photo-placeholder{height:155px;display:grid;place-items:center;background:linear-gradient(135deg,#eee3f8,#f8edf4);font-size:32px}
+.photo-info{padding:10px}.photo-info strong{font-size:12px;display:block;overflow-wrap:anywhere}.photo-info small{font-size:10px;color:var(--muted)}
+.photo-info .card-actions{padding-top:8px}
+.editor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.7fr);gap:14px}
+.note-card{padding:15px;border:1px solid var(--line);border-radius:15px;background:#fff;cursor:pointer}
+.note-card:hover{border-color:#c4a7e0}.note-card h4{font-size:13px;margin:0 0 7px}.note-card p{font-size:11px;color:var(--muted);margin:0;white-space:pre-wrap;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.note-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.modal-backdrop{position:fixed;inset:0;background:#2c1d3c70;backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:30}
+.modal-backdrop.open{display:flex}.modal{background:var(--paper);border-radius:22px;padding:22px;width:min(650px,100%);max-height:90vh;overflow:auto;box-shadow:0 20px 80px #24143440}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-head h3{margin:0;font-size:18px}.x{border:0;background:var(--panel);border-radius:10px;width:34px;height:34px;color:var(--deep)}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid .full{grid-column:1/-1}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);background:#39264d;color:white;padding:10px 16px;border-radius:12px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;z-index:50}.toast.show{opacity:1;transform:translate(-50%,0)}
+.footer{margin-top:30px;text-align:center;font-size:10px;color:#aa9ab6}
+@media(max-width:1050px){.shell{grid-template-columns:210px minmax(0,1fr)}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery{grid-template-columns:repeat(3,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.shell{display:block}.sidebar{position:sticky;z-index:20;top:0;height:auto;padding:10px 12px;border-right:0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}.brand{margin:0;padding:4px;flex-shrink:0}.brand-mark{width:36px;height:36px}.brand h1{font-size:13px}.brand p{display:none}.nav-label,.side-note{display:none}.nav{flex-direction:row;overflow-x:auto;gap:3px;flex:1}.nav button{white-space:nowrap;padding:9px 10px;font-size:11px}.nav-icon{width:auto}main{padding:20px 14px 45px}.topbar{align-items:flex-start}.topbar h2{font-size:22px}.hero-symbol{display:none}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.calendar-layout,.editor-grid{grid-template-columns:1fr}.day{min-height:47px;padding:5px 4px}.day .dot{left:5px;bottom:5px}.note-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:430px){.cards{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:12px}.stat .number{font-size:22px}.top-actions .btn{padding:8px 9px}.gallery{gap:8px}.photo-card img,.photo-placeholder{height:125px}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.day{min-height:39px;font-size:10px}.day-name{font-size:9px}}
+
+/* === CUSTOM APPEARANCE & INTRO === */
+:root{--custom-bg-image:none;--custom-hero-image:none}
+body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image);background-size:cover;background-attachment:fixed;background-position:center}
+.hero{background-image:linear-gradient(110deg,#4d326fd9,#8d65a9a6),var(--custom-hero-image);background-size:cover;background-position:center}
+.intro{position:fixed;inset:0;z-index:100;background:#1d102c;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#fff;isolation:isolate;transition:opacity .7s ease,visibility .7s ease}
+.intro.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.intro-photo{position:absolute;inset:0;background-image:linear-gradient(180deg,#160b24aa,#24133655 40%,#13091ec9),var(--intro-image,linear-gradient(140deg,#2a1643,#78579c));background-size:cover;background-position:center;animation:introReveal 6s ease-out both;z-index:-3}
+.intro:before,.intro:after{content:"";position:absolute;inset:-35%;border-radius:50%;pointer-events:none;filter:blur(65px);z-index:-2;background:radial-gradient(ellipse at 30% 55%,#a16fd766,transparent 50%),radial-gradient(ellipse at 75% 40%,#f2c4f544,transparent 45%);animation:mistDrift 12s ease-in-out infinite alternate}
+.intro:after{background:radial-gradient(ellipse at 70% 65%,#8663d05c,transparent 52%);animation-duration:17s;animation-direction:alternate-reverse}
+.intro-sparkles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.intro-sparkles span{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 15px 5px #e9bfff9c;animation:twinkle 3s ease-in-out infinite alternate}
+.intro-content{text-align:center;max-width:680px;padding:28px;animation:riseIn 2.4s .6s both}
+.intro-apples{font-size:26px;letter-spacing:18px;margin-bottom:24px;filter:drop-shadow(0 0 12px #cbb4f1)}
+.intro-content h1{font-family:Georgia,'Songti SC',serif;font-size:clamp(35px,7vw,76px);font-weight:500;letter-spacing:.14em;margin:0 0 18px;text-shadow:0 5px 35px #180825}
+.intro-content p{font-size:clamp(12px,2vw,17px);letter-spacing:.15em;color:#f4e9ff;white-space:pre-wrap;margin:0 0 35px}
+.intro-enter{border:1px solid #ffffff9c;background:#ffffff23;backdrop-filter:blur(10px);color:#fff;padding:13px 35px;border-radius:40px;letter-spacing:.16em;transition:background .25s,transform .25s}
+.intro-enter:hover{background:#ffffff42;transform:translateY(-3px)}
+.intro-skip{position:absolute;right:25px;top:22px;background:#ffffff19;border:1px solid #ffffff4a;color:white;padding:8px 15px;border-radius:24px;font-size:12px}
+.intro-bottom{position:absolute;bottom:24px;font-size:10px;letter-spacing:.2em;color:#e8d8f1aa}
+@keyframes introReveal{from{opacity:0;transform:scale(1.13)}to{opacity:1;transform:scale(1)}}
+@keyframes mistDrift{from{transform:translate(-7%,-3%) rotate(-8deg)}to{transform:translate(9%,6%) rotate(9deg)}}
+@keyframes twinkle{from{opacity:.15;transform:scale(.6)}to{opacity:.9;transform:scale(1.5)}}
+@keyframes riseIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.appearance-preview{height:140px;background:linear-gradient(#26163877,#26163877),var(--intro-image,linear-gradient(130deg,#35204d,#9673b9));background-size:cover;background-position:center;display:grid;place-items:center;color:white;border-radius:15px;margin-bottom:15px;text-align:center}
+.appearance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.appearance-grid .full{grid-column:1/-1}
+.appearance-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+@media(max-width:650px){.appearance-grid{grid-template-columns:1fr}.appearance-grid .full{grid-column:auto}.intro-apples{letter-spacing:8px}}
+@media(prefers-reduced-motion:reduce){.intro-photo,.intro:before,.intro:after,.intro-content,.intro-sparkles span{animation:none!important}}
+
+
+/* === V3: combined archive, divination and gacha === */
+.archive-tabs{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:6px 0 20px;padding-bottom:10px}
+.archive-tab{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:12px;padding:10px 16px;font-size:13px;cursor:pointer}
+.archive-tab.active{color:var(--deep);background:var(--panel);border-color:var(--accent2);font-weight:700}
+.archive-pane{display:none}.archive-pane.active{display:block}
+.archive-records{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.archive-record{display:flex;gap:13px;padding:14px;background:var(--paper);border:1px solid var(--line);border-radius:17px;min-width:0;box-shadow:0 5px 20px #67448c08}
+.archive-record-photo{flex:0 0 110px;width:110px;height:135px;object-fit:cover;border-radius:12px;background:var(--panel)}
+.archive-record-placeholder{display:grid;place-items:center;color:var(--accent);font-size:30px;background:linear-gradient(135deg,#e9ddf5,#f8edf4)}
+.archive-record-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.archive-record h4{font-size:14px;margin:0;overflow-wrap:anywhere}
+.archive-record p{font-size:11px;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.archive-record .card-actions{flex-wrap:wrap}
+.archive-record .au-meta{overflow-wrap:anywhere}
+.record-preview{max-width:100%;max-height:180px;object-fit:contain;border-radius:12px;margin-top:7px;border:1px solid var(--line)}
+@media(max-width:950px){.archive-records{grid-template-columns:1fr}}
+@media(max-width:430px){.archive-record-photo{flex-basis:82px;width:82px;height:108px}.archive-record{gap:9px;padding:10px}}
+
+.cloud-bar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:-8px 0 24px;padding:11px 14px;border:1px solid var(--line);background:#ffffffd9;border-radius:15px;font-size:12px}
+.cloud-status{flex:1;min-width:180px;color:var(--deep)}.cloud-hint{font-size:11px;color:var(--muted);margin:0 0 16px}
+
+/* V5 Phase 1: home and archive typography; V4 hero colors retained */
+.v5-home-cover{height:clamp(260px,42vw,510px);border-radius:26px;margin-bottom:20px;background:linear-gradient(140deg,#2b1b45,#594077 55%,#9576b4);background-position:center;background-size:cover;display:flex;align-items:end;overflow:hidden;box-shadow:var(--shadow)}
+.v5-cover-hint{color:#fff9;font-family:Georgia,serif;letter-spacing:.2em;padding:25px;font-size:12px;text-shadow:0 2px 10px #170c28}
+#page-home .hero{min-height:240px;cursor:pointer}
+.v5-home-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0}
+.v5-home-links button{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 15px;text-align:left;color:var(--deep);box-shadow:var(--shadow)}
+.v5-home-links button:hover{background:var(--panel);transform:translateY(-2px)}
+.v5-progress{background:var(--paper);border:1px solid var(--line);padding:18px;border-radius:17px;margin:16px 0;color:var(--deep)}
+.v5-progress-bar{height:8px;border-radius:20px;background:var(--panel);overflow:hidden;margin:10px 0}.v5-progress-bar span{height:100%;display:block;background:linear-gradient(90deg,#73529c,#b29bd4);border-radius:20px}
+.v5-section-editor{border-top:1px solid var(--line);margin-top:22px;padding-top:18px}.v5-section-editor h3{font-size:16px;margin:0}.v5-section-editor p{font-size:12px;color:var(--muted)}
+.v5-intro-hidden{display:none}
+@media(max-width:760px){.v5-home-links{grid-template-columns:repeat(2,minmax(0,1fr))}.v5-home-cover{height:320px}.v5-home-links button{padding:14px 12px;font-size:12px}}
+</style>
+<script src="https://js.puter.com/v2/"></script>
+</head>
+<body>
+<div class="intro" id="introScreen" aria-label="网站开屏">
+  <div class="intro-photo" id="introPhoto"></div>
+  <div class="intro-sparkles" id="introSparkles" aria-hidden="true"></div>
+  
+  <div class="intro-content"><div class="intro-apples">🍎 🍏</div><h1 id="introTitle" class="v5-intro-hidden">昼起之时</h1><p id="introSubtitle">两颗心相遇，于是爱在无限时空中蔓延。</p><button class="intro-enter" id="introEnter">进入 ✧</button></div>
+  <div class="intro-bottom">OUR LITTLE UNIVERSE · ✦</div>
+</div>
+<div class="shell">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">✧</div><div><h1>🍎 🍏</h1><p>MY AU UNIVERSE</p></div></div>
+  <div class="nav" id="nav">
+    <button class="active" data-page="home"><span class="nav-icon">⌂</span>首页</button>
+    <button data-page="aus"><span class="nav-icon">✦</span>AU 索引</button>
+    <button data-page="calendar"><span class="nav-icon">♡</span>日历</button>
+    <button data-page="dreams"><span class="nav-icon">☾</span>合照</button>
+    <button data-page="merch"><span class="nav-icon">✧</span>谷子</button>
+    <button data-page="settings"><span class="nav-icon">❖</span>档案</button>
+    <button data-page="writing"><span class="nav-icon">✎</span>文稿</button>
+    <button data-page="divination"><span class="nav-icon">☽</span>梦占</button>
+    <button data-page="gacha"><span class="nav-icon">✧</span>抽卡</button>
+    <button data-page="appearance"><span class="nav-icon">✿</span>外观</button>
+  </div>
+  <div class="side-note"><strong>✦ 秘密基地</strong>这里保存 AU、灵感、纪念日与收藏。数据默认保存在当前浏览器中。</div>
+</aside>
+<main>
+  <header class="topbar"><div><div class="eyebrow">PERSONAL ARCHIVE · 2026</div><h2 id="pageTitle">欢迎回来</h2></div><div class="top-actions"><button class="btn" id="exportBtn">导出备份</button><button class="btn" id="importBtn">导入备份</button><input type="file" id="importFile" accept=".json,application/json" hidden></div></header>
+
+  <div class="cloud-bar" aria-live="polite"><span class="cloud-status" id="cloudStatus">☁ 未连接 Puter · 当前仅保存在本机</span><button class="btn primary" id="cloudLogin">连接 Puter</button><button class="btn" id="cloudSync" disabled>立即同步</button><button class="btn" id="cloudReload" disabled>从云端读取</button></div>
+  <section class="page active" id="page-home">
+    <div class="v5-home-cover" id="v5HomeCover"><div class="v5-cover-hint">✦ OUR LITTLE UNIVERSE · 🍎 🍏</div></div>
+    <div class="hero" id="v5SecretHero" title="我们的秘密基地"><div class="hero-copy"><div class="eyebrow">A LITTLE UNIVERSE OF OUR OWN</div><h3>把我们的<br>共同经历好好收藏。</h3><p>就好像我们的秘密基地一样，收藏和存档着一切。</p></div><div class="hero-symbol">☾✧</div></div>
+    <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙 <span>↗</span></button><button data-goto="settings">❖ 档案室 <span>↗</span></button><button data-goto="dreams">☾ 梦图收藏 <span>↗</span></button><button data-goto="writing">✎ 文稿 <span>↗</span></button><button data-goto="divination">☽ 梦占 <span>↗</span></button><button data-goto="gacha">✧ 抽卡 <span>↗</span></button><button data-goto="calendar">♡ 日历 <span>↗</span></button><button data-goto="merch">✧ 谷子 <span>↗</span></button></div>
+    <div class="v5-progress" id="v5Progress"></div>
+    <div class="stats">
+      <div class="stat"><div class="label">AU</div><div class="number" id="statAus">13</div><div class="hint">不同的故事</div></div>
+      <div class="stat"><div class="label">纪念日</div><div class="number" id="statEvents">0</div><div class="hint">值得记下的日期</div></div>
+      <div class="stat"><div class="label">梦图收藏</div><div class="number" id="statDreams">0</div><div class="hint">灵感</div></div>
+      <div class="stat"><div class="label">文字存档</div><div class="number" id="statWriting">0</div><div class="hint">写下来的片段</div></div>
+    </div>
+    <div class="section-head"><div><h3>最近整理的 AU</h3><p>我们的故事宇宙，一览。</p></div><button class="btn soft" data-goto="aus">查看全部 →</button></div>
+    <div class="cards" id="homeAus"></div>
+    <div class="section-head"><div><h3>近期纪念日</h3><p>重要的日子˶>ᗜ<˶。</p></div><button class="btn soft" data-goto="calendar">打开日历 →</button></div>
+    <div class="panel" id="homeEvents"></div>
+    <div class="footer">Made for stories, memories & little universes · 🍎 🍏</div>
+  </section>
+
+  <section class="page" id="page-aus">
+    <div class="section-head"><div><h3>AU 索引</h3><p>管理世界观、关系设定与创作进度。</p></div><button class="btn primary" id="addAu">＋ 新建 AU</button></div>
+    <div class="toolbar"><input class="search" id="auSearch" placeholder="搜索 AU 名称、关系或标签…"><select id="auStatus" style="max-width:150px"><option value="">全部进度</option><option>已完成</option><option>计划写</option><option>构思中</option><option>待写</option><option>灵感</option><option>待发展</option></select><div class="grow"></div><span id="auCount" class="au-meta"></span></div>
+    <div class="cards" id="auGrid"></div>
+  </section>
+
+  <section class="page" id="page-calendar">
+    <div class="section-head"><div><h3>纪念日历</h3><p>纪念日、生日、计划日与倒数日都可以放在这里。</p></div><button class="btn primary" id="addEvent">＋ 添加日期</button></div>
+    <div class="calendar-layout">
+      <div class="panel"><div class="calendar-head"><button class="btn" id="prevMonth">‹</button><h3 id="monthLabel"></h3><button class="btn" id="nextMonth">›</button></div><div class="calendar-grid" id="calendarGrid"></div></div>
+      <div class="panel"><div class="section-head" style="margin:0 0 12px"><div><h3 id="selectedDateTitle">日期记录</h3><p>选择日期查看详情。</p></div></div><div id="selectedEvents"></div><div class="divider"></div><div class="section-head"><div><h3>全部纪念日</h3><p>按日期查看。</p></div></div><div class="list" id="allEvents"></div></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-dreams">
+    <div class="section-head"><div><h3>梦图分类</h3><p>收纳梦图、约稿、截图与视觉灵感。图片只保存在本机浏览器。</p></div><button class="btn primary" id="addDream">＋ 添加梦图</button></div>
+    <div class="toolbar"><input class="search" id="dreamSearch" placeholder="搜索标题、备注…"><select id="dreamCategory" style="max-width:170px"><option value="">全部分类</option><option>约稿</option><option>自绘</option><option>游戏截图</option><option>梦图</option><option>灵感参考</option><option>其他</option></select><div class="grow"></div><span id="dreamCount" class="au-meta"></span></div>
+    <div class="gallery" id="dreamGallery"></div>
+  </section>
+
+  <section class="page" id="page-merch">
+    <div class="section-head"><div><h3>谷子收藏</h3><p>记录实物收藏、购买状态、价格与入手日期。</p></div><button class="btn primary" id="addMerch">＋ 添加收藏</button></div>
+    <div class="toolbar"><input class="search" id="merchSearch" placeholder="搜索名称、系列、备注…"><select id="merchStatus" style="max-width:160px"><option value="">全部状态</option><option>已到手</option><option>运输中</option><option>预售中</option><option>想收</option></select><div class="grow"></div><span id="merchCount" class="au-meta"></span></div>
+    <div class="gallery" id="merchGallery"></div>
+  </section>
+
+  <section class="page" id="page-settings">
+    <div class="section-head"><div><h3>档案室</h3><p>设定与角色资料统一收藏，原有内容全部保留。</p></div></div>
+    <div class="archive-tabs" role="tablist" aria-label="档案分类">
+      <button type="button" class="archive-tab active" data-archive-tab="settings" role="tab" aria-selected="true">❖ 设定档案</button>
+      <button type="button" class="archive-tab" data-archive-tab="characters" role="tab" aria-selected="false">♙ 角色档案</button>
+    </div>
+    <div id="archive-settings" class="archive-pane active" role="tabpanel">
+      <div class="section-head"><div><h3>设定存档</h3><p>保存世界观规则、人物关系、时间线、考据与碎片灵感。</p></div><button class="btn primary" id="addSetting">＋ 新建设定</button></div>
+      <div class="toolbar"><input class="search" id="settingSearch" placeholder="搜索设定标题或内容…"><select id="settingType" style="max-width:160px"><option value="">全部类型</option><option>世界观</option><option>人物关系</option><option>时间线</option><option>考据资料</option><option>灵感碎片</option><option>其他</option></select><div class="grow"></div><span id="settingCount" class="au-meta"></span></div>
+      <div class="note-grid" id="settingGrid"></div>
+    </div>
+    <div id="archive-characters" class="archive-pane" role="tabpanel">
+      <div class="section-head"><div><h3>角色档案</h3><p>记录人物资料、外观、动机、关系与尚未解决的矛盾。</p></div><button class="btn primary" id="addCharacter">＋ 新建角色</button></div>
+      <div class="toolbar"><input class="search" id="characterSearch" placeholder="搜索角色、所属 AU…"><select id="characterAu" style="max-width:190px"><option value="">全部 AU</option></select><div class="grow"></div><span id="characterCount" class="au-meta"></span></div>
+      <div class="note-grid" id="characterGrid"></div>
+    </div>
+  </section>
+
+  <section class="page" id="page-writing">
+    <div class="section-head"><div><h3>文稿存档</h3><p>存放正文、片段、提纲、废稿与尚未命名的句子。</p></div><button class="btn primary" id="addWriting">＋ 新建文稿</button></div>
+    <div class="toolbar"><input class="search" id="writingSearch" placeholder="搜索标题、正文…"><select id="writingType" style="max-width:150px"><option value="">全部类型</option><option>正文</option><option>片段</option><option>大纲</option><option>设定草稿</option><option>废稿回收</option><option>其他</option></select><div class="grow"></div><span id="writingCount" class="au-meta"></span></div>
+    <div class="note-grid" id="writingGrid"></div>
+  </section>
+
+  <section class="page" id="page-appearance">
+    <div class="section-head"><div><h3>外观与开屏设置</h3><p>上传合照或喜欢的图片，设置开屏、背景、首页封面。更改会保存在本机。</p></div><button class="btn soft" id="previewIntro">预览开屏 ✧</button></div>
+    <div class="panel">
+      <div class="appearance-preview" id="appearancePreview">🍎 🍏<br>昼起之时</div>
+      <div class="appearance-grid">
+        <div class="field"><label>网站标题</label><input id="appearanceTitle" placeholder="昼起之时"></div>
+        <div class="field"><label>进入按钮文字</label><input id="appearanceButton" placeholder="进入 ✧"></div>
+        <div class="field full"><label>副标题</label><textarea id="appearanceSubtitle" rows="2" placeholder="两颗心相遇，于是爱在无限时空中蔓延。"></textarea></div>
+        <div class="field"><label>首页独立大图</label><input id="appearanceHomeFile" type="file" accept="image/*"><button class="btn" id="removeHomeImage">移除首页大图</button></div>
+        <div class="field"><label>开屏照片</label><input id="appearanceIntroFile" type="file" accept="image/*"><button class="btn" id="removeIntroImage">移除开屏照片</button></div>
+        <div class="field"><label>网站背景照片</label><input id="appearanceBgFile" type="file" accept="image/*"><button class="btn" id="removeBgImage">移除背景照片</button></div>
+        <div class="field"><label>首页横幅封面</label><input id="appearanceHeroFile" type="file" accept="image/*"><button class="btn" id="removeHeroImage">移除封面照片</button></div>
+      </div>
+      <div class="v5-section-editor"><h3>✧ 页面标题与说明</h3><p>修改每个分区的标题和小字说明，不影响原始档案。</p><div id="v5SectionFields" class="appearance-grid"></div></div>
+      <div class="appearance-actions"><button class="btn primary" id="saveAppearance">保存文字设置</button><button class="btn danger" id="resetAppearance">恢复默认外观</button></div>
+      <p style="color:var(--muted);font-size:11px">图片上传后自动压缩以节省空间。建议定期导出 JSON 备份，清理浏览器数据会删除本地记录。部分手机浏览器以 file:// 打开时可能不支持持久存储。</p>
+    </div>
+  </section>
+  <section class="page" id="page-divination">
+    <div class="section-head"><div><h3>梦占存档</h3><p>收藏塔罗、牌阵、梦占问题、牌面与自己的解读。</p></div><button class="btn primary" id="addDivination">＋ 新建梦占</button></div>
+    <div class="toolbar"><input class="search" id="divinationSearch" placeholder="搜索问题、牌阵、牌面或解读…"><select id="divinationType" style="max-width:170px"><option value="">全部类型</option><option>塔罗</option><option>神谕卡</option><option>梦境占卜</option><option>其他</option></select><div class="grow"></div><span id="divinationCount" class="au-meta"></span></div>
+    <div class="archive-records" id="divinationGrid"></div>
+  </section>
+
+  <section class="page" id="page-gacha">
+    <div class="section-head"><div><h3>抽卡存档</h3><p>记录卡池、抽数、出货结果、日期与截图。</p></div><button class="btn primary" id="addGacha">＋ 新建抽卡记录</button></div>
+    <div class="toolbar"><input class="search" id="gachaSearch" placeholder="搜索卡池、卡名、备注…"><select id="gachaRarity" style="max-width:160px"><option value="">全部稀有度</option><option>五星</option><option>四星</option><option>三星及以下</option><option>未出货</option><option>其他</option></select><div class="grow"></div><span id="gachaCount" class="au-meta"></span></div>
+    <div class="archive-records" id="gachaGrid"></div>
+  </section>
+</main>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><h3 id="modalTitle">编辑</h3><button class="x" id="closeModal">✕</button></div><div id="modalBody"></div><div class="modal-actions"><button class="btn" id="cancelModal">取消</button><button class="btn primary" id="saveModal">保存</button></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const initialAus = [
+ {id:uid(),name:"古代皇室兄妹骨",pair:"皇帝哥 × 游侠妹",type:"古代权力 / 兄妹",status:"已完成",mark:"王权与自由",desc:"身处权力中心的皇帝，与行走江湖的游侠妹妹。",icon:"♛",tags:"皇室,江湖,兄妹"},
+ {id:uid(),name:"夏以昼梦游仙境",pair:"夏以昼 × 梦境异境",type:"奇幻 / 梦境",status:"已完成",mark:"梦与现实",desc:"梦境、象征与现实边界的奇幻 AU。",icon:"☾",tags:"梦境,奇幻"},
+ {id:uid(),name:"哨向 AU",pair:"领袖 × 媒介人",type:"精神链接 / 权力",status:"计划写",mark:"精神与控制",desc:"领袖与媒介人的精神链接、权力结构和选择。",icon:"✧",tags:"哨向,精神链接"},
+ {id:uid(),name:"饥荒 AU",pair:"万能哥哥 × 小尾巴妹妹",type:"生存 / 游戏世界",status:"待写",mark:"依赖与求生",desc:"一对兄妹一起掉入《饥荒》的世界，在陌生规则中求生。",icon:"♨",tags:"饥荒,生存,兄妹"},
+ {id:uid(),name:"中世纪类魂",pair:"开拓者 / 地图绘制者",type:"黑暗奇幻 / 探索",status:"待写",mark:"未知与记录",desc:"开拓者在衰败世界中探索、绘制地图。黑纱遮面是重要服设元素。",icon:"⚔",tags:"类魂,中世纪,地图"},
+ {id:uid(),name:"特摄 AU",pair:"二骑哥 × 女高妹",type:"特摄 / 兄妹骨",status:"待写",mark:"英雄与日常",desc:"在一众男同气氛中杀出的 BG 兄妹骨，二骑与女高中生妹妹。",icon:"✦",tags:"假面骑士,特摄,兄妹"},
+ {id:uid(),name:"无限流 AU",pair:"特殊 Boss 妹 × 玩家哥",type:"迷宫 / 记忆污染",status:"待写",mark:"认知与识别",desc:"特殊 Boss 假扮玩家，哥哥却几乎立刻认出妹妹。",icon:"♜",tags:"无限流,迷宫,记忆污染"},
+ {id:uid(),name:"武侠 AU",pair:"大师兄 × 小师妹",type:"江湖 / 师门",status:"待写",mark:"传承与成长",desc:"以师门秩序、江湖规矩与人物成长为核心。",icon:"☯",tags:"武侠,师门"},
+ {id:uid(),name:"末日 AU",pair:"共同求生的两个人",type:"末日 / 悲剧",status:"构思中",mark:"没有未来",desc:"两个人努力活下去，但毁灭注定到来，最终一起走向没有未来的那一刻。",icon:"☄",tags:"末日,时间,悲剧"},
+ {id:uid(),name:"时间穿梭 AU",pair:"时空穿梭局前辈 × 新人",type:"时间 / 科幻",status:"构思中",mark:"错位的未来",desc:"昨天可以晚于明天。未来被宇宙、夏以昼与时间切割。",icon:"⌛",tags:"时间,科幻,时空局"},
+ {id:uid(),name:"浴衣与烟火大会",pair:"女高 × 男大学生",type:"现代 / 真骨",status:"灵感",mark:"夏日与短暂",desc:"浴衣、夏夜、烟火大会，以及属于某个夏天的记忆。",icon:"🎆",tags:"现代,夏日,烟火"},
+ {id:uid(),name:"痴迷与许愿柳",pair:"得到许愿柳的妹妹 × 哥哥（待定）",type:"民俗 / 欲望",status:"待发展",mark:"愿望的代价",desc:"妹妹得到许愿柳，愿望如何成真、代价落在谁身上仍待确定。",icon:"❀",tags:"民俗,愿望,痴迷"},
+ {id:uid(),name:"私人博物馆",pair:"读取物品记忆的妹妹 × 搭档哥哥",type:"民俗 / 悬疑",status:"待发展",mark:"物与记忆",desc:"在私人博物馆工作的搭档，妹妹能触摸物品查看它过去的记忆。",icon:"⌘",tags:"民俗,博物馆,悬疑"}
+];
+function uid(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4)}
+const STORE="purpleArchive_v5_dev";
+let db={aus:[],events:[],dreams:[],merch:[],settings:[],writing:[],characters:[],divinations:[],gacha:[],appearance:{}};
+try{const old=JSON.parse(localStorage.getItem(STORE)||"null");db=old&&typeof old==="object"?{...db,...old}:db}catch(e){}
+if(!Array.isArray(db.aus)||!db.aus.length)db.aus=initialAus;
+// Keep the same localStorage key and all previous record collections.
+// Older backups automatically receive the two new empty collections.
+for(const bucket of ['events','dreams','merch','settings','writing','characters','divinations','gacha']){
+ if(!Array.isArray(db[bucket]))db[bucket]=[];
+}
+function persist(){try{localStorage.setItem(STORE,JSON.stringify(db));updateStats();if(window.archiveCloud)window.archiveCloud.changed()}catch(e){toast("本地保存失败：请导出 JSON 备份。")}}
+function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function toast(s){const t=document.getElementById("toast");t.textContent=s;t.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove("show"),2500)}
+const pageNames={home:"欢迎回来",aus:"AU ",calendar:"日历",dreams:"梦图",merch:"谷子",settings:"档案",writing:"文稿",divination:"梦占存档",gacha:"抽卡存档",characters:"角色档案",appearance:"外观设置"};
+function go(page){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+page));document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===page));document.getElementById("pageTitle").textContent=(getAppearance().sections?.[page]?.title||V5_SECTION_DEFAULTS[page]?.[0]||pageNames[page]||page);renderAll();window.scrollTo({top:0,behavior:"smooth"})}
+document.getElementById("nav").addEventListener("click",e=>{const b=e.target.closest("button[data-page]");if(b)go(b.dataset.page)});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-goto]");if(b)go(b.dataset.goto)});
+function updateStats(){renderV5Progress();document.getElementById("statAus").textContent=db.aus.length;document.getElementById("statEvents").textContent=db.events.length;document.getElementById("statDreams").textContent=db.dreams.length;document.getElementById("statWriting").textContent=db.writing.length}
+function statusClass(s){return s==="已完成"?"已完成":s||"待写"}
+function auCard(a){return `<article class="au-card"><div class="au-cover">${esc(a.icon||"✧")}</div><div class="au-content"><div class="au-title">${esc(a.name)}</div><div class="au-pair">${esc(a.pair)}</div><div class="au-meta">${esc(a.type)} · ${esc(a.status)}</div><div class="au-desc">${esc(a.desc||a.mark||"尚未添加简介。")}</div><div class="tag-row">${(a.tags||"").split(/[,，]/).filter(Boolean).slice(0,4).map(t=>`<span class="tag">${esc(t.trim())}</span>`).join("")}</div><div class="card-actions"><button class="btn soft" onclick="editAu('${a.id}')">编辑设定</button><button class="btn" onclick="newSettingFor('${a.id}')">＋存档</button></div></div></article>`}
+function renderAus(){const q=(document.getElementById("auSearch")?.value||"").toLowerCase(),st=document.getElementById("auStatus")?.value||"";const list=db.aus.filter(a=>(!st||a.status===st)&&[a.name,a.pair,a.type,a.desc,a.tags].join(" ").toLowerCase().includes(q));document.getElementById("auGrid").innerHTML=list.map(auCard).join("")||empty("没有找到匹配的 AU","✦");document.getElementById("auCount").textContent=`${list.length} / ${db.aus.length}`;document.getElementById("homeAus").innerHTML=db.aus.slice(0,3).map(auCard).join("")}
+function empty(text,icon="✧"){return `<div class="empty"><div class="empty-icon">${icon}</div>${esc(text)}</div>`}
+let modalSave=null;
+function openModal(title,body,onSave){document.getElementById("modalTitle").textContent=title;document.getElementById("modalBody").innerHTML=body;modalSave=onSave;document.getElementById("modalBackdrop").classList.add("open")}
+function closeModal(){document.getElementById("modalBackdrop").classList.remove("open");modalSave=null}
+document.getElementById("closeModal").onclick=document.getElementById("cancelModal").onclick=closeModal;
+document.getElementById("modalBackdrop").addEventListener("click",e=>{if(e.target.id==="modalBackdrop")closeModal()});
+document.getElementById("saveModal").onclick=()=>{if(modalSave){const ok=modalSave();if(ok!==false){persist();closeModal();renderAll()}}};
+function val(id){return document.getElementById(id)?.value?.trim()||""}
+function f(id,label,value="",type="text",placeholder=""){return `<div class="field"><label for="${id}">${label}</label><input id="${id}" type="${type}" value="${esc(value)}" placeholder="${esc(placeholder)}"></div>`}
+function ta(id,label,value="",placeholder=""){return `<div class="field full"><label for="${id}">${label}</label><textarea id="${id}" placeholder="${esc(placeholder)}">${esc(value)}</textarea></div>`}
+function sel(id,label,opts,value){return `<div class="field"><label for="${id}">${label}</label><select id="${id}">${opts.map(o=>`<option ${o===value?"selected":""}>${esc(o)}</option>`).join("")}</select></div>`}
+function editAu(id){const a=db.aus.find(x=>x.id===id)||{id:uid(),name:"",pair:"",type:"",status:"待写",mark:"",desc:"",icon:"✧",tags:""};openModal(id?"编辑 AU":"新建 AU",`<div class="form-grid">${f("name","AU 名称",a.name)}${f("pair","关系设定",a.pair)}${f("type","类型 / 题材",a.type)}${sel("status","创作进度",["已完成","计划写","构思中","待写","灵感","待发展"],a.status)}${f("mark","主题关键词",a.mark)}${f("icon","卡片符号",a.icon||"✧")}${f("tags","标签（逗号分隔）",a.tags)}${ta("desc","简介 / 核心设定",a.desc)}</div>`,()=>{if(!val("name")){toast("请填写 AU 名称");return false}const data={id:a.id,name:val("name"),pair:val("pair"),type:val("type"),status:val("status"),mark:val("mark"),icon:val("icon")||"✧",tags:val("tags"),desc:val("desc")};const i=db.aus.findIndex(x=>x.id===a.id);if(i>=0)db.aus[i]=data;else db.aus.unshift(data);toast("AU 已保存")})}
+window.editAu=editAu;
+document.getElementById("addAu").onclick=()=>editAu(null);
+window.newSettingFor=id=>{const a=db.aus.find(x=>x.id===id);editRecord("settings",null,{title:a?.name+" · 新设定",type:"世界观",au:a?.name||"",content:""});};
+function editRecord(bucket,id,seed={}){const item=db[bucket].find(x=>x.id===id)||{id:uid(),...seed};const configs={settings:{title:"设定存档",types:["世界观","人物关系","时间线","考据资料","灵感碎片","其他"],body:"内容"},writing:{title:"文稿",types:["正文","片段","大纲","设定草稿","废稿回收","其他"],body:"正文 / 内容"},characters:{title:"角色档案",types:[],body:"详细档案"}};
+const c=configs[bucket];let body=`<div class="form-grid">${f("title","标题 / 角色名",item.title||item.name||"")}`;
+if(bucket==="characters"){body+=`${f("au","所属 AU",item.au||"")}${f("role","身份 / 关系",item.role||"")}${f("appearance","外观关键词",item.appearance||"")}${f("motivation","动机 / 目标",item.motivation||"")}${ta("content","详细档案",item.content||"")} `}
+else {body+=`${sel("type","分类",c.types,item.type||c.types[0])}${f("au","所属 AU（可选）",item.au||"")}${ta("content",c.body,item.content||"")}`}
+body+=`</div>`;
+openModal(item.title||item.name?"编辑"+c.title:"新建"+c.title,body,()=>{const title=val("title");if(!title){toast("请填写标题");return false}const data={...item,title,name:bucket==="characters"?title:item.name,type:val("type")||item.type||"",au:val("au"),role:val("role"),appearance:val("appearance"),motivation:val("motivation"),content:val("content"),updated:new Date().toISOString()};const i=db[bucket].findIndex(x=>x.id===item.id);if(i>=0)db[bucket][i]=data;else db[bucket].unshift(data);toast("已保存")})}
+document.getElementById("addSetting").onclick=()=>editRecord("settings");
+document.getElementById("addWriting").onclick=()=>editRecord("writing");
+document.getElementById("addCharacter").onclick=()=>editRecord("characters");
+window.editRecord=editRecord;
+window.deleteItem=(bucket,id)=>{if(confirm("确定删除这条记录吗？此操作无法撤销。")){db[bucket]=db[bucket].filter(x=>x.id!==id);persist();renderAll();toast("已删除")}};
+function noteCard(item,bucket){const title=item.title||item.name||"未命名",snippet=(item.content||item.desc||"").slice(0,170);return `<article class="note-card" onclick="editRecord('${bucket}','${item.id}')"><div class="tag-row" style="margin-bottom:8px"><span class="tag">${esc(item.type||item.role||"档案")}</span>${item.au?`<span class="tag">${esc(item.au)}</span>`:""}</div><h4>${esc(title)}</h4><p>${esc(snippet||"点击打开，继续补充内容。")}</p><div class="card-actions"><button class="btn soft" onclick="event.stopPropagation();editRecord('${bucket}','${item.id}')">编辑</button><button class="btn danger" onclick="event.stopPropagation();deleteItem('${bucket}','${item.id}')">删除</button></div></article>`}
+function renderNotes(bucket,gridId,searchId,typeId){const q=(document.getElementById(searchId)?.value||"").toLowerCase(),type=document.getElementById(typeId)?.value||"";const list=db[bucket].filter(x=>(!type||x.type===type)&&[x.title,x.name,x.au,x.type,x.content,x.role].join(" ").toLowerCase().includes(q));document.getElementById(gridId).innerHTML=list.map(x=>noteCard(x,bucket)).join("")||empty("这里还没有存档，点右上角添加第一条。");const countId={settings:"settingCount",writing:"writingCount",characters:"characterCount"}[bucket];document.getElementById(countId).textContent=`${list.length} 条记录`;if(bucket==="characters"){const select=document.getElementById("characterAu"),old=select.value;select.innerHTML='<option value="">全部 AU</option>'+db.aus.map(a=>`<option>${esc(a.name)}</option>`).join("");select.value=old;}}
+function imageField(id,label){return `<div class="field full"><label>${label}</label><input id="${id}" type="file" accept="image/*"><small style="color:var(--muted);font-size:10px">建议使用压缩后的图片，较大的图片会占用浏览器本地空间。</small></div>`}
+function editPhoto(bucket,id){const isDream=bucket==="dreams",item=db[bucket].find(x=>x.id===id)||{id:uid(),title:"",category:isDream?"梦图":"周边",status:isDream?"":"想收",date:"",price:"",series:"",note:"",image:""};let body=`<div class="form-grid">${f("title","名称",item.title)}${isDream?sel("category","分类",["约稿","自绘","游戏截图","梦图","灵感参考","其他"],item.category):sel("status","收藏状态",["已到手","运输中","预售中","想收"],item.status)}${isDream?f("date","日期",item.date,"date"):f("series","作品 / 系列",item.series)}${!isDream?f("price","价格 / 预算",item.price):""}${imageField("imageFile","图片")}${ta("note","备注",item.note||"")}</div>`;openModal(isDream?"添加梦图":"添加谷子",body,()=>{if(!val("title")){toast("请填写名称");return false}const file=document.getElementById("imageFile").files[0];const save=image=>{const data={...item,title:val("title"),category:val("category"),status:val("status"),date:val("date"),series:val("series"),price:val("price"),note:val("note"),image:image||item.image};const i=db[bucket].findIndex(x=>x.id===item.id);if(i>=0)db[bucket][i]=data;else db[bucket].unshift(data);persist();closeModal();renderAll();toast("收藏已保存")};if(file){if(file.size>2.5*1024*1024){toast("图片大于 2.5MB，请先压缩后再上传");return false}const reader=new FileReader();reader.onload=()=>save(reader.result);reader.onerror=()=>toast("图片读取失败");reader.readAsDataURL(file);return false}else{save(item.image);return false}})}
+document.getElementById("addDream").onclick=()=>editPhoto("dreams");
+document.getElementById("addMerch").onclick=()=>editPhoto("merch");
+function photoCard(item,bucket){const img=item.image?`<img src="${item.image}" alt="${esc(item.title)}">`:`<div class="photo-placeholder">${bucket==="dreams"?"☾":"✧"}</div>`;return `<article class="photo-card">${img}<div class="photo-info"><strong>${esc(item.title)}</strong><small>${esc(bucket==="dreams"?(item.category||"未分类"):(item.series||"未分类"))}${item.status?" · "+esc(item.status):""}</small>${item.price?`<small style="display:block;margin-top:3px">价格：${esc(item.price)}</small>`:""}<div class="card-actions"><button class="btn soft" onclick="editPhoto('${bucket}','${item.id}')">编辑</button><button class="btn danger" onclick="deleteItem('${bucket}','${item.id}')">删除</button></div></div></article>`}
+window.editPhoto=editPhoto;
+function renderPhotos(bucket,gridId,searchId,filterId){const q=(document.getElementById(searchId)?.value||"").toLowerCase(),filter=document.getElementById(filterId)?.value||"";const list=db[bucket].filter(x=>(!filter||(bucket==="dreams"?x.category===filter:x.status===filter))&&[x.title,x.category,x.status,x.note,x.series].join(" ").toLowerCase().includes(q));document.getElementById(gridId).innerHTML=list.map(x=>photoCard(x,bucket)).join("")||empty("这里还没有收藏，上传一张图片开始整理。",bucket==="dreams"?"☾":"✧");document.getElementById(bucket==="dreams"?"dreamCount":"merchCount").textContent=`${list.length} 件`}
+function dateOnly(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+let calDate=new Date();calDate.setDate(1);let selectedDate=dateOnly(new Date());
+function dateDiff(date){const now=new Date();now.setHours(0,0,0,0);const d=new Date(date+"T00:00:00");return Math.round((d-now)/86400000)}
+function eventDays(e){const d=dateDiff(e.date);if(e.kind==="倒数日")return d;return Math.abs(d)}
+function eventCard(e){const diff=dateDiff(e.date),text=e.kind==="倒数日"?(diff===0?"就是今天！":diff>0?`还有 ${diff} 天`:`已过 ${Math.abs(diff)} 天`):(diff===0?"今天，纪念日快乐":diff<0?`已经 ${Math.abs(diff)} 天`:`还有 ${diff} 天`);return `<div class="list-item"><div style="font-size:22px;color:var(--accent)">${e.kind==="倒数日"?"♡":"✧"}</div><div class="item-main"><strong>${esc(e.title)}</strong><small>${esc(e.date)} · ${esc(e.kind||"纪念日")} · ${text}</small>${e.note?`<small style="display:block;margin-top:3px">${esc(e.note)}</small>`:""}</div><button class="btn danger" onclick="deleteItem('events','${e.id}')">删除</button></div>`}
+function renderCalendar(){const y=calDate.getFullYear(),m=calDate.getMonth();document.getElementById("monthLabel").textContent=`${y} 年 ${m+1} 月`;const grid=document.getElementById("calendarGrid");const weekdays=["日","一","二","三","四","五","六"];let html=weekdays.map(x=>`<div class="day-name">${x}</div>`).join("");const first=new Date(y,m,1).getDay(),total=new Date(y,m+1,0).getDate(),prevTotal=new Date(y,m,0).getDate();for(let i=0;i<42;i++){let d,dt,muted=false;if(i<first){d=prevTotal-first+i+1;dt=new Date(y,m-1,d);muted=true}else if(i>=first+total){d=i-first-total+1;dt=new Date(y,m+1,d);muted=true}else{d=i-first+1;dt=new Date(y,m,d)}const key=dateOnly(dt),has=db.events.some(e=>e.date===key),today=key===dateOnly(new Date());html+=`<button class="day ${muted?"muted":""} ${today?"today":""} ${key===selectedDate?"selected":""}" data-date="${key}">${d}${has?'<span class="dot"></span>':""}</button>`}grid.innerHTML=html;grid.querySelectorAll("[data-date]").forEach(b=>b.onclick=()=>{selectedDate=b.dataset.date;renderCalendar()});document.getElementById("selectedDateTitle").textContent=selectedDate+" 的记录";const chosen=db.events.filter(e=>e.date===selectedDate);document.getElementById("selectedEvents").innerHTML=chosen.map(eventCard).join("")||empty("这一天还没有记录。","♡");document.getElementById("allEvents").innerHTML=[...db.events].sort((a,b)=>a.date.localeCompare(b.date)).map(eventCard).join("")||empty("添加一个值得记住的日子。","♡");const upcoming=[...db.events].sort((a,b)=>Math.abs(dateDiff(a.date))-Math.abs(dateDiff(b.date))).slice(0,3);document.getElementById("homeEvents").innerHTML=upcoming.map(eventCard).join("")||empty("还没有纪念日，添加一个重要的日期吧。","♡")}
+document.getElementById("prevMonth").onclick=()=>{calDate.setMonth(calDate.getMonth()-1);renderCalendar()};
+document.getElementById("nextMonth").onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCalendar()};
+document.getElementById("addEvent").onclick=()=>openModal("添加纪念日",`<div class="form-grid">${f("title","名称","")}${f("date","日期",dateOnly(new Date()),"date")}${sel("kind","类型",["纪念日","倒数日","生日","计划日"],"纪念日")}${ta("note","备注","")}</div>`,()=>{if(!val("title")||!val("date")){toast("请填写名称和日期");return false}db.events.push({id:uid(),title:val("title"),date:val("date"),kind:val("kind"),note:val("note")});selectedDate=val("date");calDate=new Date(val("date")+"T00:00:00");calDate.setDate(1);toast("日期已添加")});
+function renderCharacters(){renderNotes("characters","characterGrid","characterSearch","characterAu");const filter=document.getElementById("characterAu").value;if(filter){const list=db.characters.filter(x=>x.au===filter&&[x.title,x.name,x.au,x.content,x.role].join(" ").toLowerCase().includes((document.getElementById("characterSearch").value||"").toLowerCase()));document.getElementById("characterGrid").innerHTML=list.map(x=>noteCard(x,"characters")).join("")||empty("这个 AU 还没有角色档案。")}}
+function renderAll(){updateStats();renderAus();renderCalendar();renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory");renderPhotos("merch","merchGallery","merchSearch","merchStatus");renderNotes("settings","settingGrid","settingSearch","settingType");renderNotes("writing","writingGrid","writingSearch","writingType");renderCharacters();renderDivinations();renderGacha()}
+["auSearch","auStatus"].forEach(id=>document.getElementById(id).addEventListener("input",renderAus));
+["dreamSearch","dreamCategory"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderPhotos("dreams","dreamGallery","dreamSearch","dreamCategory")));
+["merchSearch","merchStatus"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderPhotos("merch","merchGallery","merchSearch","merchStatus")));
+["settingSearch","settingType"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderNotes("settings","settingGrid","settingSearch","settingType")));
+["writingSearch","writingType"].forEach(id=>document.getElementById(id).addEventListener("input",()=>renderNotes("writing","writingGrid","writingSearch","writingType")));
+["characterSearch","characterAu"].forEach(id=>document.getElementById(id).addEventListener("input",renderCharacters));
+document.getElementById("exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="🍎 🍏 -备份-"+dateOnly(new Date())+".json";a.click();URL.revokeObjectURL(url);toast("备份已导出")};
+document.getElementById("importBtn").onclick=()=>document.getElementById("importFile").click();
+document.getElementById("importFile").onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const incoming=JSON.parse(r.result);if(!incoming||!Array.isArray(incoming.aus))throw new Error();if(confirm("导入会覆盖当前档案。建议先导出备份，确定继续吗？")){db={...db,...incoming};for(const b of ["events","dreams","merch","settings","writing","characters","divinations","gacha"]){if(!Array.isArray(db[b]))db[b]=[]}persist();renderAll();applyAppearance();toast("备份已导入")}}catch(err){toast("文件格式不正确，无法导入")}e.target.value=""};r.readAsText(file)};
+
+
+/* === V3: Archive tabs and independent divination/gacha records === */
+function setArchiveTab(tab){
+ const chosen=tab==='characters'?'characters':'settings';
+ document.querySelectorAll('[data-archive-tab]').forEach(b=>{
+  const on=b.dataset.archiveTab===chosen;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on));
+ });
+ document.querySelectorAll('.archive-pane').forEach(p=>p.classList.toggle('active',p.id==='archive-'+chosen));
+}
+document.querySelectorAll('[data-archive-tab]').forEach(b=>b.addEventListener('click',()=>setArchiveTab(b.dataset.archiveTab)));
+// Image conversion uses the existing compressor, keeping file size manageable.
+function archiveImagePreview(image){return image?`<img class="record-preview" src="${image}" alt="已保存的图片预览">`:''}
+function archiveRecordCard(x,bucket){
+ const isD=bucket==='divinations';
+ const summary=isD?(x.question||x.interpretation||x.cards||x.note||'尚未填写解读'):(x.result||x.note||'尚未填写结果');
+ const details=isD?[x.date,x.type,x.spread,x.au].filter(Boolean).join(' · '):[x.date,x.pool,x.rarity,x.count?x.count+' 抽':''].filter(Boolean).join(' · ');
+ const icon=isD?'☽':'✧';
+ const img=x.image?`<img class="archive-record-photo" src="${x.image}" alt="${esc(x.title)} 的存档图片">`:`<div class="archive-record-photo archive-record-placeholder">${icon}</div>`;
+ return `<article class="archive-record">${img}<div class="archive-record-body"><h4>${esc(x.title||'未命名记录')}</h4><div class="au-meta">${esc(details)}</div><p>${esc(summary)}</p>${isD&&x.cards?`<div class="tag-row"><span class="tag">${esc(x.cards.slice(0,60))}</span></div>`:''}<div class="card-actions"><button class="btn soft" onclick="editSpecialRecord('${bucket}','${x.id}')">查看 / 编辑</button><button class="btn danger" onclick="deleteItem('${bucket}','${x.id}')">删除</button></div></div></article>`;
+}
+function renderDivinations(){
+ const q=(document.getElementById('divinationSearch').value||'').toLowerCase();
+ const type=document.getElementById('divinationType').value;
+ const list=db.divinations.filter(x=>(!type||x.type===type)&&[x.title,x.question,x.spread,x.cards,x.interpretation,x.note,x.au].join(' ').toLowerCase().includes(q));
+ document.getElementById('divinationGrid').innerHTML=list.map(x=>archiveRecordCard(x,'divinations')).join('')||empty('还没有梦占记录，添加一次牌阵或解读吧。','☽');
+ document.getElementById('divinationCount').textContent=`${list.length} 条记录`;
+}
+function renderGacha(){
+ const q=(document.getElementById('gachaSearch').value||'').toLowerCase();
+ const rarity=document.getElementById('gachaRarity').value;
+ const list=db.gacha.filter(x=>(!rarity||x.rarity===rarity)&&[x.title,x.pool,x.rarity,x.result,x.note].join(' ').toLowerCase().includes(q));
+ document.getElementById('gachaGrid').innerHTML=list.map(x=>archiveRecordCard(x,'gacha')).join('')||empty('还没有抽卡记录，可以先记下第一次出货。','✧');
+ document.getElementById('gachaCount').textContent=`${list.length} 条记录`;
+}
+function editSpecialRecord(bucket,id){
+ const isD=bucket==='divinations';
+ const item=db[bucket].find(x=>x.id===id)||{id:uid(),title:'',date:dateOnly(new Date()),image:''};
+ const title=isD?'梦占':'抽卡';
+ const body=isD?`<div class="form-grid">
+  ${f('spTitle','记录标题',item.title||'')}${f('spDate','日期',item.date||dateOnly(new Date()),'date')}
+  ${sel('spType','占卜类型',['塔罗','神谕卡','梦境占卜','其他'],item.type||'塔罗')}${f('spAu','关联 AU（可选）',item.au||'')}
+  ${f('spSpread','牌阵 / 抽牌方式',item.spread||'')}${ta('spQuestion','占卜问题',item.question||'')}
+  ${ta('spCards','牌面记录（牌名、正逆位、位置）',item.cards||'')}${ta('spInterpretation','解读与感想',item.interpretation||'')}
+  ${ta('spNote','后续验证 / 备注',item.note||'')}
+  ${imageField('spImage','牌阵照片 / 截图（可选）')}
+  <div class="field full" id="spPreview">${archiveImagePreview(item.image)}</div>
+ </div>`:`<div class="form-grid">
+  ${f('spTitle','卡片 / 记录名称',item.title||'')}${f('spDate','抽卡日期',item.date||dateOnly(new Date()),'date')}
+  ${f('spPool','卡池 / 活动名称',item.pool||'')}${sel('spRarity','稀有度 / 结果',['五星','四星','三星及以下','未出货','其他'],item.rarity||'五星')}
+  ${f('spCount','本次抽数',item.count||'','number','例如 70')}${ta('spResult','抽卡结果 / 出货内容',item.result||'')}
+  ${ta('spNote','备注 / 心情 / 保底情况',item.note||'')}
+  ${imageField('spImage','抽卡截图 / 卡面（可选）')}
+  <div class="field full" id="spPreview">${archiveImagePreview(item.image)}</div>
+ </div>`;
+ openModal((id?'编辑':'新建')+title+'存档',body,()=>{
+  if(!val('spTitle')){toast('请填写记录标题');return false}
+  const fields=isD?{
+   type:val('spType'),au:val('spAu'),spread:val('spSpread'),question:val('spQuestion'),
+   cards:val('spCards'),interpretation:val('spInterpretation'),note:val('spNote')
+  }:{pool:val('spPool'),rarity:val('spRarity'),count:val('spCount'),result:val('spResult'),note:val('spNote')};
+  const data={...item,...fields,title:val('spTitle'),date:val('spDate'),updated:new Date().toISOString()};
+  const file=document.getElementById('spImage').files[0];
+  const finish=(image)=>{
+   if(image)data.image=image;
+   const idx=db[bucket].findIndex(x=>x.id===item.id);
+   if(idx>=0)db[bucket][idx]=data;else db[bucket].unshift(data);
+   // Save atomically: if storage is full, restore the previous in-memory data.
+   try{persist();closeModal();renderAll();toast(title+'记录已保存')}
+   catch(e){if(idx>=0)db[bucket][idx]=item;else db[bucket]=db[bucket].filter(x=>x.id!==data.id);toast('存储空间不足，记录未保存。请备份并缩小图片。')}
+  };
+  if(file){compressAppearanceImage(file).then(finish).catch(e=>toast(e.message||'图片处理失败'));return false}
+  finish('');return false;
+ });
+}
+window.editSpecialRecord=editSpecialRecord;
+document.getElementById('addDivination').onclick=()=>editSpecialRecord('divinations');
+document.getElementById('addGacha').onclick=()=>editSpecialRecord('gacha');
+['divinationSearch','divinationType'].forEach(id=>document.getElementById(id).addEventListener('input',renderDivinations));
+['gachaSearch','gachaRarity'].forEach(id=>document.getElementById(id).addEventListener('input',renderGacha));
+
+/* === Appearance: all settings live inside db and are included in JSON backup === */
+const APPEARANCE_DEFAULTS={title:"昼起之时",subtitle:"两颗心相遇，于是爱在无限时空中蔓延。",button:"进入 ✧",intro:"",background:"",hero:"",homeCover:"",sections:{}};
+function getAppearance(){return {...APPEARANCE_DEFAULTS,...(db.appearance||{})}}
+function cssImage(src){return src?`url("${src}")`:'none'}
+function applyAppearance(){
+ const a=getAppearance();document.documentElement.style.setProperty('--custom-bg-image',cssImage(a.background));
+ document.documentElement.style.setProperty('--custom-hero-image',cssImage(a.hero));
+ document.documentElement.style.setProperty('--intro-image',a.intro?cssImage(a.intro):'linear-gradient(140deg,#2a1643,#78579c)');
+ document.getElementById('introTitle').textContent=a.title;document.getElementById('introSubtitle').textContent=a.subtitle;
+ document.getElementById('introEnter').textContent=a.button;document.title=a.title+' · AU Archive';
+ document.querySelector('.brand h1').textContent=a.title;
+ document.getElementById('appearanceTitle').value=a.title;document.getElementById('appearanceSubtitle').value=a.subtitle;
+ document.getElementById('appearanceButton').value=a.button;
+ document.getElementById('appearancePreview').textContent='🍎 🍏  '+a.title;
+ document.getElementById('v5HomeCover').style.backgroundImage=a.homeCover?`linear-gradient(180deg,#27183c44,#24133888),url(${JSON.stringify(a.homeCover)})`:'';
+ applyV5Sections(a);
+}
+function closeIntro(){document.getElementById('introScreen').classList.add('hidden')}
+function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden');
+ const photo=document.getElementById('introPhoto'),content=el.querySelector('.intro-content');
+ [photo,content].forEach(x=>{x.style.animation='none';void x.offsetWidth;x.style.animation=''});
+}
+document.getElementById('introEnter').onclick=closeIntro;
+
+document.getElementById('previewIntro').onclick=showIntro;
+const sparkles=document.getElementById('introSparkles');
+for(let i=0;i<24;i++){const dot=document.createElement('span');dot.style.left=((i*41+17)%97)+'%';dot.style.top=((i*37+9)%94)+'%';dot.style.animationDelay=-(i%7)*.7+'s';sparkles.appendChild(dot)}
+document.getElementById('saveAppearance').onclick=()=>{
+ db.appearance={...getAppearance(),title:document.getElementById('appearanceTitle').value.trim()||APPEARANCE_DEFAULTS.title,
+ subtitle:document.getElementById('appearanceSubtitle').value.trim(),button:document.getElementById('appearanceButton').value.trim()||APPEARANCE_DEFAULTS.button,sections:readV5Sections()};
+ persist();applyAppearance();toast('外观文字已保存');
+};
+async function compressAppearanceImage(file){
+ if(!file.type.startsWith('image/'))throw Error('请选择图片文件');
+ const url=URL.createObjectURL(file);try{
+ const img=new Image();await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url});
+ const canvas=document.createElement('canvas');const scale=Math.min(1,1600/Math.max(img.naturalWidth,img.naturalHeight));
+ canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+ canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+ return canvas.toDataURL('image/jpeg',.76);
+ }finally{URL.revokeObjectURL(url)}
+}
+function bindImageUpload(inputId,key){document.getElementById(inputId).addEventListener('change',async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{const data=await compressAppearanceImage(file);const old=getAppearance();db.appearance={...old,[key]:data};
+ try{persist()}catch(err){db.appearance=old;throw Error('存储空间不足，请备份并使用更小的照片')}
+ applyAppearance();toast('图片已更新并保存');}catch(err){toast(err.message||'图片处理失败')}finally{e.target.value=''}
+})}
+bindImageUpload('appearanceHomeFile','homeCover');bindImageUpload('appearanceIntroFile','intro');bindImageUpload('appearanceBgFile','background');bindImageUpload('appearanceHeroFile','hero');
+[['removeHomeImage','homeCover'],['removeIntroImage','intro'],['removeBgImage','background'],['removeHeroImage','hero']].forEach(([id,key])=>{
+ document.getElementById(id).onclick=()=>{db.appearance={...getAppearance(),[key]:''};persist();applyAppearance();toast('图片已移除')}
+});
+document.getElementById('resetAppearance').onclick=()=>{if(!confirm('恢复默认标题、文字和三张照片？其他档案不会删除。'))return;
+ db.appearance={...APPEARANCE_DEFAULTS};persist();applyAppearance();toast('外观已恢复默认')};
+
+
+/* V5 Phase 1: editable section headings and homepage */
+const V5_SECTION_DEFAULTS={
+ aus:['AU 索引','管理世界观、关系设定与创作进度。'],
+ calendar:['纪念日历','纪念日、生日、计划日与倒数日都可以放在这里。'],
+ dreams:['梦图分类','收纳梦图、约稿、截图与视觉灵感。'],
+ merch:['谷子收藏','记录实物收藏、购买状态、价格与入手日期。'],
+ settings:['储藏室','设定与角色资料统一收藏，原有内容全部保留。'],
+ writing:['文稿存档','存放正文、片段、提纲、废稿与尚未命名的句子。'],
+ divination:['梦占存档','收藏塔罗、牌阵、梦占问题、牌面与自己的解读。'],
+ gacha:['抽卡存档','记录卡池、抽数与每一次相遇。'],
+ appearance:['外观与开屏设置','自定义网站外观、首页封面与文字。']
+};
+function applyV5Sections(a){
+ const values=a.sections||{};
+ for(const [page,defaults] of Object.entries(V5_SECTION_DEFAULTS)){
+  const section=document.getElementById('page-'+page),heading=section?.querySelector('.section-head h3'),desc=section?.querySelector('.section-head p');
+  const custom=values[page]||{},title=custom.title||defaults[0],subtitle=custom.subtitle??defaults[1];
+  if(heading)heading.textContent=title;if(desc)desc.textContent=subtitle;
+  const nav=document.querySelector('#nav button[data-page="'+page+'"]');
+  if(nav){const icon=nav.querySelector('.nav-icon')?.outerHTML||'';nav.innerHTML=icon+esc(title);}
+  if(document.getElementById('page-'+page)?.classList.contains('active'))document.getElementById('pageTitle').textContent=title;
+ }
+ const fields=document.getElementById('v5SectionFields');if(!fields)return;
+ fields.innerHTML=Object.entries(V5_SECTION_DEFAULTS).map(([page,defaults])=>{
+ const item=values[page]||{};
+ return '<div class="field"><label>'+esc(defaults[0])+' · 标题</label><input data-v5-page="'+page+'" data-v5-field="title" value="'+esc(item.title||defaults[0])+'"></div>'+
+ '<div class="field"><label>'+esc(defaults[0])+' · 小字说明</label><input data-v5-page="'+page+'" data-v5-field="subtitle" value="'+esc(item.subtitle??defaults[1])+'"></div>';
+ }).join('');
+}
+function readV5Sections(){
+ const result={};document.querySelectorAll('[data-v5-page][data-v5-field]').forEach(input=>{
+ const key=input.dataset.v5Page;result[key]??={};result[key][input.dataset.v5Field]=input.value.trim();
+ });return result;
+}
+function renderV5Progress(){
+ const root=document.getElementById('v5Progress');if(!root||!db?.aus)return;
+ const completed=db.aus.filter(a=>a.status==='已完成').length,total=db.aus.length;
+ const pct=total?Math.round(completed/total*100):0;
+ root.innerHTML='<strong>✦ AU 创作进度</strong><div class="v5-progress-bar"><span style="width:'+pct+'%"></span></div><small>已完成 '+completed+' / '+total+' 个 AU · '+pct+'%</small>';
+}
+let v5SecretClicks=0,v5SecretTimer;
+document.getElementById('v5SecretHero').addEventListener('click',()=>{
+ v5SecretClicks++;clearTimeout(v5SecretTimer);
+ if(v5SecretClicks>=5){v5SecretClicks=0;toast('仅属于我们的秘密基地');}
+ else v5SecretTimer=setTimeout(()=>v5SecretClicks=0,1800);
+});
+
+/* === V4 Puter cloud sync (GitHub Pages + same Puter account on both devices) ===
+   GitHub stores ONLY this website source. Your records live in your Puter app drive.
+   Cloud storage is private per Puter account/app, but is NOT end-to-end encrypted.
+   Same GitHub Pages URL must be used on every device (Puter app origin identity).
+*/
+(function(){
+ const CLOUD_FILE='archive-v5-dev.json';
+ const status=document.getElementById('cloudStatus');
+ const login=document.getElementById('cloudLogin');
+ const sync=document.getElementById('cloudSync');
+ const reload=document.getElementById('cloudReload');
+ let connected=false, dirty=false, saving=false, lastCloudStamp='', timer=null, lastPull=0, syncError=false;
+ const setStatus=(message)=>{status.textContent='☁ '+message};
+ const exists=()=>typeof puter!=='undefined' && puter.auth && puter.fs;
+ const snapshot=()=>JSON.parse(JSON.stringify(db));
+ const isSeedOnly=()=> db.events.length===0 && db.dreams.length===0 && db.merch.length===0 && db.settings.length===0 && db.writing.length===0 && db.characters.length===0 && db.divinations.length===0 && db.gacha.length===0 && (!db.appearance || Object.values(db.appearance).every(x=>!x));
+ function saveLocal(){try{localStorage.setItem(STORE,JSON.stringify(db));updateStats()}catch(e){toast('本地空间不足，请导出备份')}}
+ function loadData(data){
+  if(!data||!Array.isArray(data.aus))throw Error('云端档案格式不正确');
+  db={...db,...data};
+  for(const key of ['events','dreams','merch','settings','writing','characters','divinations','gacha'])if(!Array.isArray(db[key]))db[key]=[];
+  saveLocal();renderAll();applyAppearance();
+ }
+ async function fetchCloud(){
+  try{const blob=await puter.fs.read(CLOUD_FILE);const data=JSON.parse(await blob.text());
+   if(!data || !data.data || !Array.isArray(data.data.aus))throw Error('云端数据格式错误');return data;
+  }catch(e){
+   const msg=String(e?.message||e).toLowerCase();
+   if(/not.found|does.not.exist|no.such.file|404|enoent|not_found/.test(msg))return null;
+   throw e;
+  }
+ }
+ async function push(force=false){
+  if(!connected||saving)return;
+  clearTimeout(timer);saving=true;setStatus('正在上传云端…');
+  try{
+   const remote=await fetchCloud();
+   if(!force && remote && lastCloudStamp && remote.updatedAt!==lastCloudStamp){
+    dirty=true;setStatus('发现其他设备的更新 · 请先解决冲突');
+    toast('云端已变化，请点击「立即同步」处理冲突');return;
+   }
+   if(!force && remote && !lastCloudStamp){dirty=true;setStatus('云端已有档案 · 请先选择读取或覆盖');return;}
+   const stamp=new Date().toISOString();
+   await puter.fs.write(CLOUD_FILE,JSON.stringify({version:1,updatedAt:stamp,data:snapshot()}));
+   lastCloudStamp=stamp;dirty=false;syncError=false;setStatus('已同步 · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}));
+  }catch(e){syncError=true;dirty=true;setStatus('同步失败 · 本机已保存，可重试');console.error('Puter sync error',e);toast('云端同步失败，请检查网络或 Puter 存储空间')}
+  finally{saving=false;}
+ }
+ async function pull({interactive=false}={}){
+  if(!connected||saving)return;
+  try{
+   const remote=await fetchCloud();lastPull=Date.now();
+   if(!remote){setStatus('云端暂无档案');return null;}
+   if(remote.updatedAt===lastCloudStamp){if(!dirty)setStatus('云端已是最新');return remote;}
+   if(dirty && !interactive){setStatus('本地和云端都有改动 · 需要手动处理');return remote;}
+   if(dirty && interactive && !confirm('本机有尚未上传的修改。读取云端会覆盖这些本机修改。建议先导出 JSON 备份。确定读取云端吗？'))return remote;
+   loadData(remote.data);lastCloudStamp=remote.updatedAt;dirty=false;syncError=false;
+   setStatus('已读取云端最新档案');if(interactive)toast('已从云端更新');return remote;
+  }catch(e){console.error('Puter load error',e);setStatus('读取云端失败 · 请检查网络');if(interactive)toast('读取失败，请稍后重试');return undefined;}
+ }
+ async function connect(){
+  if(!exists()){setStatus('Puter SDK 加载失败 · 请检查网络');return;}
+  try{
+   // User gesture is required for popup auth.
+   if(!puter.auth.isSignedIn())await puter.auth.signIn();
+   connected=true;login.textContent='已连接 Puter';sync.disabled=false;reload.disabled=false;
+   setStatus('已登录 · 正在检查云端…');
+   const remote=await fetchCloud();
+   if(!remote){
+    setStatus('云端暂无档案 · 本机内容尚未上传');
+    if(confirm('Puter 云端还没有档案。是否将当前本机档案作为第一份云端档案上传？')){dirty=true;await push(true)}
+   }else if(isSeedOnly()){
+    loadData(remote.data);lastCloudStamp=remote.updatedAt;dirty=false;setStatus('已读取云端档案');
+   }else{
+    const takeCloud=confirm('检测到云端已有档案，且当前浏览器也有本机内容。\n\n确定：读取云端（会替换本机内容）\n取消：保留本机，稍后手动选择同步。\n\n建议先导出本机 JSON 备份。');
+    if(takeCloud){loadData(remote.data);lastCloudStamp=remote.updatedAt;dirty=false;setStatus('已读取云端档案')}
+    else{lastCloudStamp='';dirty=true;setStatus('保留本机内容 · 尚未覆盖云端')}
+   }
+  }catch(e){console.error('Puter login error',e);setStatus('连接失败 · 请允许登录弹窗并重试');toast('Puter 登录失败或已取消')}
+ }
+ login.addEventListener('click',connect);
+ sync.addEventListener('click',async()=>{
+  if(!connected)return;
+  try{
+   const remote=await fetchCloud();
+   if(remote && remote.updatedAt!==lastCloudStamp){
+    if(!confirm('云端存在另一份更新。\n\n确定：将当前本机数据覆盖云端。\n取消：不覆盖，保留两边数据。\n\n建议先导出本机 JSON 备份。'))return;
+    await push(true);
+   }else await push(true);
+  }catch(e){setStatus('同步前检查失败 · 请重试');toast('云端读取失败，未覆盖任何数据')}
+ });
+ reload.addEventListener('click',()=>pull({interactive:true}));
+ window.archiveCloud={changed(){dirty=true;if(!connected){setStatus('本机已保存 · 连接 Puter 后可同步');return;}
+   setStatus('本机已保存 · 等待云端同步…');clearTimeout(timer);timer=setTimeout(()=>push(false),1700);
+ }};
+ // Check for remote edits after switching tabs/devices, without overwriting local drafts.
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden && connected && Date.now()-lastPull>15000 && !dirty)pull()});
+ window.addEventListener('focus',()=>{if(connected && Date.now()-lastPull>15000 && !dirty)pull()});
+ setInterval(()=>{if(connected && !dirty && !saving && Date.now()-lastPull>30000)pull()},30000);
+ if(location.protocol==='file:')setStatus('请先发布到 GitHub Pages：file:// 页面无法登录 Puter');
+})();
+
+renderAll();
+applyAppearance();
+</script>
+</body>
+</html>
