@@ -256,6 +256,15 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 #page-home .v5-home-links{margin-top:24px}
 #page-home .v5-progress{margin-top:24px}
 @media(max-width:600px){#page-home .v5-home-cover{min-height:260px}}
+
+.v5-secret-overlay{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;visibility:hidden;background:rgba(19,10,36,.68);backdrop-filter:blur(9px);transition:opacity .45s ease,visibility .45s ease}
+.v5-secret-overlay.visible{opacity:1;visibility:visible}
+.v5-secret-overlay.fade-out{opacity:0;transition:opacity 1.5s ease}
+.v5-secret-glow{position:absolute;width:min(80vw,700px);height:280px;border-radius:50%;background:radial-gradient(ellipse,#ae85dc4f,transparent 70%);filter:blur(22px)}
+.v5-secret-message{position:relative;max-width:94vw;padding:20px;text-align:center;color:#fff2ff;font-size:clamp(28px,6.3vw,72px);font-weight:700;letter-spacing:.09em;line-height:1.5;text-shadow:0 0 22px #d6a6ffb3,0 3px 24px #24113d;white-space:normal}
+.v5-secret-message:after{content:'▏';animation:v5SecretBlink .7s step-end infinite;color:#edccff}
+@keyframes v5SecretBlink{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.v5-secret-overlay,.v5-secret-overlay.fade-out{transition-duration:.2s}.v5-secret-message:after{animation:none}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -394,7 +403,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 </div>
 
 <div class="v5-music-player" id="v5MusicPlayer"><div class="v5-music-handle" id="v5MusicHandle" title="拖动位置">⠿</div><button class="v5-music-toggle" id="v5MusicToggle" aria-label="播放音乐">♫</button><div class="v5-music-details"><strong id="v5MusicLabel">未选择音乐</strong><small id="v5MusicState">点击播放 · 默认静音</small></div><button class="v5-music-volume" id="v5MusicPrev" aria-label="上一首">‹</button><button class="v5-music-volume" id="v5MusicNext" aria-label="下一首">›</button><button class="v5-music-volume" id="v5MusicExpand" aria-label="展开唱片机">⤢</button><button class="v5-music-volume" id="v5MusicMute" aria-label="切换静音">🔇</button><div class="v5-music-expanded" id="v5MusicExpanded"><div class="v5-record-scene"><div class="v5-record-disc" id="v5RecordDisc"><div class="v5-record-center" id="v5RecordCenter">🍎🍏</div></div><div class="v5-record-arm"></div></div><div class="v5-record-caption">✧ OUR LITTLE UNIVERSE ✧</div><div id="v5MusicTracks"></div></div><audio id="v5MusicAudio" preload="none"></audio></div><div class="modal-backdrop" id="modalBackdrop"><div class="modal"><div class="modal-head"><h3 id="modalTitle">编辑</h3><button class="x" id="closeModal">✕</button></div><div id="modalBody"></div><div class="modal-actions"><button class="btn" id="cancelModal">取消</button><button class="btn primary" id="saveModal">保存</button></div></div></div>
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast"></div><div class="v5-secret-overlay" id="v5SecretOverlay" aria-hidden="true"><div class="v5-secret-glow"></div><div class="v5-secret-message" id="v5SecretMessage"></div></div>
 <script>
 const initialAus = [
  {id:uid(),name:"古代皇室兄妹骨",pair:"皇帝哥 × 游侠妹",type:"古代权力 / 兄妹",status:"已完成",mark:"王权与自由",desc:"身处权力中心的皇帝，与行走江湖的游侠妹妹。",icon:"♛",tags:"皇室,江湖,兄妹"},
@@ -801,10 +810,26 @@ function renderV5Progress(){
  const pct=total?Math.round(completed/total*100):0;
  root.innerHTML='<strong>✦ AU 创作进度</strong><div class="v5-progress-bar"><span style="width:'+pct+'%"></span></div><small>已完成 '+completed+' / '+total+' 个 AU · '+pct+'%</small>';
 }
-let v5SecretClicks=0,v5SecretTimer;
+let v5SecretClicks=0,v5SecretTimer,v5SecretSequence=0;
+function v5ShowSecret(){
+ const overlay=document.getElementById('v5SecretOverlay'),message=document.getElementById('v5SecretMessage');
+ const phrase='仅属于我们的秘密基地',sequence=++v5SecretSequence;
+ overlay.classList.remove('fade-out');overlay.classList.add('visible');overlay.setAttribute('aria-hidden','false');
+ message.textContent='';
+ let index=0;
+ function typeNext(){
+  if(sequence!==v5SecretSequence)return;
+  if(index<phrase.length){message.textContent+=phrase[index++];setTimeout(typeNext,145);return}
+  setTimeout(()=>{if(sequence!==v5SecretSequence)return;overlay.classList.add('fade-out');
+   setTimeout(()=>{if(sequence!==v5SecretSequence)return;overlay.classList.remove('visible','fade-out');overlay.setAttribute('aria-hidden','true')},1500);
+  },1600);
+ }
+ setTimeout(typeNext,320);
+}
+
 document.getElementById('v5SecretHero').addEventListener('click',()=>{
  v5SecretClicks++;clearTimeout(v5SecretTimer);
- if(v5SecretClicks>=5){v5SecretClicks=0;toast('仅属于我们的秘密基地');}
+ if(v5SecretClicks>=5){v5SecretClicks=0;v5ShowSecret();}
  else v5SecretTimer=setTimeout(()=>v5SecretClicks=0,1800);
 });
 
