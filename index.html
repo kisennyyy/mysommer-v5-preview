@@ -306,7 +306,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 @keyframes v5BirdDissolve{0%,18%{opacity:1}100%{opacity:0;visibility:hidden}}
 .v5-flight{position:absolute;inset:0;z-index:9;pointer-events:none;overflow:hidden;opacity:0}
 .intro.bird-closing .v5-flight{opacity:1}
-.v5-flight svg{position:absolute;width:var(--size);height:var(--size);left:var(--left);top:var(--top);opacity:0;fill:#fffdfd;filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 8px #fff8ff) drop-shadow(0 0 12px #ffffffa0);will-change:transform,opacity}
+.v5-flight svg{position:absolute;width:var(--size);height:var(--size);left:var(--left);top:var(--top);opacity:0;fill:#fffdfd;filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 4px #fff8ff88);will-change:transform,opacity}
 .intro.bird-closing .v5-flight svg{animation:v5BirdFlight 1.34s cubic-bezier(.23,.52,.24,1) var(--delay) both}
 @keyframes v5BirdFlight{0%{opacity:0;transform:translate(-42px,25px) rotate(calc(var(--angle) - 13deg)) scale(.62)}24%{opacity:var(--alpha,.85)}72%{opacity:var(--alpha,.85)}100%{opacity:0;transform:translate(125px,-95px) rotate(calc(var(--angle) + 9deg)) scale(1.05)}}
 @media(prefers-reduced-motion:reduce){.intro.bird-closing{animation-duration:.2s!important}.intro.bird-closing .v5-flight svg{animation:none!important}}
@@ -758,46 +758,45 @@ document.getElementById('introEnter').onclick=closeIntro;
 
 document.getElementById('previewIntro').onclick=showIntro;
 // Luminous swallow-like birds arranged in three flowing, curved ribbons.
+// Small, graceful white swallows in two loose streams; avoid moth-like broad wings.
 const v5Flight=document.getElementById('v5Flight');
 const v5BirdNS='http://www.w3.org/2000/svg';
-for(let ribbon=0;ribbon<3;ribbon++){
- const count=[17,15,13][ribbon];
+for(let ribbon=0;ribbon<2;ribbon++){
+ const count=[10,9][ribbon];
  for(let i=0;i<count;i++){
-  const t=i/(count-1),seed=(i*37+ribbon*17)%23/23;
+  const t=i/(count-1),seed=((i*7+ribbon*3)%13)/13;
   const svg=document.createElementNS(v5BirdNS,'svg');
-  svg.setAttribute('viewBox','0 0 100 72');
-  const path=document.createElementNS(v5BirdNS,'path');
-  path.setAttribute('d','M49 35 C35 18 18 9 2 18 C17 21 22 31 28 37 C17 34 9 39 6 46 C25 40 37 48 47 53 L50 49 L53 54 C66 46 78 39 96 43 C90 35 81 32 70 36 C78 28 84 18 99 14 C79 10 61 20 51 35 L50 39 Z M47 49 Q40 62 29 69 Q44 65 51 56 Q59 66 73 68 Q61 60 54 48 Z');
-  svg.appendChild(path);
-  const x=5+t*86+(seed-.5)*15;
-  const wave=Math.sin(t*Math.PI*2+(ribbon*.9));
-  const y=[29,57,77][ribbon]+wave*10+(seed-.5)*17;
-  svg.style.setProperty('--left',x+'%');svg.style.setProperty('--top',y+'%');
-  svg.style.setProperty('--size',(22+seed*30+(ribbon===1?7:0))+'px');
-  svg.style.setProperty('--delay',(t*.24+ribbon*.065)+'s');
-  svg.style.setProperty('--alpha',(.7+seed*.28).toFixed(2));
-  svg.style.setProperty('--angle',(wave*15-5)+'deg');
+  svg.setAttribute('viewBox','0 0 120 65');
+  const wing=document.createElementNS(v5BirdNS,'path');
+  wing.setAttribute('d','M59 39 Q42 23 7 18 Q30 12 55 32 Q60 35 63 33 Q89 12 115 17 Q91 24 68 42 L63 43 L59 39 Z M60 40 L53 60 L63 49 L76 61 L68 39 Z');
+  svg.appendChild(wing);
+  const wave=Math.sin(t*Math.PI*1.7+ribbon*.8);
+  svg.style.setProperty('--left',(8+t*80+(seed-.5)*9)+'%');
+  svg.style.setProperty('--top',([35,66][ribbon]+wave*9+(seed-.5)*10)+'%');
+  svg.style.setProperty('--size',(18+seed*19)+'px');
+  svg.style.setProperty('--delay',(t*.19+ribbon*.08)+'s');
+  svg.style.setProperty('--alpha',(.48+seed*.23).toFixed(2));
+  svg.style.setProperty('--angle',(wave*11-4)+'deg');
   v5Flight.appendChild(svg);
  }
 }
-// A few soft white feathers drift between the birds.
-for(let i=0;i<7;i++){
- const seed=(i*11%17)/17;
+// A few delicate, slim white feathers among the birds.
+for(let i=0;i<4;i++){
  const feather=document.createElementNS(v5BirdNS,'svg');
- feather.setAttribute('viewBox','0 0 40 76');
- const body=document.createElementNS(v5BirdNS,'path');
- body.setAttribute('d','M19 3 C2 14 3 37 18 70 C35 47 39 20 19 3 Z');
- feather.appendChild(body);
+ feather.setAttribute('viewBox','0 0 30 76');
+ const shape=document.createElementNS(v5BirdNS,'path');
+ shape.setAttribute('d','M15 4 Q2 18 11 53 L15 67 Q27 40 25 21 Q24 10 15 4 Z');
+ feather.appendChild(shape);
  const quill=document.createElementNS(v5BirdNS,'path');
- quill.setAttribute('d','M18 69 Q19 34 28 17');
- quill.setAttribute('fill','none');quill.setAttribute('stroke','#d9c7e9');quill.setAttribute('stroke-width','1.2');
+ quill.setAttribute('d','M15 69 Q14 37 21 15');
+ quill.setAttribute('fill','none');quill.setAttribute('stroke','#d4c3e1');quill.setAttribute('stroke-width','1');
  feather.appendChild(quill);
- feather.style.setProperty('--left',(10+i*12+seed*5)+'%');
- feather.style.setProperty('--top',(23+(i*19)%61)+'%');
- feather.style.setProperty('--size',(17+seed*17)+'px');
- feather.style.setProperty('--delay',(.12+i*.035)+'s');
- feather.style.setProperty('--alpha',(.55+seed*.23).toFixed(2));
- feather.style.setProperty('--angle',(-18+i*9)+'deg');
+ feather.style.setProperty('--left',(18+i*21)+'%');
+ feather.style.setProperty('--top',(25+(i*19)%52)+'%');
+ feather.style.setProperty('--size',(14+i*2)+'px');
+ feather.style.setProperty('--delay',(.1+i*.06)+'s');
+ feather.style.setProperty('--alpha','.55');
+ feather.style.setProperty('--angle',(-10+i*7)+'deg');
  v5Flight.appendChild(feather);
 }
 // A handful of very small, faint galaxy-like points; no dense silver particles.
