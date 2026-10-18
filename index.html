@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#6e4aa1">
-<title>夏以昼x锺起</title>
+<title>🍎🍏</title>
 <style>
 :root{
   --bg:#f7f3fb;--paper:#fffdfd;--panel:#f0e8f8;--panel2:#e8dcf3;
@@ -414,6 +414,29 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 #page-home .room-drawer .v5-home-links{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 #page-home .room-drawer .v5-home-links button{font-size:12px}
 @media(max-width:700px){#page-home .dream-room{padding:25px 12px 26px}#page-home .radio-machine{padding:11px 12px 9px}#page-home .room-sub{font-size:10px;letter-spacing:.08em}}
+
+/* V5.1 radio-led archive entrance: visual only, no storage or cloud migration. */
+#page-home .room-scene{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,480px) minmax(0,1fr);align-items:center;gap:18px;width:100%;max-width:980px;margin:auto}
+#page-home .room-memories{display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;min-width:0}
+#page-home .room-memories span{display:block;width:95%;min-height:78px;padding:18px 8px;border:5px solid #f8f2eb;background:linear-gradient(145deg,#a7a4b7,#77718e 48%,#d8c8dc);box-shadow:2px 9px 19px #3f2c5440;transform:rotate(-6deg);font:700 10px/1.7 Georgia,serif;letter-spacing:.1em;text-align:center;color:#fff6ee;text-shadow:0 1px 5px #38274a}
+#page-home .room-memories span:last-child{transform:rotate(5deg);background:linear-gradient(125deg,#6c658c,#a4a0b5 60%,#cfb6d1)}
+#page-home .room-memories-right span{transform:rotate(6deg)}
+#page-home .room-memories-right span:last-child{transform:rotate(-5deg)}
+#page-home .room-memories i{font-size:28px;font-style:normal;color:#f9f3ff;text-shadow:0 0 12px #fff}
+#page-home .radio-area{width:100%;max-width:480px;grid-column:auto}
+#page-home .radio-machine{cursor:pointer;transition:transform .3s ease,filter .3s ease;filter:drop-shadow(0 13px 15px #33273b44)}
+#page-home .radio-machine:hover{transform:translateY(-4px) rotate(-.5deg);filter:drop-shadow(0 17px 19px #33273b66)}
+#page-home .radio-machine[aria-expanded="true"]{filter:drop-shadow(0 12px 25px #bd96ffb3)}
+#page-home .radio-machine[aria-expanded="true"] .radio-led{box-shadow:0 0 14px 5px #b4ffad;background:#a4ff9c}
+#page-home .room-drawer[hidden]{display:none!important}
+#page-home .room-drawer{animation:radioOpen .4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes radioOpen{from{opacity:0;transform:translateY(-12px) scale(.98)}to{opacity:1;transform:none}}
+#page-home .dream-room .v5-home-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px}
+#page-home .room-calendar{margin-top:14px}
+.shell:has(#page-home.active) .sidebar .nav button:not([data-page="home"]){display:none}
+@media(max-width:760px){#page-home .room-scene{grid-template-columns:1fr 1fr;gap:12px}#page-home .radio-area{grid-column:1/-1;grid-row:1;max-width:460px}#page-home .room-memories{grid-row:2;gap:8px}#page-home .room-memories span{min-height:46px;padding:9px 5px;font-size:8px;border-width:3px}#page-home .room-memories i{display:none}}
+@media(prefers-reduced-motion:reduce){#page-home .room-drawer{animation:none}#page-home .radio-machine{transition:none}}
+
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -453,14 +476,15 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
   <div class="dream-room">
     <p class="room-sub">✧ TUNE INTO OUR LITTLE UNIVERSE ✧</p>
     <div class="room-scene">
-      <div class="radio-area"><div class="radio-antenna"></div><button class="radio-machine" id="roomRadio" type="button" aria-expanded="false" aria-controls="roomDrawer" aria-label="点击收音机打开宇宙档案菜单"><div class="radio-top"></div><div class="radio-controls"><b></b><span>STEREO CASSETTE · FM 88.8</span><b></b></div><div class="radio-bottom"><div class="radio-speaker"></div><div class="radio-tape"><div class="tape-window"><i></i><i></i></div><div class="tape-label">SIDE A · OUR UNIVERSE</div></div><div class="radio-speaker"></div></div><div class="radio-keys"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="radio-led"></div></button><p class="radio-caption">✧ TOUCH TO OPEN THE UNIVERSE ✧</p></div>
+      <div class="room-memories room-memories-left" aria-hidden="true"><span>✦ OUR STORIES</span><i>✧</i><span>THE OTHER SIDE OF TIME</span></div>
+      <div class="radio-area"><div class="radio-antenna"></div><button class="radio-machine" id="roomRadio" type="button" aria-expanded="false" aria-controls="roomDrawer" aria-label="点击收音机打开宇宙档案菜单"><div class="radio-top"></div><div class="radio-controls"><b></b><span>STEREO CASSETTE · FM 07.09</span><b></b></div><div class="radio-bottom"><div class="radio-speaker"></div><div class="radio-tape"><div class="tape-window"><i></i><i></i></div><div class="tape-label">SIDE A · OUR UNIVERSE</div></div><div class="radio-speaker"></div></div><div class="radio-keys"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="radio-led"></div></button><p class="radio-caption">✧ TOUCH TO OPEN THE UNIVERSE ✧</p></div>
+      <div class="room-memories room-memories-right" aria-hidden="true"><span>♡ SUMMER LETTERS</span><i>☾</i><span>MEMORIES ON AIR</span></div>
     </div>
     <button class="room-calendar" type="button" data-goto="calendar" aria-label="打开纪念日历"><strong id="roomMonth">OCTOBER 2026</strong><em id="roomDay">18</em><span>♡ 翻开我们的纪念日</span></button>
     <div class="room-drawer" id="roomDrawer" hidden><button class="room-close" id="roomClose" type="button" aria-label="关闭菜单">×</button><h3>✦ 宇宙档案室</h3><p>旋转频率，找到属于我们的故事。</p>
       <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙</button><button data-goto="settings">❖ 档案室</button><button data-goto="dreams">☾ 梦图收藏</button><button data-goto="writing">✎ 文稿</button><button data-goto="letters">✉ 书信</button><button data-goto="divination">☽ 梦占</button><button data-goto="gacha">✧ 抽卡</button><button data-goto="calendar">♡ 日历</button><button data-goto="merch">✧ 谷子</button><button data-goto="appearance">✿ 外观设置</button></div>
     </div>
   </div>
-    <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙 <span>↗</span></button><button data-goto="settings">❖ 档案室 <span>↗</span></button><button data-goto="dreams">☾ 梦图收藏 <span>↗</span></button><button data-goto="writing">✎ 文稿 <span>↗</span></button><button data-goto="letters">✉ 书信 <span>↗</span></button><button data-goto="divination">☽ 梦占 <span>↗</span></button><button data-goto="gacha">✧ 抽卡 <span>↗</span></button><button data-goto="calendar">♡ 日历 <span>↗</span></button><button data-goto="merch">✧ 谷子 <span>↗</span></button></div>
     <div class="v5-progress" id="v5Progress"></div>
     <!-- Legacy render targets retained for compatibility; the V5 homepage stays static. -->
     <div class="v5-home-legacy" hidden aria-hidden="true">
