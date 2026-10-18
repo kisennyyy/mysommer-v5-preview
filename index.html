@@ -283,6 +283,18 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 .intro:after{background:radial-gradient(ellipse at 70% 65%,#e7cbb637,transparent 55%)}
 .intro-sparkles{display:none!important}
 .intro-apples{filter:drop-shadow(0 0 10px #e8d5c26b)}
+
+/* V5 splash: soft editorial lavender haze, no scattered silver/purple dots. */
+.intro{background:#251b35}
+.intro-photo{background-image:linear-gradient(180deg,rgba(34,22,47,.42),rgba(54,37,72,.19) 42%,rgba(28,18,43,.66)),var(--intro-image,linear-gradient(145deg,#342543 0%,#7f6a93 53%,#3c2c51 100%))}
+.intro:before,.intro:after{inset:-25%;border-radius:45%;filter:blur(95px);opacity:.65}
+.intro:before{background:radial-gradient(ellipse at 26% 60%,rgba(225,195,224,.25),transparent 57%);animation:mistDrift 16s ease-in-out infinite alternate}
+.intro:after{background:radial-gradient(ellipse at 75% 35%,rgba(191,169,213,.23),transparent 58%);animation:mistDrift 22s ease-in-out infinite alternate-reverse}
+.intro-sparkles,.intro-sparkles span{display:none!important}
+.intro-content{position:relative;text-shadow:0 3px 28px rgba(26,15,38,.48)}
+.intro-enter{background:rgba(255,244,255,.12);border-color:rgba(255,241,255,.54)}
+/* Three deliberate sizes: orb → bar → record player → orb. */
+.v5-music-player.compact{width:54px!important}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -696,8 +708,7 @@ function showIntro(){const el=document.getElementById('introScreen');el.classLis
 document.getElementById('introEnter').onclick=closeIntro;
 
 document.getElementById('previewIntro').onclick=showIntro;
-const sparkles=document.getElementById('introSparkles');
-for(let i=0;i<24;i++){const dot=document.createElement('span');dot.style.left=((i*41+17)%97)+'%';dot.style.top=((i*37+9)%94)+'%';dot.style.animationDelay=-(i%7)*.7+'s';sparkles.appendChild(dot)}
+// The splash uses soft light and mist instead of silver/purple dotted sparkles.
 document.getElementById('saveAppearance').onclick=()=>{
  db.appearance={...getAppearance(),title:document.getElementById('appearanceTitle').value.trim()||APPEARANCE_DEFAULTS.title,
  subtitle:document.getElementById('appearanceSubtitle').value.trim(),button:document.getElementById('appearanceButton').value.trim()||APPEARANCE_DEFAULTS.button,sections:readV5Sections(),navOrder:[...document.querySelectorAll("#nav button[data-page]")].map(b=>b.dataset.page)};
