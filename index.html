@@ -223,6 +223,11 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 
 .v5-nav-order-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
 .v5-nav-order-row span{flex:1;min-width:0;font-size:13px}.v5-nav-order-row button{min-width:40px}
+
+#page-home{position:relative}.v5-home-decor{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden}
+.v5-home-decor img{position:absolute;top:110px;width:clamp(68px,12vw,160px);height:auto;max-height:240px;object-fit:contain;opacity:.9;filter:drop-shadow(0 5px 14px #3b205344)}
+.v5-decor-left{left:0;transform:translateX(-16%)}.v5-decor-right{right:0;transform:translateX(16%)}
+@media(max-width:600px){.v5-home-decor img{width:72px;top:80px;opacity:.75}.v5-decor-left{transform:translateX(-25%)}.v5-decor-right{transform:translateX(25%)}}
 </style>
 <script src="https://js.puter.com/v2/"></script>
 </head>
@@ -257,7 +262,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 
   <div class="cloud-bar" aria-live="polite"><span class="cloud-status" id="cloudStatus">☁ 未连接 Puter · 当前仅保存在本机</span><button class="btn primary" id="cloudLogin">连接 Puter</button><button class="btn" id="cloudSync" disabled>立即同步</button><button class="btn" id="cloudReload" disabled>从云端读取</button></div>
   <section class="page active" id="page-home">
-    <div class="v5-home-cover" id="v5HomeCover"><div class="v5-cover-hint">✦ OUR LITTLE UNIVERSE · 🍎 🍏</div></div>
+    <div class="v5-home-decor" id="v5HomeDecor" aria-hidden="true"></div><div class="v5-home-cover" id="v5HomeCover"><div class="v5-cover-hint">✦ OUR LITTLE UNIVERSE · 🍎 🍏</div></div>
     <div class="hero" id="v5SecretHero" title="我们的秘密基地"><div class="hero-copy"><div class="eyebrow">A LITTLE UNIVERSE OF OUR OWN</div><h3>把我们的<br>共同经历好好收藏。</h3><p>就好像我们的秘密基地一样，收藏和存档着一切。</p></div><div class="hero-symbol">☾✧</div></div>
     <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙 <span>↗</span></button><button data-goto="settings">❖ 档案室 <span>↗</span></button><button data-goto="dreams">☾ 梦图收藏 <span>↗</span></button><button data-goto="writing">✎ 文稿 <span>↗</span></button><button data-goto="letters">✉ 书信 <span>↗</span></button><button data-goto="divination">☽ 梦占 <span>↗</span></button><button data-goto="gacha">✧ 抽卡 <span>↗</span></button><button data-goto="calendar">♡ 日历 <span>↗</span></button><button data-goto="merch">✧ 谷子 <span>↗</span></button></div>
     <div class="v5-progress" id="v5Progress"></div>
@@ -346,7 +351,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
         <div class="field"><label>网站背景照片</label><input id="appearanceBgFile" type="file" accept="image/*"><button class="btn" id="removeBgImage">移除背景照片</button></div>
         <div class="field"><label>首页横幅封面</label><input id="appearanceHeroFile" type="file" accept="image/*"><button class="btn" id="removeHeroImage">移除封面照片</button></div>
       </div>
-      <div class="v5-section-editor"><h3>☾ 导航顺序</h3><p>点击上下箭头调整侧边栏顺序，保存后下次打开仍会保留。</p><div id="v5NavOrder"></div></div><div class="v5-section-editor"><h3>✧ 页面标题与说明</h3><p>修改每个分区的标题和小字说明，不影响原始档案。</p><div id="v5SectionFields" class="appearance-grid"></div></div>
+      <div class="v5-section-editor"><h3>✦ 首页装饰贴图</h3><p>可上传两张装饰图片，分别放在首页左右两侧。透明背景 PNG 更适合做贴纸。</p><div class="appearance-grid"><div class="field"><label>左侧装饰</label><input id="v5DecorLeftFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorLeftRemove">移除左侧装饰</button></div><div class="field"><label>右侧装饰</label><input id="v5DecorRightFile" type="file" accept="image/*"><button class="btn soft" id="v5DecorRightRemove">移除右侧装饰</button></div></div></div><div class="v5-section-editor"><h3>☾ 导航顺序</h3><p>点击上下箭头调整侧边栏顺序，保存后下次打开仍会保留。</p><div id="v5NavOrder"></div></div><div class="v5-section-editor"><h3>✧ 页面标题与说明</h3><p>修改每个分区的标题和小字说明，不影响原始档案。</p><div id="v5SectionFields" class="appearance-grid"></div></div>
       <div class="appearance-actions"><button class="btn primary" id="saveAppearance">保存文字设置</button><button class="btn danger" id="resetAppearance">恢复默认外观</button></div>
       <p style="color:var(--muted);font-size:11px">图片上传后自动压缩以节省空间。建议定期导出 JSON 备份，清理浏览器数据会删除本地记录。部分手机浏览器以 file:// 打开时可能不支持持久存储。</p>
     </div>
@@ -568,7 +573,7 @@ function applyAppearance(){
  document.getElementById('appearanceButton').value=a.button;
  document.getElementById('appearancePreview').textContent='🍎 🍏  '+a.title;
  document.getElementById('v5HomeCover').style.backgroundImage=a.homeCover?`linear-gradient(180deg,#27183c44,#24133888),url(${JSON.stringify(a.homeCover)})`:'';
- applyV5Sections(a);applyV5NavOrder(a);
+ applyV5Sections(a);applyV5NavOrder(a);renderV5HomeDecor(a);
 }
 function closeIntro(){document.getElementById('introScreen').classList.add('hidden')}
 function showIntro(){const el=document.getElementById('introScreen');el.classList.remove('hidden');
@@ -601,6 +606,40 @@ function bindImageUpload(inputId,key){document.getElementById(inputId).addEventL
  try{persist()}catch(err){db.appearance=old;throw Error('存储空间不足，请备份并使用更小的照片')}
  applyAppearance();toast('图片已更新并保存');}catch(err){toast(err.message||'图片处理失败')}finally{e.target.value=''}
 })}
+function renderV5HomeDecor(a){
+ const el=document.getElementById('v5HomeDecor');if(!el)return;
+ el.innerHTML=['left','right'].filter(side=>a.decorations?.[side]).map(side=>{
+ const img=document.createElement('img');img.src=a.decorations[side];img.alt='';img.className='v5-decor-'+side;return img.outerHTML;
+ }).join('');
+}
+function bindV5Decor(side,inputId,removeId){
+ const input=document.getElementById(inputId);
+ input.addEventListener('change',async e=>{
+ const file=e.target.files?.[0];if(!file)return;
+ try{
+  const data=await compressV5Decor(file),old=getAppearance();
+  db.appearance={...old,decorations:{...(old.decorations||{}),[side]:data}};
+  persist();applyAppearance();toast('装饰图片已保存');
+ }catch(err){toast(err.message||'装饰上传失败')}finally{input.value=''}
+ });
+ document.getElementById(removeId).onclick=()=>{
+  const a=getAppearance();db.appearance={...a,decorations:{...(a.decorations||{}),[side]:''}};
+  persist();applyAppearance();toast('装饰已移除');
+ };
+}
+async function compressV5Decor(file){
+ if(!file.type.startsWith('image/'))throw Error('请选择图片');
+ const url=URL.createObjectURL(file);
+ try{
+  const img=new Image();await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;img.src=url});
+  const canvas=document.createElement('canvas'),scale=Math.min(1,480/Math.max(img.naturalWidth,img.naturalHeight));
+  canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+  canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+  return canvas.toDataURL('image/png');
+ }finally{URL.revokeObjectURL(url)}
+}
+bindV5Decor('left','v5DecorLeftFile','v5DecorLeftRemove');
+bindV5Decor('right','v5DecorRightFile','v5DecorRightRemove');
 bindImageUpload('appearanceHomeFile','homeCover');bindImageUpload('appearanceIntroFile','intro');bindImageUpload('appearanceBgFile','background');bindImageUpload('appearanceHeroFile','hero');
 [['removeHomeImage','homeCover'],['removeIntroImage','intro'],['removeBgImage','background'],['removeHeroImage','hero']].forEach(([id,key])=>{
  document.getElementById(id).onclick=()=>{db.appearance={...getAppearance(),[key]:''};persist();applyAppearance();toast('图片已移除')}
