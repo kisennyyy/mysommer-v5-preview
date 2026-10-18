@@ -288,7 +288,7 @@ body{background-image:linear-gradient(#f7f3fbe6,#f7f3fbe6),var(--custom-bg-image
 <main>
   <header class="topbar"><div><div class="eyebrow">PERSONAL ARCHIVE · 2026</div><h2 id="pageTitle">欢迎回来</h2></div><div class="top-actions"><button class="btn" id="exportBtn">导出备份</button><button class="btn" id="importBtn">导入备份</button><input type="file" id="importFile" accept=".json,application/json" hidden></div></header>
 
-  <div class="cloud-bar" aria-live="polite"><span class="cloud-status" id="cloudStatus">☁ 未连接 Puter · 当前仅保存在本机</span><button class="btn primary" id="cloudLogin">连接 Puter</button><button class="btn" id="cloudSync" disabled>立即同步</button><button class="btn" id="cloudReload" disabled>从云端读取</button></div>
+  <div class="cloud-bar" aria-live="polite"><span class="cloud-status" id="cloudStatus">☁ 未连接 Puter · 当前仅保存在本机</span><button class="btn primary" id="cloudLogin">连接 Puter</button><button class="btn" id="cloudSync" disabled>立即同步</button><button class="btn" id="cloudReload" disabled>从云端读取</button><button class="btn" id="cloudBackup" disabled>下载云端备份</button></div>
   <section class="page active" id="page-home">
     <div class="v5-home-decor" id="v5HomeDecor" aria-hidden="true"></div><div class="v5-home-cover" id="v5HomeCover"><div class="v5-cover-hint">✦ OUR LITTLE UNIVERSE · 🍎 🍏</div></div>
     <div class="hero" id="v5SecretHero" title="我们的秘密基地"><div class="hero-copy"><div class="eyebrow">A LITTLE UNIVERSE OF OUR OWN</div><h3>把我们的<br>共同经历好好收藏。</h3><p>就好像我们的秘密基地一样，收藏和存档着一切。</p></div><div class="hero-symbol">☾✧</div></div>
@@ -1130,16 +1130,19 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
  const login=document.getElementById('cloudLogin');
  const sync=document.getElementById('cloudSync');
  const reload=document.getElementById('cloudReload');
+ const backup=document.getElementById('cloudBackup');
  let connected=false, dirty=false, saving=false, lastCloudStamp='', timer=null, lastPull=0, syncError=false, editRevision=0;
  const setStatus=(message)=>{status.textContent='☁ '+message};
  const exists=()=>typeof puter!=='undefined' && puter.auth && puter.fs;
  const snapshot=()=>JSON.parse(JSON.stringify(db));
  const isSeedOnly=()=> db.events.length===0 && db.dreams.length===0 && db.merch.length===0 && db.settings.length===0 && db.writing.length===0 && db.characters.length===0 && db.divinations.length===0 && db.gacha.length===0 && (!db.appearance || Object.values(db.appearance).every(x=>!x));
  function saveLocal(){try{localStorage.setItem(STORE,JSON.stringify(db));updateStats()}catch(e){toast('本地空间不足，请导出备份')}}
+ function downloadBackup(data,name){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)}
+ function localBackup(){downloadBackup(snapshot(),'v5-local-before-cloud-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json')}
  function loadData(data){
   if(!data||!Array.isArray(data.aus))throw Error('云端档案格式不正确');
   db={...db,...data};
-  for(const key of ['events','dreams','merch','settings','writing','characters','divinations','gacha'])if(!Array.isArray(db[key]))db[key]=[];
+  for(const key of ['events','dreams','merch','settings','writing','characters','divinations','gacha','letters'])if(!Array.isArray(db[key]))db[key]=[];
   saveLocal();renderAll();applyAppearance();
  }
  async function fetchCloud(){
@@ -1158,7 +1161,7 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
    const remote=await fetchCloud();
    if(remote && lastCloudStamp && remote.updatedAt!==lastCloudStamp){
     dirty=true;setStatus('发现其他设备的更新 · 请先解决冲突');
-    toast('云端已变化，请点击「立即同步」处理冲突');return;
+    toast('云端已变化，已暂停上传。请先下载云端备份');return;
    }
    if(remote && !lastCloudStamp){dirty=true;setStatus('云端已有档案 · 请先选择读取或覆盖');return;}
    const stamp=new Date().toISOString();
@@ -1177,6 +1180,7 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
    if(remote.updatedAt===lastCloudStamp){if(!dirty)setStatus('云端已是最新');return remote;}
    if(dirty && !interactive){setStatus('本地和云端都有改动 · 需要手动处理');return remote;}
    if(dirty && interactive){setStatus('本机有未同步的修改 · 已阻止覆盖，请先导出两份备份');toast('为防止丢失数据，不能直接覆盖未同步的本机档案');return remote;}
+   if(interactive)localBackup();
    loadData(remote.data);lastCloudStamp=remote.updatedAt;dirty=false;syncError=false;
    setStatus('已读取云端最新档案');if(interactive)toast('已从云端更新');return remote;
   }catch(e){console.error('Puter load error',e);setStatus('读取云端失败 · 请检查网络');if(interactive)toast('读取失败，请稍后重试');return undefined;}
@@ -1186,14 +1190,14 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
   try{
    // User gesture is required for popup auth.
    if(!puter.auth.isSignedIn())await puter.auth.signIn();
-   connected=true;login.textContent='已连接 Puter';sync.disabled=false;reload.disabled=false;
+   connected=true;login.textContent='已连接 Puter';sync.disabled=false;reload.disabled=false;backup.disabled=false;
    setStatus('已登录 · 正在检查云端…');
    const remote=await fetchCloud();
    if(!remote){
     setStatus('云端暂无档案 · 本机内容尚未上传');
     if(confirm('Puter 云端还没有档案。是否将当前本机档案作为第一份云端档案上传？')){dirty=true;await push(true)}
    }else if(isSeedOnly()){
-    loadData(remote.data);lastCloudStamp=remote.updatedAt;dirty=false;setStatus('已读取云端档案');
+    localBackup();loadData(remote.data);lastCloudStamp=remote.updatedAt;dirty=false;setStatus('已读取云端档案');
    }else{
     lastCloudStamp='';dirty=true;setStatus('本机与云端都有档案 · 已暂停同步，避免覆盖');toast('请先导出本机备份，再决定如何合并档案');
    }
@@ -1212,6 +1216,12 @@ document.getElementById('v5LetterGrid').addEventListener('click',e=>{const b=e.t
   }catch(e){setStatus('同步前检查失败 · 请重试');toast('云端读取失败，未覆盖任何数据')}
  });
  reload.addEventListener('click',()=>pull({interactive:true}));
+ backup.addEventListener('click',async()=>{
+  if(!connected)return;
+  try{const remote=await fetchCloud();if(!remote){toast('云端暂无备份');return}
+   downloadBackup(remote.data,'v5-cloud-backup-'+String(remote.updatedAt||new Date().toISOString()).replace(/[:.]/g,'-')+'.json');toast('云端备份已下载，本机内容未修改')
+  }catch(e){console.error('Cloud backup failed',e);toast('云端备份下载失败，请检查网络')}
+ });
  window.archiveCloud={changed(){editRevision++;dirty=true;if(!connected){setStatus('本机已保存 · 连接 Puter 后可同步');return;}
    setStatus('本机已保存 · 等待云端同步…');clearTimeout(timer);timer=setTimeout(()=>push(false),1700);
  }};
