@@ -757,29 +757,33 @@ function showIntro(){
 document.getElementById('introEnter').onclick=closeIntro;
 
 document.getElementById('previewIntro').onclick=showIntro;
-// Glowing origami cranes: angular folded-paper wings, diamond body and fine fold lines.
+// Side-profile origami cranes: unmistakable pointed beak, long folded neck, raised wings, diamond body and tail.
 const v5Flight=document.getElementById('v5Flight');
 const v5BirdNS='http://www.w3.org/2000/svg';
 for(let ribbon=0;ribbon<2;ribbon++){
- const count=[9,8][ribbon];
+ const count=[7,6][ribbon];
  for(let i=0;i<count;i++){
   const t=i/(count-1),seed=((i*7+ribbon*3)%13)/13;
   const svg=document.createElementNS(v5BirdNS,'svg');
-  svg.setAttribute('viewBox','0 0 120 90');
-  const paper=document.createElementNS(v5BirdNS,'path');
-  paper.setAttribute('d','M58 46 L9 8 L32 54 L53 59 L59 70 L66 59 L89 52 L116 8 L70 45 L64 33 L59 13 L54 34 Z M59 70 L53 59 L35 74 L56 64 L59 82 L63 64 L87 74 L66 59 Z');
-  svg.appendChild(paper);
-  const folds=document.createElementNS(v5BirdNS,'path');
-  folds.setAttribute('d','M9 8 L58 46 L32 54 M116 8 L66 47 L89 52 M54 34 L59 70 L64 33 M53 59 L66 59');
-  folds.setAttribute('fill','none');folds.setAttribute('stroke','#d7c9e6');folds.setAttribute('stroke-width','1.6');folds.setAttribute('stroke-linecap','round');
-  svg.appendChild(folds);
+  svg.setAttribute('viewBox','0 0 150 110');
+  // Paper facets make the object readable as an origami crane, not a generic bird silhouette.
+  const facets=[
+   ['M58 68 L18 23 L42 73 L69 85 Z','#fffdfd'],
+   ['M58 68 L77 12 L94 70 L69 85 Z','#f8f3ff'],
+   ['M69 85 L94 70 L113 81 L88 96 Z','#eee5f7'],
+   ['M88 96 L113 81 L142 94 L114 91 Z','#fffdfd'],
+   ['M94 70 L111 46 L116 22 L127 19 L119 49 L113 81 Z','#fffdfd'],
+   ['M116 22 L127 19 L137 24 L145 25 L130 30 L119 49 Z','#f6f0ff'],
+   ['M69 85 L88 96 L74 101 L58 94 Z','#e9e0f5']
+  ];
+  for(const [d,fill] of facets){const p=document.createElementNS(v5BirdNS,'path');p.setAttribute('d',d);p.setAttribute('fill',fill);p.setAttribute('stroke','#d6c9e5');p.setAttribute('stroke-width','.8');p.setAttribute('stroke-linejoin','round');svg.appendChild(p)}
   const wave=Math.sin(t*Math.PI*1.7+ribbon*.8);
-  svg.style.setProperty('--left',(8+t*80+(seed-.5)*9)+'%');
-  svg.style.setProperty('--top',([35,66][ribbon]+wave*9+(seed-.5)*10)+'%');
-  svg.style.setProperty('--size',(25+seed*24)+'px');
-  svg.style.setProperty('--delay',(t*.19+ribbon*.08)+'s');
-  svg.style.setProperty('--alpha',(.6+seed*.25).toFixed(2));
-  svg.style.setProperty('--angle',(wave*11-4)+'deg');
+  svg.style.setProperty('--left',(4+t*82+(seed-.5)*6)+'%');
+  svg.style.setProperty('--top',([31,64][ribbon]+wave*8+(seed-.5)*8)+'%');
+  svg.style.setProperty('--size',(46+seed*34)+'px');
+  svg.style.setProperty('--delay',(t*.17+ribbon*.07)+'s');
+  svg.style.setProperty('--alpha',(.78+seed*.16).toFixed(2));
+  svg.style.setProperty('--angle',(wave*9-3)+'deg');
   v5Flight.appendChild(svg);
  }
 }
