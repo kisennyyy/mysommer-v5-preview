@@ -373,7 +373,7 @@ body:has(#page-home.active) .cloud-bar{position:relative;z-index:4;max-width:104
 @media(prefers-reduced-motion:reduce){.room-drawer{animation:none}}
 
 /* Illustrated vintage radio room — preview only, preserves the original archive storage */
-#page-home .dream-room{border-radius:30px;overflow:hidden;margin-bottom:30px;min-height:690px;background:radial-gradient(ellipse at 50% 44%,#668cc1 0%,#4e75aa 24%,#666d9c 51%,#51466e 77%,#343450 100%);box-shadow:inset 0 0 110px #222b5b88,0 24px 55px #38284b29}
+#page-home .dream-room{border-radius:30px;overflow:hidden;margin-top:30px;margin-bottom:30px;min-height:690px;background:radial-gradient(ellipse at 50% 44%,#668cc1 0%,#4e75aa 24%,#666d9c 51%,#51466e 77%,#343450 100%);box-shadow:inset 0 0 110px #222b5b88,0 24px 55px #38284b29}
 #page-home .dream-room:before{background:repeating-linear-gradient(0deg,#ffffff05 0 1px,transparent 1px 5px),radial-gradient(circle at 50% 38%,#b9d6ff38,transparent 52%);opacity:.85}
 #page-home .room-name{font-family:Georgia,"Songti SC",serif;font-size:clamp(28px,4vw,47px);font-weight:400;letter-spacing:.27em;text-shadow:0 4px 25px #1a264e}
 #page-home .room-scene{grid-template-columns:1fr minmax(290px,510px) 1fr;gap:clamp(10px,2vw,32px);min-height:340px}
@@ -447,6 +447,8 @@ body:has(#page-home.active) .cloud-bar{position:relative;z-index:4;max-width:104
 
   <div class="cloud-bar" aria-live="polite"><span class="cloud-status" id="cloudStatus">☁ 未连接 Puter · 当前仅保存在本机</span><button class="btn primary" id="cloudLogin">连接 Puter</button><button class="btn" id="cloudSync" disabled>立即同步</button><button class="btn" id="cloudReload" disabled>从云端读取</button><button class="btn" id="cloudBackup" disabled>下载云端备份</button></div>
   <section class="page active" id="page-home">
+  <div class="v5-home-legacy" hidden aria-hidden="true"><span id="statAus"></span><span id="statEvents"></span><span id="statDreams"></span><span id="statWriting"></span><div id="homeAus"></div><div id="homeEvents"></div></div>
+  <div id="v5HomeDecor" hidden></div><div class="v5-home-cover" id="v5HomeCover"><div class="v5-cover-hint">✦ OUR LITTLE UNIVERSE · 🍎 🍏</div></div><div class="hero" id="v5SecretHero" title="我们的秘密基地"><div class="hero-copy"><div class="eyebrow">A LITTLE UNIVERSE OF OUR OWN</div><h3>把我们的<br>共同经历好好收藏。</h3><p>就好像我们的秘密基地一样，收藏和存档着一切。</p></div><div class="hero-symbol">☾✧</div></div><div id="v5Progress" hidden></div>
   <div class="dream-room">
     <h1 class="room-name">昼起之时</h1><p class="room-sub">OUR LITTLE UNIVERSE · EST. 2026</p>
     <div class="room-scene">
@@ -459,8 +461,7 @@ body:has(#page-home.active) .cloud-bar{position:relative;z-index:4;max-width:104
       <div class="v5-home-links"><button data-goto="aus">✦ AU 宇宙</button><button data-goto="settings">❖ 档案室</button><button data-goto="dreams">☾ 梦图收藏</button><button data-goto="writing">✎ 文稿</button><button data-goto="letters">✉ 书信</button><button data-goto="divination">☽ 梦占</button><button data-goto="gacha">✧ 抽卡</button><button data-goto="calendar">♡ 日历</button><button data-goto="merch">✧ 谷子</button><button data-goto="appearance">✿ 外观设置</button></div>
     </div>
   </div>
-  <div class="v5-home-legacy" hidden aria-hidden="true"><span id="statAus"></span><span id="statEvents"></span><span id="statDreams"></span><span id="statWriting"></span><div id="homeAus"></div><div id="homeEvents"></div></div>
-  <div id="v5HomeDecor" hidden></div><div class="v5-home-cover" id="v5HomeCover"><div class="v5-cover-hint">✦ OUR LITTLE UNIVERSE · 🍎 🍏</div></div><div class="hero" id="v5SecretHero" title="我们的秘密基地"><div class="hero-copy"><div class="eyebrow">A LITTLE UNIVERSE OF OUR OWN</div><h3>把我们的<br>共同经历好好收藏。</h3><p>就好像我们的秘密基地一样，收藏和存档着一切。</p></div><div class="hero-symbol">☾✧</div></div><div id="v5Progress" hidden></div>
+
   </section>
 
   <section class="page" id="page-aus">
